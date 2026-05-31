@@ -192,7 +192,7 @@ Tom: consultivo, sem jargão excessivo, com evidências de valor."
 **Configuração mínima para escalar sem caos:**
 
 ```
-Por cliente ativo, criar no Notion/ClickUp:
+Por cliente ativo, criar no Prod Grão:
 ├── Board de projeto com fases padronizadas
 ├── Pasta de entregas com nomenclatura padrão
 ├── Canal no Slack/Teams com o cliente
@@ -211,7 +211,7 @@ Gere:
 3. Ações definidas (formato: [Responsável] fará [ação] até [data])
 4. Dúvidas que ficaram em aberto
 5. Próximos passos"
-Destino: Notion (página do cliente) + e-mail para participantes
+Destino: Prod Grão (página do cliente) + e-mail para participantes
 ```
 
 ---
@@ -284,8 +284,8 @@ CAMADA DE AUTOMAÇÃO
 
 CAMADA DE CRM & PROJETOS
 ├── Pipedrive ou HubSpot (CRM)
-├── Notion (base de conhecimento + projetos)
-└── ClickUp (gestão de tarefas)
+├── Prod Grão (base de conhecimento + projetos — app próprio no Base44)
+└── ClickUp (gestão de tarefas, se necessário)
 
 CAMADA DE COMUNICAÇÃO
 ├── WhatsApp Business API (follow-up)

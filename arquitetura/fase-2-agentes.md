@@ -186,7 +186,7 @@
 |---|---|
 | **Objetivo** | Gerar uma proposta comercial personalizada, profissional e baseada no diagnóstico do cliente. |
 | **Entradas** | Output de DC-01, DC-02, DC-03; objetivos do cliente; serviços disponíveis; tabela de preços. |
-| **Saídas** | Proposta completa em formato PDF/Notion: situação atual, solução proposta, escopo, cronograma, investimento, garantias, próximos passos. |
+| **Saídas** | Proposta completa em formato PDF/Prod Grão: situação atual, solução proposta, escopo, cronograma, investimento, garantias, próximos passos. |
 | **Ferramentas** | Template de proposta, geração de texto com IA, ferramenta de design (Canva/Beautiful.ai). |
 | **Frequência** | Sob demanda (a cada oportunidade qualificada). |
 | **Dependências** | DC-01, DC-02, DC-03, PROP-02. |
@@ -231,7 +231,7 @@
 | **Objetivo** | Criar e manter o cronograma de cada projeto, gerar alertas de atraso, organizar tarefas e garantir visibilidade sobre o status de entrega. |
 | **Entradas** | Escopo do projeto (da proposta aprovada), prazos, responsáveis, dependências entre tarefas. |
 | **Saídas** | Board de projeto atualizado, relatório semanal de status, alertas de risco, ata de reunião de kickoff. |
-| **Ferramentas** | Notion, Asana, ClickUp ou similar; templates de projeto por tipo de serviço. |
+| **Ferramentas** | Prod Grão (Base44), ClickUp ou similar; templates de projeto por tipo de serviço. |
 | **Frequência** | Diário (monitoramento), semanal (relatório). |
 | **Dependências** | PROP-01 (escopo aprovado). |
 | **Indicadores** | % de entregas no prazo; horas estimadas vs. realizadas; satisfação do cliente com a gestão. |
@@ -245,7 +245,7 @@
 | **Objetivo** | Capturar e documentar processos da agência e dos projetos de clientes, criando base de conhecimento operacional. |
 | **Entradas** | Gravações de reunião, descrições de processos, fluxos executados. |
 | **Saídas** | SOPs (Procedimentos Operacionais Padrão), fluxogramas, wikis de processo. |
-| **Ferramentas** | Transcrição de áudio/vídeo, geração de documentação com IA, Notion/Confluence. |
+| **Ferramentas** | Transcrição de áudio/vídeo, geração de documentação com IA, Prod Grão (Base44). |
 | **Frequência** | Contínuo (captura), semanal (revisão). |
 | **Dependências** | OP-01, OP-03. |
 | **Indicadores** | Nº de processos documentados; redução de perguntas recorrentes; onboarding de novos membros mais rápido. |

@@ -36,7 +36,7 @@
 
 | Ação | Entregável | Responsável |
 |---|---|---|
-| Criar template de proposta (PROP-01) | Template em Notion/Canva | Fundador |
+| Criar template de proposta (PROP-01) | Template no Prod Grão/Canva | Fundador |
 | Montar planilha de precificação (PROP-02) | Calculadora de preços | Fundador |
 | Criar 3 pacotes de serviço padrão | Página de serviços clara | Fundador |
 | Revisar propostas existentes com novo template | Propostas atualizadas | Fundador |
@@ -110,7 +110,7 @@
 n8n (ou Make) conectando:
 ├── CRM → análise de pipeline automática
 ├── Formulário de diagnóstico → relatório IA → e-mail ao cliente
-├── Transcrição de reunião → ata → Notion → e-mail
+├── Transcrição de reunião → ata → Prod Grão → e-mail
 ├── Google Alerts → CRM (gatilhos de compra)
 └── NPS → alerta no Slack → tarefa no CRM
 ```

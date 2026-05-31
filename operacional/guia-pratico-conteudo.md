@@ -115,7 +115,7 @@ Com base nisso, crie um calendário editorial para o mês com:
 
 O Claude vai entregar um calendário completo.
 
-**O que você faz:** Lê, risca o que não faz sentido, pede para trocar o que não gostou. Quando estiver bom, salva em algum lugar (Notion, Google Docs, uma anotação).
+**O que você faz:** Lê, risca o que não faz sentido, pede para trocar o que não gostou. Quando estiver bom, salva no Prod Grão.
 
 ---
 
@@ -241,8 +241,8 @@ PRÓXIMO PASSO (semi-automático):
 Formulário → Você cola no Claude → Claude gera → Você revisa → Agenda
 
 FUTURO (automático):
-Formulário → n8n envia pro Claude → Claude gera → vai pro Notion →
-você aprova no Notion → publica automaticamente
+Formulário → n8n envia pro Claude → Claude gera → vai pro Prod Grão →
+você aprova no Prod Grão → publica automaticamente
 ```
 
 Mas isso só faz sentido depois que o processo manual estiver rodando bem.

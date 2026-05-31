@@ -12,7 +12,7 @@
 [ ] Preencher o Prompt 1 (calendário mensal) com as infos do mês
 [ ] Revisar o calendário gerado
 [ ] Ajustar o que não faz sentido
-[ ] Salvar o calendário no Notion / Drive / onde preferir
+[ ] Salvar o calendário no Prod Grão
 [ ] Repetir para cada cliente ativo
 ```
 
