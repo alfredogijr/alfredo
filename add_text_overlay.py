@@ -17,30 +17,30 @@ from moviepy import VideoFileClip, concatenate_videoclips
 # anim     : "fade" | "typewriter" | "slide_up" | "scale_fade"
 TEXT_SEGMENTS = [
     dict(start=0,  end=4,
-         main=["CAMPO GRANDE"], sub=["ParkShoppingCampoGrande"],
+         main=["SPRINT"], sub=["NorteShopping"],
          position="center", anim="scale_fade"),
 
     dict(start=6,  end=11,
-         main=["A melhor pista indoor", "da Zona Oeste do Rio"], sub=[],
+         main=["10 minutos de corrida", "por um preço que cabe no bolso"], sub=[],
          position="bottom", anim="typewriter"),
 
     dict(start=14, end=19,
-         main=["Bateria de 15 minutos", "capacete incluso"], sub=[],
+         main=["Durante a semana", "das 16h às 18h — R$69,90"], sub=[],
          position="bottom", anim="slide_up"),
 
-    dict(start=22, end=27,
-         main=["Seg a Sex a partir das 16h",
-               "Sáb, Dom e feriados a partir das 15h"], sub=[],
-         position="bottom", anim="typewriter"),
+    dict(start=21, end=26,
+         main=["Fins de semana", "das 12h às 15h — R$79,90"], sub=[],
+         position="bottom", anim="slide_up"),
 
-    dict(start=30, end=35,
-         main=["Reservas pelo WhatsApp", "(21) 97338-5900"], sub=[],
+    dict(start=27, end=30,
+         main=["Reservas pelo WhatsApp", "(21) 96645-2862"], sub=[],
          position="bottom", anim="fade"),
-
-    dict(start=37, end=40,
-         main=["META KART"], sub=["Indoor Karting"],
-         position="center", anim="scale_fade"),
 ]
+
+# Disclaimer exibido nos últimos segundos do vídeo (base da tela, texto pequeno)
+DISCLAIMER_START = 35
+DISCLAIMER_TEXT  = "Promoções não são acumulativas. Leia o regulamento."
+FONT_SIZE_DISCLAIMER = 22
 
 # Hook segments (center/top) get a bigger font
 FONT_SIZE_HOOK    = 66
@@ -280,6 +280,22 @@ def process_frame(
 
         arr = np.array(result.convert("RGB"))
         break
+
+    # Disclaimer — tiny text pinned to very bottom, shown from DISCLAIMER_START onward
+    if t >= DISCLAIMER_START:
+        h, w = arr.shape[:2]
+        font_disc = load_font(FONT_SIZE_DISCLAIMER)
+        base = Image.fromarray(arr).convert("RGBA")
+        disc_overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        dd = ImageDraw.Draw(disc_overlay)
+        dw = dd.textlength(DISCLAIMER_TEXT, font=font_disc)
+        dx = (w - dw) / 2
+        dy = h - 48
+        dd.text((dx + 1, dy + 1), DISCLAIMER_TEXT, font=font_disc,
+                fill=(0, 0, 0, 180))
+        dd.text((dx, dy), DISCLAIMER_TEXT, font=font_disc,
+                fill=(255, 255, 255, 200))
+        arr = np.array(Image.alpha_composite(base, disc_overlay).convert("RGB"))
 
     return arr
 
