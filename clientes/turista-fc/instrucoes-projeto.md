@@ -59,4 +59,17 @@ CTAs APROVADOS:
 - "Fale com um consultor"
 - "Solicite informações"
 - "Garanta sua experiência"
+
+VERSÃO WHITE LABEL (canal B2B):
+Todo post produzido para o Turista FC tem também uma versão white label
+para as agências parceiras distribuírem nos próprios canais.
+
+Regras da versão white label:
+- Remove qualquer menção ao nome Turista FC
+- Remove CTAs que direcionem para o Turista FC
+- A agência é sempre o sujeito da frase ("nossa equipe", "trabalhamos com", "oferecemos")
+- Mantém o mesmo tema, ângulo e qualidade editorial do post original
+- CTA white label padrão: "Fale com a nossa equipe" / "Entre em contato" / "Solicite mais informações"
+- Tom: a agência parceira fala para o cliente final dela
+- Canal de destino: grupos de WhatsApp, Instagram e canais próprios das agências
 ```

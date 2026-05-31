@@ -33,10 +33,12 @@ Tempo estimado: 20 min por cliente
 [ ] Copiar legenda + hashtags
 [ ] Abrir o agendador (Meta Business Suite / Buffer / Later)
 [ ] Agendar cada post com imagem + horário
+[ ] (Turista FC) Rodar Prompt 4 — gerar versão white label de cada post
+[ ] (Turista FC) Enviar white label no grupo de WhatsApp das agências
 [ ] Repetir para cada cliente ativo
 ```
 
-Tempo estimado: 30 min por cliente
+Tempo estimado: 35 min por cliente (40 min para o Turista FC)
 
 ---
 
