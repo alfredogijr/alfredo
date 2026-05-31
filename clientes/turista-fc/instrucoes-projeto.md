@@ -47,6 +47,11 @@ PILARES DE CONTEÚDO:
 3. CURADORIA — especialistas que vivem o esporte
 4. COMODIDADE — tudo resolvido, o cliente só aproveita
 
+DADOS CONFIRMADOS (usar com segurança em posts públicos):
+- 17 cidades, 9 países atendidos
+- 16 anos de histórico
+- Única operadora brasileira presente em todas as fases da Champions com clientes
+
 DIFERENCIAIS QUE SEMPRE PODEMOS MENCIONAR:
 - Nome Turista FC aparece no ingresso oficial
 - Única operadora brasileira presente em todas as fases da
