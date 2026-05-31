@@ -46,7 +46,31 @@ Se esse é o tipo de experiência que combina com você, chama no direct. A gent
 
 **Stories:** Card com a frase "O único Grand Slam onde o branco ainda é regra" + sticker de link/direct. Tom contemplativo, sem enquete.
 
-**Arte:** Foto/estático 4:5 (1080×1350px). Quadra de grama, verde profundo, luz de fim de tarde. Detalhe da grama com linha branca ou plano aberto da quadra central. Texto pequeno e delicado, estética sóbria. Sem amarelo com branco.
+---
+
+**BRIEFING PARA DESIGNER:**
+
+Cliente: agência de turismo de experiências esportivas que leva clientes brasileiros a grandes eventos no exterior. Post promove Wimbledon para público de alto poder aquisitivo. Objetivo: despertar desejo pela tradição e exclusividade, não vender com urgência.
+
+Formato: foto/estático, 4:5 vertical, 1080×1350px.
+
+Elementos visuais obrigatórios: quadra de grama de tênis bem cuidada, verde profundo, linhas brancas demarcadas. Plano aberto ou detalhe fechado da grama com a linha branca. Reserve área de fundo desfocado (céu, arquibancada ou gramado fora de foco) para o texto.
+
+Texto na imagem: "O único Grand Slam onde o branco ainda é regra" em até 3 linhas, fonte pequena e delicada (ref. 40pt). Texto não compete com a imagem. Logo Turista FC discreto.
+
+Paleta: verde grama profundo, branco, tons neutros. Sem cores vibrantes. Nunca fundo amarelo com texto branco.
+
+Tipografia: serifada ou sans-serif elegante e fina. Nada pesado ou agressivo.
+
+Mood: contemplativo, sóbrio, aspiracional, premium. Revista de viagem de alto padrão, luz natural fim de tarde.
+
+NÃO colocar: cores berrantes, texto grande, dois emojis seguidos, travessão, fundo amarelo com texto branco, quadra de saibro ou dura, rostos de jogadores reais, logos oficiais do torneio.
+
+---
+
+**PROMPT GPT (DALL-E / ChatGPT):**
+
+A pristine grass tennis court photographed in the editorial style of a high-end travel magazine. Deep, lush green freshly mowed grass with crisp white boundary lines, shot in soft golden late-afternoon light. Composition framed as a vertical 4:5 image, with the court occupying the lower and central portion and a softly blurred, out-of-focus background (empty wooden grandstand or hazy sky) in the upper area to leave clean negative space for text overlay. Serene, quiet, timeless atmosphere evoking a century of tradition and prestige. Natural muted color palette: profound grass green, clean whites, neutral tones. Cinematic shallow depth of field, fine detail on the grass texture and the white line. Calm, contemplative, premium mood. No people, no faces, no logos, no text, no brand marks, no saturated or vibrant colors, no clay or hard court surfaces, no harsh lighting. Photorealistic, elegant, editorial.
 
 ---
 
