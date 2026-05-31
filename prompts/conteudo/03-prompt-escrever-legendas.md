@@ -1,7 +1,7 @@
-# PROMPT 3 — Escrever as Legendas
+# PROMPT 3 — Escrever as Legendas + Material Criativo
 
 > Use este prompt DEPOIS de aprovar as pautas (Prompt 2).
-> Este é o passo onde o conteúdo é gerado de fato.
+> Gera legenda + tudo que o time criativo precisa para produzir a arte.
 
 ---
 
@@ -10,36 +10,51 @@
 ---
 
 ```
-Ótimo. Agora escreva as legendas dos [número] posts aprovados.
+Ótimo. Agora escreva as legendas e o material criativo dos [número] posts aprovados.
 
-Para cada post, entregue:
-1. LEGENDA COMPLETA — pronta para publicar, com emojis se couber no tom
-2. HASHTAGS — máximo 5, relevantes (não encha de hashtag genérico)
-3. SUGESTÃO DE HORÁRIO — dia e horário ideal de publicação
-4. TEXTO DE APOIO PARA STORIES — versão curta/adaptada para stories (se aplicável)
-5. INSTRUÇÃO PARA IMAGEM — o que a imagem/arte precisa mostrar (para passar para o designer ou Canva)
+Para cada post entregue:
 
-Formato: entregue um post por vez, separado por linha tracejada.
-Após todos os posts, me dê um resumo em bullet de qual o objetivo de cada post.
+COPY:
+1. Legenda completa — pronta para publicar
+2. Hashtags — máximo 5, relevantes
+3. Sugestão de dia e horário de publicação
+4. Texto de stories — versão curta/adaptada (se aplicável)
+
+CRIATIVO — entregue os três abaixo:
+
+A) BRIEFING PARA DESIGNER
+   Formato e dimensões, elementos visuais obrigatórios, paleta de cor,
+   tipografia, mood, referência de estilo, o que NÃO colocar.
+   Escrito para um designer que não conhece o cliente.
+
+B) PROMPT PARA GERAÇÃO DE IMAGEM NO GPT (DALL-E / ChatGPT)
+   Prompt em inglês, detalhado, pronto para colar no ChatGPT.
+   Incluir: estilo fotográfico, composição, iluminação, cores,
+   elementos principais, o que evitar.
+
+C) ORIENTAÇÃO PARA VÍDEO
+   Apenas se o formato for Reels ou Stories em vídeo.
+   Roteiro de cenas em tópicos, duração por cena, tipo de corte,
+   mood de trilha sonora, legenda sugerida na tela.
+   Se não for vídeo, omita este item.
+
+Formato: um post por vez, separado por linha tracejada.
 ```
 
 ---
 
-## O que você faz ao receber as legendas
+## Qual entregável criativo usar em cada situação
 
-Leia cada uma e pergunte:
-
-| Pergunta | Se a resposta for NÃO |
+| Situação | O que usar |
 |---|---|
-| Parece que essa marca escreveu? | "Reescreve com tom mais [X]" |
-| Está factualmente correto? | Corrija manualmente ou peça ajuste |
-| O CTA está presente? | "Adiciona CTA no final: [texto do CTA]" |
-| Está no tamanho certo para a plataforma? | "Corta pela metade. Só o essencial." |
-| Tem algo que o cliente não aprovaria? | "Remove [trecho]. Troca por [alternativa]" |
+| Tem designer disponível | **A) Briefing para Designer** |
+| Sem designer, precisa escalar | **B) Prompt GPT** — cola no ChatGPT e gera |
+| Tem foto própria que serve | Ignora A e B — vai direto pro Canva manualmente |
+| Post é vídeo (Reels / Stories) | **C) Orientação para Vídeo** como roteiro |
 
 ---
 
-## Ajustes rápidos mais comuns
+## Ajustes rápidos de copy
 
 **Ficou longo demais:**
 ```
@@ -48,47 +63,50 @@ Esse post ficou longo. Corta para no máximo 5 linhas. Mantém o gancho e o CTA.
 
 **Tom errado:**
 ```
-Ficou muito formal. Reescreve como se fosse uma mensagem de WhatsApp
-para um amigo que é dono de empresa.
+Ficou muito [formal/informal]. Reescreve com tom mais [X].
 ```
 
 **Muito genérico:**
 ```
-Está genérico demais. Adiciona um exemplo real ou uma situação específica
-que alguém do segmento [X] viveria no dia a dia.
+Está genérico demais. Adiciona um exemplo real ou situação específica
+do dia a dia de alguém do segmento [X].
 ```
 
 **Gancho fraco:**
 ```
-A primeira frase não prende. Tenta 3 versões diferentes de gancho para o post 2.
-```
-
-**Precisa de variação:**
-```
-Cria 2 versões do post 1: uma mais direta e uma mais storytelling.
-Vou escolher a melhor.
+A primeira frase não prende. Tenta 3 versões diferentes de gancho para o post [X].
 ```
 
 ---
 
-## Quando estiver aprovado
+## Ajustes rápidos do criativo
 
-Copie a legenda + hashtags.
-Abra o agendador (Meta Business Suite, Buffer, Later, etc.).
-Cole, adicione a imagem, agende no horário sugerido.
+**Briefing vago:**
+```
+O briefing do post [X] ficou genérico. Detalha mais: qual o elemento
+visual central, qual emoção a imagem precisa transmitir, e uma
+referência visual (filme, marca ou fotógrafo).
+```
 
-Pronto.
+**Prompt GPT não gerou o resultado esperado:**
+```
+O prompt do post [X] não funcionou. Reescreve enfatizando [o que quer]
+e acrescenta: "photorealistic, editorial photography style, shot on Sony A7".
+```
+
+**Precisa do briefing em formato WhatsApp para mandar ao designer:**
+```
+Reformata o briefing do post [X] como mensagem de WhatsApp curta
+e direta. Máximo 8 linhas.
+```
 
 ---
 
-## Dica para stories
+## Dica para stories em vídeo
 
-Se o Claude gerou texto de stories, use como roteiro — não precisa publicar
-o texto exatamente. Use como base para gravar um áudio ou um vídeo rápido.
+O Claude entrega o roteiro. Você executa com sua própria linguagem:
 
-Exemplo de como usar:
-- Claude entrega: "Você sabia que 70% das PMEs ainda não usam nenhuma ferramenta de IA?"
-- Você grava: [aparece na câmera] "Gente, você sabia que 7 em cada 10 empresas
-  ainda não usam IA? E não é porque é caro. É porque ninguém mostrou como."
+- Claude entrega: "Cena 1 — você na câmera, pergunta direta: você já foi a Wimbledon?"
+- Você grava: [câmera aberta] "Gente, já foi a Wimbledon? Porque tem um detalhe que quase ninguém sabe..."
 
-O Claude deu a informação. Você trouxe a personalidade. Funciona assim.
+O roteiro é o esqueleto. A personalidade é sua.

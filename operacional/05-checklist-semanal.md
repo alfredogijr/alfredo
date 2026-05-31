@@ -28,8 +28,15 @@ Tempo estimado: 20 min por cliente
 [ ] Preencher o Prompt 2 (pautas) com os temas da semana
 [ ] Revisar os ganchos e ângulos que o Claude entregou
 [ ] Aprovar ou ajustar os ângulos
-[ ] Preencher o Prompt 3 (legendas) com base nas pautas aprovadas
+[ ] Preencher o Prompt 3 (legendas + criativo) com base nas pautas aprovadas
 [ ] Revisar cada legenda
+
+CRIATIVO — para cada post, escolher uma opção:
+[ ] Tem designer? → Enviar o Briefing para Designer (entregável A)
+[ ] Sem designer? → Colar o Prompt GPT no ChatGPT e gerar imagem (entregável B)
+[ ] Tem foto própria? → Montar manualmente no Canva (ignorar A e B)
+[ ] É vídeo? → Usar as Orientações para Vídeo como roteiro (entregável C)
+
 [ ] Copiar legenda + hashtags
 [ ] Abrir o agendador (Meta Business Suite / Buffer / Later)
 [ ] Agendar cada post com imagem + horário
@@ -38,7 +45,7 @@ Tempo estimado: 20 min por cliente
 [ ] Repetir para cada cliente ativo
 ```
 
-Tempo estimado: 35 min por cliente (40 min para o Turista FC)
+Tempo estimado: 40 min por cliente (45 min para o Turista FC)
 
 ---
 
