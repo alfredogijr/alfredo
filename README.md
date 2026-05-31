@@ -1,76 +1,63 @@
-# Arquitetura de Agentes de IA — Agência Grão de Mostarda
+# Agência Grão de Mostarda — Sistema de IA
 
-> Sistema empresarial completo de automação e inteligência artificial para operação, crescimento e escala.
+> Arquitetura completa de operação com agentes de IA:
+> estratégia, clientes, prompts, produtos e operacional.
 
 ---
 
-## Estrutura do Documento
+## Estrutura da Pasta
 
-| Arquivo | Conteúdo |
+```
+/
+├── arquitetura/          → Planejamento estratégico (7 fases)
+├── clientes/             → Um arquivo por cliente com memória do projeto
+│   ├── _template/        → Modelos para novos clientes
+│   ├── grao-mostarda/    → A própria agência
+│   └── turista-fc/       → Cliente ativo
+├── prompts/              → Prompts prontos por área de trabalho
+│   ├── conteudo/         → ✅ Calendário, pautas, legendas
+│   ├── comercial/        → 🔜 Follow-up, qualificação, gatilhos
+│   ├── diagnostico/      → 🔜 Entrevista, auditoria, GAP analysis
+│   └── proposta/         → 🔜 Construção, precificação, revisão
+├── produtos/             → Descrição e pitch dos produtos da agência
+└── operacional/          → Guias práticos e checklists do dia a dia
+```
+
+---
+
+## Por onde começar
+
+**Novo cliente:**
+1. Copie `clientes/_template/briefing-novo-cliente.md`
+2. Cole em qualquer chat e traga as respostas
+3. Cole em `clientes/_template/instrucoes-projeto.md` e adapte
+4. Crie um novo Projeto no claude.ai e cole o resultado
+
+**Produção de conteúdo (cliente já configurado):**
+1. Mês novo → `prompts/conteudo/01-prompt-calendario-mensal.md`
+2. Toda semana → `prompts/conteudo/02-prompt-pautas-semanais.md`
+3. Escrever → `prompts/conteudo/03-prompt-escrever-legendas.md`
+4. Checklist → `operacional/checklist-semanal.md`
+
+---
+
+## Status atual
+
+| Área | Status |
 |---|---|
-| [fase-1-mapeamento.md](./fase-1-mapeamento.md) | Mapeamento estratégico de todas as áreas |
-| [fase-2-agentes.md](./fase-2-agentes.md) | Estrutura completa de cada agente |
-| [fase-3-fluxos.md](./fase-3-fluxos.md) | Workflows e diagramas Mermaid |
-| [fase-4-priorizacao.md](./fase-4-priorizacao.md) | Classificação por ROI |
-| [fase-5-aplicacao-grao.md](./fase-5-aplicacao-grao.md) | Aplicação específica na Grão de Mostarda |
-| [fase-6-escalabilidade.md](./fase-6-escalabilidade.md) | Transformação em produtos e serviços |
-| [fase-7-roadmap.md](./fase-7-roadmap.md) | Roadmap 30 / 90 / 180 dias / 1 ano |
+| Arquitetura estratégica (7 fases) | ✅ Completo |
+| Workflow de conteúdo | ✅ Operacional |
+| Clientes configurados | 🔄 Em andamento (Turista FC) |
+| Workflow comercial | 🔜 Próxima fase |
+| Workflow de diagnóstico | 🔜 Próxima fase |
+| Workflow de proposta | 🔜 Próxima fase |
+| Produtos documentados | 🔜 Próxima fase |
 
 ---
 
-## Premissa Central
+## Clientes Ativos
 
-> **Começar pelo fluxo que gera dinheiro.**
->
-> Inteligência de Mercado → Diagnóstico → Comercial → Proposta → Entrega → Conteúdo → Tráfego → Pós-venda
-
-Conteúdo é produção. Diagnóstico, venda e pós-venda são **crescimento**.
-
----
-
-## Visão do Sistema
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    CAMADA ESTRATÉGICA                           │
-│   Inteligência de Mercado · Diagnóstico · Business Intelligence │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────────┐
-│                    CAMADA COMERCIAL                             │
-│        Prospecção · Qualificação · Follow-up · Propostas        │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────────┐
-│                    CAMADA DE ENTREGA                            │
-│         Gestão de Projetos · Produção · QA · Documentação       │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────────┐
-│                    CAMADA DE CRESCIMENTO                        │
-│          Conteúdo · Tráfego · SEO · Distribuição               │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────────┐
-│                    CAMADA DE RETENÇÃO                           │
-│           Pós-venda · NPS · Expansão · Relacionamento           │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Total de Agentes Mapeados
-
-| Área | Nº de Agentes | Prioridade |
+| Cliente | Projeto Claude | Workflow ativo |
 |---|---|---|
-| Inteligência de Mercado | 4 | Nível 1 |
-| Diagnóstico de Clientes | 3 | Nível 1 |
-| Comercial & Follow-up | 5 | Nível 1 |
-| Propostas | 3 | Nível 1 |
-| Entrega / Operações | 4 | Nível 2 |
-| Conteúdo | 5 | Nível 2 |
-| Tráfego & Performance | 3 | Nível 2 |
-| Pós-venda & Relacionamento | 3 | Nível 2 |
-| Financeiro & BI | 3 | Nível 3 |
-| Produto & Inovação | 3 | Nível 3 |
-| **Total** | **36** | — |
+| Grão de Mostarda | `Conteúdo — Grão de Mostarda` | Conteúdo |
+| Turista FC | `Conteúdo — Turista FC` | Conteúdo |
