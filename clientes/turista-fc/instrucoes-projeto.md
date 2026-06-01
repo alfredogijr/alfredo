@@ -66,6 +66,11 @@ CTAs APROVADOS:
 - "Garanta sua experiência"
 
 VERSÃO WHITE LABEL (canal B2B):
+A Grão de Mostarda atua como agência de marketing das agências parceiras do
+Turista FC. O material white label não é comunicação da Grão com as agências
+— é conteúdo produzido para que as agências usem com os clientes delas.
+Relação: Grão produz → agência parceira distribui → cliente final consome.
+
 Todo post produzido para o Turista FC tem também uma versão white label
 para as agências parceiras distribuírem nos próprios canais.
 
