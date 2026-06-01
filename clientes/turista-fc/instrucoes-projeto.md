@@ -57,7 +57,7 @@ DIFERENCIAIS QUE SEMPRE PODEMOS MENCIONAR:
 - Única operadora brasileira presente em todas as fases da
   Champions League com clientes
 - Escritórios no Brasil e na Europa
-- Acompanhamento VIP exclusivo
+- Concierge Premium exclusivo
 - Volume reduzido e intencional — atenção real a cada pessoa
 
 CTAs APROVADOS:
