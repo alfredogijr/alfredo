@@ -77,4 +77,12 @@ Regras da versão white label:
 - CTA white label padrão: "Fale com a nossa equipe" / "Entre em contato" / "Solicite mais informações"
 - Tom: a agência parceira fala para o cliente final dela
 - Canal de destino: grupos de WhatsApp, Instagram e canais próprios das agências
+- Quando houver preço de pacote disponível, incluir "a partir de R$X" na legenda e/ou texto da imagem
+- Posts B2B sobre o programa de parceiros não possuem versão white label
+
+FLUXO DE APROVAÇÃO E DISPARO (WHITE LABEL):
+1. Arte white label produzida
+2. Encaminhar para Felipe (gerente de produto) — aprovação
+3. Felipe aprovando, encaminhar para Daniel (executivo de contas)
+4. Daniel realiza o disparo no grupo de WhatsApp
 ```
