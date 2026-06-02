@@ -1,3 +1,5 @@
 output_*.mp4
 output_*.mov
 temp_audio.*
+fonts/HKModular*
+fonts/HK-Modular*
