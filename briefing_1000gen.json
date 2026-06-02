@@ -1,0 +1,105 @@
+{
+  "brand_color": [255, 70, 0],
+  "output_size": [1080, 1920],
+  "fps": 30,
+  "transition_dur": 0.6,
+  "vignette": 0.62,
+  "font_hook": 66,
+  "font_cap": 52,
+  "font_sub": 34,
+
+  "slides": [
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/51e14f5b-159193.jpg",
+      "duration": 4.0,
+      "main": ["1000 GENERATION"],
+      "sub": ["A categoria onde campeões nascem."],
+      "position": "top",
+      "anim": "scale_fade",
+      "accent": true,
+      "ken_burns_in": true
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/d9e70a34-159190.jpg",
+      "duration": 4.0,
+      "main": ["Nunca é cedo demais", "para sonhar grande."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "slide_up",
+      "ken_burns_in": false
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/76c44a2d-159195.jpg",
+      "duration": 4.0,
+      "main": ["Todo campeão", "já foi criança na pista."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "typewriter",
+      "ken_burns_in": true
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/361594d2-159192.jpg",
+      "duration": 4.0,
+      "main": ["Foco. Velocidade.", "Emoção pura."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade",
+      "ken_burns_in": false
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/ab998411-159194.jpg",
+      "duration": 4.0,
+      "main": ["A ultrapassagem", "que muda tudo."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "typewriter",
+      "ken_burns_in": true
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/0a87c768-159188.jpg",
+      "duration": 4.0,
+      "main": ["Kart é inteligência", "emocional em alta velocidade."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "slide_up",
+      "ken_burns_in": false
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/33ea0092-159191.jpg",
+      "duration": 4.0,
+      "main": ["Uma paixão que une", "família e velocidade."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade",
+      "ken_burns_in": true
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/616f1acf-159189.jpg",
+      "duration": 4.0,
+      "main": ["Competição real.", "Segurança em cada curva."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "typewriter",
+      "ken_burns_in": false
+    },
+    {
+      "image": "/root/.claude/uploads/849888f5-5bc7-4c67-bcd3-8163b44d7ae6/6ed2ce93-159187.jpg",
+      "duration": 4.0,
+      "main": ["E se o próximo", "campeão fosse seu filho?"],
+      "sub": [],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true,
+      "ken_burns_in": true
+    },
+    {
+      "type": "cta",
+      "duration": 5.0,
+      "main": ["Vem pra pista!"],
+      "sub": ["Entre na 1000 Generation", "(21) 96645-2862"],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+"""
+make_slideshow.py — Instagram Reels from still photos.
+Ken Burns, cross-dissolve transitions, text overlay, grade, CTA frame.
+
+Usage:
+    python3 make_slideshow.py briefing.json output.mp4
+"""
+
+import sys
+import json
+import textwrap
+import numpy as np
+from pathlib import Path
+from PIL import Image, ImageDraw, ImageFont
+from moviepy import VideoClip
+
+
+# ── Font loader ───────────────────────────────────────────────────────────────
+_font_cache = {}
+
+def load_font(size: int) -> ImageFont.FreeTypeFont:
+    if size not in _font_cache:
+        candidates = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+        ]
+        f = ImageFont.load_default()
+        for p in candidates:
+            try:
+                f = ImageFont.truetype(p, size)
+                break
+            except OSError:
+                pass
+        _font_cache[size] = f
+    return _font_cache[size]
+
+
+# ── Image utils ───────────────────────────────────────────────────────────────
+def load_portrait(path: str, out_w: int = 1080, out_h: int = 1920) -> np.ndarray:
+    """Load image and crop to portrait (9:16) using cover strategy."""
+    img = Image.open(path).convert("RGB")
+    w, h = img.size
+    if (w / h) > (out_w / out_h):
+        scale = out_h / h
+        img = img.resize((int(w * scale), out_h), Image.LANCZOS)
+        x0 = (img.width - out_w) // 2
+        img = img.crop((x0, 0, x0 + out_w, out_h))
+    else:
+        scale = out_w / w
+        img = img.resize((out_w, int(h * scale)), Image.LANCZOS)
+        y0 = (img.height - out_h) // 2
+        img = img.crop((0, y0, out_w, y0 + out_h))
+    return np.array(img)
+
+
+def ken_burns(img: np.ndarray, t: float, duration: float,
+              zoom: float = 0.06, zoom_in: bool = True) -> np.ndarray:
+    h, w = img.shape[:2]
+    p = t / max(duration, 0.001)
+    scale = (1.0 + zoom * p) if zoom_in else (1.0 + zoom * (1 - p))
+    nh, nw = max(1, int(h / scale)), max(1, int(w / scale))
+    y0, x0 = (h - nh) // 2, (w - nw) // 2
+    cropped = img[y0:y0 + nh, x0:x0 + nw]
+    return np.array(Image.fromarray(cropped).resize((w, h), Image.BILINEAR))
+
+
+def build_vignette(h: int, w: int, strength: float = 0.6) -> np.ndarray:
+    Y = np.linspace(-1, 1, h)[:, None]
+    X = np.linspace(-1, 1, w)[None, :]
+    mask = 1.0 - np.clip(np.sqrt(X**2 + Y**2) / np.sqrt(2) * strength, 0, 1)
+    return mask[:, :, None]
+
+
+def grade(arr: np.ndarray, vignette: np.ndarray, contrast: float = 1.15) -> np.ndarray:
+    f = (arr.astype(np.float32) - 128) * contrast + 128
+    return np.clip(f * vignette, 0, 255).astype(np.uint8)
+
+
+def make_cta_bg(w: int, h: int, brand_color: list) -> np.ndarray:
+    """Very dark background with subtle brand color radial glow."""
+    Y = np.linspace(-1, 1, h)[:, None]
+    X = np.linspace(-1, 1, w)[None, :]
+    glow = np.clip(1 - np.sqrt(X**2 + Y**2) * 1.4, 0, 1)[:, :, None]
+    brand = np.array(brand_color[:3], dtype=np.float32) / 255
+    bg = glow * brand * 55
+    return np.clip(bg, 0, 255).astype(np.uint8)
+
+
+# ── Text rendering ────────────────────────────────────────────────────────────
+def box_y(position: str, h: int, box_h: int) -> int:
+    if position == "top":    return int(h * 0.07)
+    if position == "center": return (h - box_h) // 2
+    return int(h * 0.76) - box_h
+
+
+def render_text_ov(
+    w: int, h: int,
+    main_lines: list, sub_lines: list,
+    font_main, font_sub,
+    position: str, alpha: float,
+    box_color: tuple, y_shift: int = 0, scale: float = 1.0,
+) -> Image.Image:
+    max_lw = 18 if position in ("center", "top") else 26
+    wm = sum([textwrap.wrap(l, max_lw) or [""] for l in main_lines], [])
+    ws = sum([textwrap.wrap(l, max_lw + 6) or [""] for l in sub_lines], [])
+
+    lhm = font_main.size + 12
+    lhs = font_sub.size + 8
+    gap = 10
+    tot = lhm * len(wm) + (gap + lhs * len(ws) if ws else 0)
+    px, py = 32, 18
+
+    ov = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(ov)
+
+    mwm = max((draw.textlength(l, font=font_main) for l in wm), default=0)
+    mws = max((draw.textlength(l, font=font_sub)  for l in ws),  default=0)
+    bw = max(mwm, mws) + 2 * px
+    bx = (w - bw) / 2
+    by = box_y(position, h, tot + 2 * py) + y_shift
+
+    draw.rounded_rectangle(
+        [bx, by, bx + bw, by + tot + 2 * py], radius=14,
+        fill=(*box_color[:3], int(box_color[3] * alpha)),
+    )
+
+    def put(text, x, y, font):
+        draw.text((x + 2, y + 2), text, font=font, fill=(0, 0, 0, int(215 * alpha)))
+        draw.text((x,     y),     text, font=font, fill=(255, 255, 255, int(255 * alpha)))
+
+    y = by + py
+    for line in wm:
+        lw = draw.textlength(line, font=font_main)
+        put(line, (w - lw) / 2, y, font_main)
+        y += lhm
+    if ws:
+        y += gap
+        for line in ws:
+            lw = draw.textlength(line, font=font_sub)
+            put(line, (w - lw) / 2, y, font_sub)
+            y += lhs
+
+    # Scale around center for scale_fade
+    if scale < 1.0:
+        bbox = ov.getbbox()
+        if bbox:
+            region = ov.crop(bbox)
+            nw2 = max(1, int((bbox[2] - bbox[0]) * scale))
+            nh2 = max(1, int((bbox[3] - bbox[1]) * scale))
+            region = region.resize((nw2, nh2), Image.LANCZOS)
+            cx, cy = (bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2
+            ov = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+            ov.paste(region, (cx - nw2 // 2, cy - nh2 // 2), region)
+
+    return ov
+
+
+# ── Slide renderer ────────────────────────────────────────────────────────────
+def render_slide(slide: dict, local_t: float, imgs: dict,
+                 vignette: np.ndarray, fonts: dict,
+                 brand_color: list, anim_dur: float = 0.45) -> np.ndarray:
+    dur      = slide["duration"]
+    is_cta   = slide.get("type") == "cta"
+    h, w     = vignette.shape[:2]
+    fade_out = 0.35
+
+    # Base image
+    if is_cta:
+        arr = make_cta_bg(w, h, brand_color)
+    else:
+        arr = ken_burns(
+            imgs[slide["image"]], local_t, dur,
+            zoom=0.06, zoom_in=slide.get("ken_burns_in", True),
+        )
+        arr = grade(arr, vignette, contrast=1.18)
+
+    # Text params
+    position  = slide.get("position", "bottom")
+    anim      = slide.get("anim", "fade")
+    main_l    = slide.get("main", [])
+    sub_l     = slide.get("sub", [])
+    accent    = slide.get("accent", False)
+    box_color = (*brand_color[:3], 215) if accent else (0, 0, 0, 165)
+    font_m    = fonts["hook"] if position in ("center", "top") else fonts["cap"]
+    font_s    = fonts["sub"]
+
+    elapsed   = local_t
+    remaining = dur - local_t
+
+    if anim == "typewriter":
+        total_chars = sum(len(l) for l in main_l + sub_l)
+        shown = min(total_chars, int(elapsed * 22))
+        ml, sl, rem = [], [], shown
+        for line in main_l:
+            take = min(len(line), rem); ml.append(line[:take]); rem -= take
+        for line in sub_l:
+            if rem <= 0: break
+            take = min(len(line), rem); sl.append(line[:take]); rem -= take
+        ml = ml or [""]
+        in_alpha, y_shift, sc = 1.0, 0, 1.0
+        main_r, sub_r = ml, sl
+
+    elif anim == "scale_fade":
+        p = min(1.0, elapsed / anim_dur)
+        ease = 1 - (1 - p) ** 2
+        in_alpha, sc, y_shift = ease, 0.78 + 0.22 * ease, 0
+        main_r, sub_r = main_l, sub_l
+
+    elif anim == "slide_up":
+        p = min(1.0, elapsed / anim_dur)
+        ease = 1 - (1 - p) ** 3
+        in_alpha = p
+        y_shift  = int(70 * (1 - ease))
+        sc       = 1.0
+        main_r, sub_r = main_l, sub_l
+
+    else:  # fade
+        in_alpha, y_shift, sc = min(1.0, elapsed / anim_dur), 0, 1.0
+        main_r, sub_r = main_l, sub_l
+
+    alpha = in_alpha * min(1.0, remaining / fade_out)
+
+    base = Image.fromarray(arr).convert("RGBA")
+    ov   = render_text_ov(w, h, main_r, sub_r, font_m, font_s,
+                           position, alpha, box_color, y_shift, sc)
+    return np.array(Image.alpha_composite(base, ov).convert("RGB"))
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+def run(briefing_path: str, output_path: str):
+    cfg         = json.loads(Path(briefing_path).read_text(encoding="utf-8"))
+    brand_color = cfg.get("brand_color", [255, 70, 0])
+    out_w, out_h = cfg.get("output_size", [1080, 1920])
+    fps         = cfg.get("fps", 30)
+    trans_dur   = cfg.get("transition_dur", 0.6)
+    slides_data = cfg["slides"]
+
+    # Pre-load images
+    imgs = {}
+    for slide in slides_data:
+        path = slide.get("image", "")
+        if path and path not in imgs:
+            print(f"Loading {Path(path).name}...")
+            imgs[path] = load_portrait(path, out_w, out_h)
+
+    vignette = build_vignette(out_h, out_w, strength=cfg.get("vignette", 0.62))
+    fonts = {
+        "hook": load_font(cfg.get("font_hook", 66)),
+        "cap":  load_font(cfg.get("font_cap",  52)),
+        "sub":  load_font(cfg.get("font_sub",  34)),
+    }
+
+    total_duration = sum(s["duration"] for s in slides_data)
+
+    def make_frame(t):
+        cumulative = 0.0
+        for i, slide in enumerate(slides_data):
+            slide_end = cumulative + slide["duration"]
+            if t < slide_end or i == len(slides_data) - 1:
+                local_t = t - cumulative
+                current = render_slide(slide, local_t, imgs, vignette, fonts, brand_color)
+
+                # Cross-dissolve to next slide
+                remaining = slide_end - t
+                if remaining < trans_dur and i + 1 < len(slides_data):
+                    alpha_next = 1.0 - (remaining / trans_dur)
+                    nxt = render_slide(slides_data[i + 1], 0.0, imgs, vignette, fonts, brand_color)
+                    return ((1 - alpha_next) * current + alpha_next * nxt).astype(np.uint8)
+
+                return current
+            cumulative += slide["duration"]
+
+        return render_slide(slides_data[-1], slides_data[-1]["duration"] - 0.001,
+                            imgs, vignette, fonts, brand_color)
+
+    print(f"Rendering {total_duration:.1f}s at {fps}fps → {output_path}")
+    VideoClip(make_frame, duration=total_duration).write_videofile(
+        output_path, fps=fps, codec="libx264", audio=False, logger="bar",
+    )
+    print(f"\nDone! → {output_path}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("Usage: python3 make_slideshow.py briefing.json output.mp4")
+        sys.exit(1)
+    run(sys.argv[1], sys.argv[2])
