@@ -14,7 +14,7 @@
       "duration": 3.5,
       "kb_direction": "in_br",
       "transition": "dissolve",
-      "main": ["1000 GENERATION"],
+      "main": ["NEW GENERATION"],
       "sub": ["A categoria onde campeões nascem."],
       "position": "top",
       "anim": "scale_fade",
