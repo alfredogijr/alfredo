@@ -20,6 +20,10 @@
   "disclaimer": "Promoções não são acumulativas. Leia o regulamento.",
   "disclaimer_start": 30,
 
+  "captions_file": "captions_sprint.json",
+  "captions_mode": "fill_gaps",
+  "captions_y": 0.60,
+
   "segments": [
     {
       "start": 0, "end": 4,

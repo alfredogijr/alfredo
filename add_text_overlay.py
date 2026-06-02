@@ -1,10 +1,18 @@
 """
 Instagram Reels overlay engine.
-Features: Ken Burns, progress bar, brand accent, typewriter, slide-up, scale-fade, fade-out.
+Features: Ken Burns, progress bar, brand accent, typewriter, slide-up,
+          scale-fade, fade-out, auto-captions with word highlight.
 
 Usage:
     python3 add_text_overlay.py briefing.json output.mp4
     python3 add_text_overlay.py briefing.json output.mp4 override1.mp4 ...
+
+Briefing JSON keys:
+    inputs, brand_color, progress_bar, ken_burns, vignette, contrast,
+    segments, disclaimer, disclaimer_start,
+    captions_file   – path to captions JSON from transcribe.py
+    captions_mode   – "always" | "fill_gaps" (default: fill_gaps)
+    captions_y      – fraction of height for caption zone (default: 0.62)
 """
 
 import sys
@@ -146,6 +154,58 @@ def render_overlay(
     return overlay
 
 
+def render_auto_caption(
+    w: int, h: int,
+    caption: dict, t: float,
+    font: ImageFont.FreeTypeFont,
+    brand_color: tuple,
+    y_fraction: float = 0.62,
+) -> Image.Image:
+    """Render one caption chunk with per-word brand-color highlight."""
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    words = caption.get("words", [])
+    if not words:
+        # Fallback: plain text, no word-level data
+        text = caption["text"].upper()
+        tw = draw.textlength(text, font=font)
+        x  = (w - tw) / 2
+        y  = int(h * y_fraction)
+        px, py = 20, 10
+        draw.rounded_rectangle(
+            [x - px, y - py, x + tw + px, y + font.size + py],
+            radius=8, fill=(0, 0, 0, 140),
+        )
+        draw.text((x + 2, y + 2), text, font=font, fill=(0, 0, 0, 200))
+        draw.text((x,     y),     text, font=font, fill=(255, 255, 255, 255))
+        return overlay
+
+    # Measure total width for centering
+    parts    = [w_["word"].upper() for w_ in words]
+    gap_w    = draw.textlength(" ", font=font)
+    total_w  = sum(draw.textlength(p, font=font) for p in parts) + gap_w * (len(parts) - 1)
+    x_start  = (w - total_w) / 2
+    y        = int(h * y_fraction)
+
+    px, py = 20, 10
+    draw.rounded_rectangle(
+        [x_start - px, y - py, x_start + total_w + px, y + font.size + py],
+        radius=8, fill=(0, 0, 0, 140),
+    )
+
+    cx = x_start
+    for i, (wd, part) in enumerate(zip(words, parts)):
+        pw       = draw.textlength(part, font=font)
+        is_now   = wd["start"] <= t < wd["end"]
+        color    = (*brand_color, 255) if is_now else (255, 255, 255, 255)
+        draw.text((cx + 2, y + 2), part, font=font, fill=(0, 0, 0, 200))
+        draw.text((cx,     y),     part, font=font, fill=color)
+        cx += pw + (gap_w if i < len(parts) - 1 else 0)
+
+    return overlay
+
+
 def composite_scaled(base: Image.Image, ov: Image.Image, scale: float) -> Image.Image:
     if scale >= 1.0:
         return Image.alpha_composite(base, ov)
@@ -246,6 +306,28 @@ def process_frame(
         arr = np.array(result.convert("RGB"))
         break
 
+    # Auto-captions (Whisper)
+    captions      = briefing.get("_captions", [])
+    captions_mode = briefing.get("captions_mode", "fill_gaps")
+    captions_y    = briefing.get("captions_y", 0.62)
+    if captions:
+        manual_active = any(
+            seg["start"] <= t < seg["end"]
+            for seg in briefing.get("segments", [])
+        )
+        show_caption = (captions_mode == "always") or not manual_active
+        if show_caption:
+            for cap in captions:
+                if cap["start"] <= t < cap["end"]:
+                    h, w  = arr.shape[:2]
+                    base  = Image.fromarray(arr).convert("RGBA")
+                    cap_ov = render_auto_caption(
+                        w, h, cap, t, font_cap,
+                        brand_rgb, captions_y,
+                    )
+                    arr = np.array(Image.alpha_composite(base, cap_ov).convert("RGB"))
+                    break
+
     # Disclaimer
     disc_text  = briefing.get("disclaimer", "")
     disc_start = briefing.get("disclaimer_start", 9999)
@@ -272,6 +354,12 @@ def process_frame(
 def run(briefing_path: str, output_path: str, extra_inputs: list = None):
     briefing    = json.loads(Path(briefing_path).read_text(encoding="utf-8"))
     input_paths = extra_inputs if extra_inputs else briefing.get("inputs", [])
+
+    # Load auto-captions if specified
+    caps_file = briefing.get("captions_file", "")
+    if caps_file and Path(caps_file).exists():
+        briefing["_captions"] = json.loads(Path(caps_file).read_text(encoding="utf-8"))
+        print(f"Loaded {len(briefing['_captions'])} caption chunks from {caps_file}")
 
     clips = [VideoFileClip(p) for p in input_paths]
     clip  = concatenate_videoclips(clips, method="compose") if len(clips) > 1 else clips[0]
