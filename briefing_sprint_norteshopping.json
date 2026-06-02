@@ -1,0 +1,69 @@
+{
+  "inputs": [
+    "/root/.claude/uploads/5f641238-6107-431d-b1e5-577b4b62933f/02336f98-IMG_9893.MOV",
+    "/root/.claude/uploads/7484abef-4333-4ead-af83-7cc3eedb0c07/c4c11260-IMG_9938.MOV"
+  ],
+
+  "brand_color": [255, 70, 0],
+  "progress_bar": true,
+  "progress_bar_height": 5,
+
+  "ken_burns": 0.04,
+  "vignette": 0.55,
+  "contrast": 1.12,
+
+  "font_size_hook": 66,
+  "font_size_caption": 48,
+  "font_size_sub": 32,
+  "font_size_disclaimer": 22,
+
+  "disclaimer": "Promoções não são acumulativas. Leia o regulamento.",
+  "disclaimer_start": 30,
+
+  "segments": [
+    {
+      "start": 0, "end": 4,
+      "main": ["SPRINT"],
+      "sub": ["NorteShopping"],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    },
+    {
+      "start": 6, "end": 11,
+      "main": ["10 minutos de corrida", "por um preço que cabe no bolso"],
+      "sub": [],
+      "position": "bottom",
+      "anim": "typewriter"
+    },
+    {
+      "start": 14, "end": 19,
+      "main": ["Durante a semana", "das 16h às 18h — R$69,90"],
+      "sub": [],
+      "position": "bottom",
+      "anim": "slide_up"
+    },
+    {
+      "start": 21, "end": 26,
+      "main": ["Fins de semana", "das 12h às 15h — R$79,90"],
+      "sub": [],
+      "position": "bottom",
+      "anim": "slide_up"
+    },
+    {
+      "start": 27, "end": 30,
+      "main": ["Reservas pelo WhatsApp", "(21) 96645-2862"],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "start": 35, "end": 40,
+      "main": ["META KART"],
+      "sub": ["Indoor Karting"],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    }
+  ]
+}
