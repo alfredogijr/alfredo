@@ -16,15 +16,27 @@ from moviepy import VideoClip
 
 
 # ── Font loader ───────────────────────────────────────────────────────────────
-_font_cache = {}
+_font_cache: dict = {}
+_FONTS_DIR = Path(__file__).parent / "fonts"
 
-def load_font(size: int) -> ImageFont.FreeTypeFont:
-    if size not in _font_cache:
-        candidates = [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
-        ]
+_TITLE_FONTS = [
+    str(_FONTS_DIR / "HKModular-Bold.ttf"),
+    str(_FONTS_DIR / "HKModular-Black.ttf"),
+    str(_FONTS_DIR / "BarlowCondensed-Black.ttf"),
+    str(_FONTS_DIR / "BarlowCondensed-Bold.ttf"),
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
+_BODY_FONTS = [
+    str(_FONTS_DIR / "Montserrat-Bold.ttf"),
+    str(_FONTS_DIR / "Montserrat-SemiBold.ttf"),
+    str(_FONTS_DIR / "BarlowCondensed-Bold.ttf"),
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
+
+def load_font(size: int, role: str = "body") -> ImageFont.FreeTypeFont:
+    key = (size, role)
+    if key not in _font_cache:
+        candidates = _TITLE_FONTS if role == "title" else _BODY_FONTS
         f = ImageFont.load_default()
         for p in candidates:
             try:
@@ -32,8 +44,8 @@ def load_font(size: int) -> ImageFont.FreeTypeFont:
                 break
             except OSError:
                 pass
-        _font_cache[size] = f
-    return _font_cache[size]
+        _font_cache[key] = f
+    return _font_cache[key]
 
 
 # ── Image utils ───────────────────────────────────────────────────────────────
@@ -303,9 +315,9 @@ def run(briefing_path: str, output_path: str):
 
     vignette = build_vignette(out_h, out_w, strength=cfg.get("vignette", 0.62))
     fonts = {
-        "hook": load_font(cfg.get("font_hook", 66)),
-        "cap":  load_font(cfg.get("font_cap",  52)),
-        "sub":  load_font(cfg.get("font_sub",  34)),
+        "hook": load_font(cfg.get("font_hook", 66), role="title"),
+        "cap":  load_font(cfg.get("font_cap",  52), role="body"),
+        "sub":  load_font(cfg.get("font_sub",  34), role="body"),
     }
 
     total_duration = sum(s["duration"] for s in slides_data)

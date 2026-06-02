@@ -1,5 +1,5 @@
 {
-  "brand_color": [255, 70, 0],
+  "brand_color": [90, 60, 150],
   "output_size": [1080, 1920],
   "fps": 30,
   "transition_dur": 0.55,

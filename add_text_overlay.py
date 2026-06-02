@@ -25,12 +25,27 @@ from moviepy import VideoFileClip, concatenate_videoclips
 
 
 def load_font(size: int, _cache: dict = {}) -> ImageFont.FreeTypeFont:
-    if size not in _cache:
-        candidates = [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
-        ]
+FONTS_DIR = Path(__file__).parent / "fonts"
+
+# Font priority: Meta Kart brand fonts → system fallback
+FONT_TITLE_CANDIDATES = [
+    str(FONTS_DIR / "HKModular-Bold.ttf"),
+    str(FONTS_DIR / "HKModular-Black.ttf"),
+    str(FONTS_DIR / "BarlowCondensed-Black.ttf"),   # fallback
+    str(FONTS_DIR / "BarlowCondensed-Bold.ttf"),
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
+FONT_BODY_CANDIDATES = [
+    str(FONTS_DIR / "Montserrat-Bold.ttf"),
+    str(FONTS_DIR / "Montserrat-SemiBold.ttf"),
+    str(FONTS_DIR / "BarlowCondensed-Bold.ttf"),
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
+
+def load_font(size: int, role: str = "body", _cache: dict = {}) -> ImageFont.FreeTypeFont:
+    key = (size, role)
+    if key not in _cache:
+        candidates = FONT_TITLE_CANDIDATES if role == "title" else FONT_BODY_CANDIDATES
         font = ImageFont.load_default()
         for path in candidates:
             try:
@@ -38,8 +53,8 @@ def load_font(size: int, _cache: dict = {}) -> ImageFont.FreeTypeFont:
                 break
             except OSError:
                 pass
-        _cache[size] = font
-    return _cache[size]
+        _cache[key] = font
+    return _cache[key]
 
 
 def build_vignette(h: int, w: int, strength: float) -> np.ndarray:
@@ -373,10 +388,10 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
     h_px, w_px = clip.size[1], clip.size[0]
     vignette   = build_vignette(h_px, w_px, briefing.get("vignette", 0.55))
 
-    font_hook = load_font(briefing.get("font_size_hook",       66))
-    font_cap  = load_font(briefing.get("font_size_caption",    48))
-    font_sub  = load_font(briefing.get("font_size_sub",        32))
-    font_disc = load_font(briefing.get("font_size_disclaimer", 22))
+    font_hook = load_font(briefing.get("font_size_hook",       66), role="title")
+    font_cap  = load_font(briefing.get("font_size_caption",    48), role="body")
+    font_sub  = load_font(briefing.get("font_size_sub",        32), role="body")
+    font_disc = load_font(briefing.get("font_size_disclaimer", 22), role="body")
 
     def add_effects(get_frame, t):
         return process_frame(
