@@ -55,12 +55,47 @@ def load_portrait(path: str, out_w: int = 1080, out_h: int = 1920) -> np.ndarray
 
 
 def ken_burns(img: np.ndarray, t: float, duration: float,
-              zoom: float = 0.06, zoom_in: bool = True) -> np.ndarray:
+              zoom: float = 0.12, direction: str = "in_center") -> np.ndarray:
+    """Directional Ken Burns. Directions: in_center out_center right left up down in_tl in_br diagonal."""
     h, w = img.shape[:2]
     p = t / max(duration, 0.001)
-    scale = (1.0 + zoom * p) if zoom_in else (1.0 + zoom * (1 - p))
+    p_e = 1 - (1 - p) ** 2  # ease-out progress
+
+    if direction == "in_center":
+        scale = 1.0 + zoom * p_e
+        xf, yf = 0.5, 0.5
+    elif direction == "out_center":
+        scale = 1.0 + zoom * (1 - p_e)
+        xf, yf = 0.5, 0.5
+    elif direction == "right":
+        scale = 1.0 + zoom * 0.4
+        xf, yf = 0.25 + 0.5 * p_e, 0.5
+    elif direction == "left":
+        scale = 1.0 + zoom * 0.4
+        xf, yf = 0.75 - 0.5 * p_e, 0.5
+    elif direction == "up":
+        scale = 1.0 + zoom * 0.4
+        xf, yf = 0.5, 0.7 - 0.4 * p_e
+    elif direction == "down":
+        scale = 1.0 + zoom * 0.4
+        xf, yf = 0.5, 0.3 + 0.4 * p_e
+    elif direction == "in_tl":
+        scale = 1.0 + zoom * p_e
+        xf, yf = 0.3, 0.25
+    elif direction == "in_br":
+        scale = 1.0 + zoom * p_e
+        xf, yf = 0.7, 0.75
+    elif direction == "diagonal":
+        scale = 1.0 + zoom * p_e
+        xf = 0.25 + 0.5 * p_e
+        yf = 0.75 - 0.5 * p_e
+    else:
+        scale = 1.0 + zoom * p_e
+        xf, yf = 0.5, 0.5
+
     nh, nw = max(1, int(h / scale)), max(1, int(w / scale))
-    y0, x0 = (h - nh) // 2, (w - nw) // 2
+    y0 = max(0, min(int((h - nh) * yf), h - nh))
+    x0 = max(0, min(int((w - nw) * xf), w - nw))
     cropped = img[y0:y0 + nh, x0:x0 + nw]
     return np.array(Image.fromarray(cropped).resize((w, h), Image.BILINEAR))
 
@@ -156,14 +191,31 @@ def render_text_ov(
     return ov
 
 
+def ease_out_back(p: float, overshoot: float = 0.25) -> float:
+    """Ease-out with slight overshoot — text 'pops' past 1.0 then settles."""
+    c1 = overshoot
+    c3 = c1 + 1
+    return 1 + c3 * ((p - 1) ** 3) + c1 * ((p - 1) ** 2)
+
+
+def progress_bar(arr: np.ndarray, t: float, total: float,
+                 color: tuple, bar_h: int = 5) -> np.ndarray:
+    bar_w = max(0, int(arr.shape[1] * min(1.0, t / total)))
+    if bar_w > 0:
+        out = arr.copy()
+        out[:bar_h, :bar_w] = color
+        return out
+    return arr
+
+
 # ── Slide renderer ────────────────────────────────────────────────────────────
 def render_slide(slide: dict, local_t: float, imgs: dict,
                  vignette: np.ndarray, fonts: dict,
-                 brand_color: list, anim_dur: float = 0.45) -> np.ndarray:
+                 brand_color: list, anim_dur: float = 0.30) -> np.ndarray:
     dur      = slide["duration"]
     is_cta   = slide.get("type") == "cta"
     h, w     = vignette.shape[:2]
-    fade_out = 0.35
+    fade_out = 0.30
 
     # Base image
     if is_cta:
@@ -171,7 +223,8 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
     else:
         arr = ken_burns(
             imgs[slide["image"]], local_t, dur,
-            zoom=0.06, zoom_in=slide.get("ken_burns_in", True),
+            zoom=slide.get("kb_zoom", 0.12),
+            direction=slide.get("kb_direction", "in_center"),
         )
         arr = grade(arr, vignette, contrast=1.18)
 
@@ -190,7 +243,7 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
 
     if anim == "typewriter":
         total_chars = sum(len(l) for l in main_l + sub_l)
-        shown = min(total_chars, int(elapsed * 22))
+        shown = min(total_chars, int(elapsed * 28))  # faster type speed
         ml, sl, rem = [], [], shown
         for line in main_l:
             take = min(len(line), rem); ml.append(line[:take]); rem -= take
@@ -203,8 +256,12 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
 
     elif anim == "scale_fade":
         p = min(1.0, elapsed / anim_dur)
-        ease = 1 - (1 - p) ** 2
-        in_alpha, sc, y_shift = ease, 0.78 + 0.22 * ease, 0
+        # ease-out-back: text POPs past 1.0 and settles
+        ease_scale = min(ease_out_back(p, overshoot=0.22), 1.15)
+        ease_alpha = 1 - (1 - p) ** 2
+        in_alpha = ease_alpha
+        sc       = 0.70 + 0.30 * ease_scale  # starts at 0.70, overshoots ~1.07
+        y_shift  = 0
         main_r, sub_r = main_l, sub_l
 
     elif anim == "slide_up":
@@ -252,27 +309,48 @@ def run(briefing_path: str, output_path: str):
     }
 
     total_duration = sum(s["duration"] for s in slides_data)
+    brand_rgb      = tuple(brand_color[:3])
 
     def make_frame(t):
         cumulative = 0.0
         for i, slide in enumerate(slides_data):
             slide_end = cumulative + slide["duration"]
             if t < slide_end or i == len(slides_data) - 1:
-                local_t = t - cumulative
+                local_t    = t - cumulative
+                remaining  = slide_end - t
+                transition = slide.get("transition", "dissolve")
+
                 current = render_slide(slide, local_t, imgs, vignette, fonts, brand_color)
 
-                # Cross-dissolve to next slide
-                remaining = slide_end - t
-                if remaining < trans_dur and i + 1 < len(slides_data):
-                    alpha_next = 1.0 - (remaining / trans_dur)
-                    nxt = render_slide(slides_data[i + 1], 0.0, imgs, vignette, fonts, brand_color)
-                    return ((1 - alpha_next) * current + alpha_next * nxt).astype(np.uint8)
+                if i + 1 < len(slides_data):
+                    if transition == "cut":
+                        # Brief white flash: last 2 frames out, first 2 frames in
+                        flash_out = remaining * fps
+                        flash_in  = local_t * fps
+                        if flash_out < 2:
+                            strength = (1 - flash_out / 2) * 0.65
+                            current  = np.clip(
+                                current.astype(np.float32) * (1 - strength) + 255 * strength, 0, 255
+                            ).astype(np.uint8)
+                        elif flash_in < 2:
+                            strength = (1 - flash_in / 2) * 0.65
+                            current  = np.clip(
+                                current.astype(np.float32) * (1 - strength) + 255 * strength, 0, 255
+                            ).astype(np.uint8)
+                    else:  # dissolve
+                        if remaining < trans_dur:
+                            alpha_next = 1.0 - (remaining / trans_dur)
+                            nxt = render_slide(slides_data[i + 1], 0.0, imgs, vignette, fonts, brand_color)
+                            current = ((1 - alpha_next) * current + alpha_next * nxt).astype(np.uint8)
 
+                # Progress bar
+                current = progress_bar(current, t, total_duration, brand_rgb)
                 return current
             cumulative += slide["duration"]
 
-        return render_slide(slides_data[-1], slides_data[-1]["duration"] - 0.001,
+        last = render_slide(slides_data[-1], slides_data[-1]["duration"] - 0.001,
                             imgs, vignette, fonts, brand_color)
+        return progress_bar(last, t, total_duration, brand_rgb)
 
     print(f"Rendering {total_duration:.1f}s at {fps}fps → {output_path}")
     VideoClip(make_frame, duration=total_duration).write_videofile(
