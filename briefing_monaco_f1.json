@@ -12,6 +12,11 @@
   "ken_burns": 0.025,
   "vignette": 0.68,
   "contrast": 1.18,
+  "color_grade": "cinematic",
+  "letterbox": 55,
+
+  "audio_fade": 1.8,
+  "audio_volume": 0.85,
 
   "font_size_main": 40,
   "font_size_sub": 24,

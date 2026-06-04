@@ -68,6 +68,21 @@ def grade_frame(frame: np.ndarray, vignette: np.ndarray, contrast: float) -> np.
     return np.clip(f * vignette, 0, 255).astype(np.uint8)
 
 
+def cinematic_grade(arr: np.ndarray, strength: float = 1.0) -> np.ndarray:
+    """Teal-orange cinematic grade: cool shadows, warm highlights."""
+    f   = arr.astype(np.float32) / 255.0
+    lum = (0.299 * f[:,:,0] + 0.587 * f[:,:,1] + 0.114 * f[:,:,2])[:,:,None]
+    sha = np.clip(1.0 - lum / 0.4, 0, 1)   # shadow mask
+    hil = np.clip((lum - 0.6) / 0.4, 0, 1) # highlight mask
+    s   = strength * 0.07
+    out = np.stack([
+        np.clip(f[:,:,0] - sha[:,:,0]*s + hil[:,:,0]*s*1.1, 0, 1),
+        np.clip(f[:,:,1] + sha[:,:,0]*s*0.3, 0, 1),
+        np.clip(f[:,:,2] + sha[:,:,0]*s*1.1 - hil[:,:,0]*s, 0, 1),
+    ], axis=2)
+    return (out * 255).astype(np.uint8)
+
+
 def apply_ken_burns(frame: np.ndarray, scale: float) -> np.ndarray:
     if abs(scale - 1.0) < 0.001:
         return frame
@@ -261,8 +276,10 @@ def process_frame(
                 frame = apply_ken_burns(frame, scale)
                 break
 
-    # Color grade + vignette
+    # Color grade + vignette + optional cinematic look
     arr = grade_frame(frame, vignette, briefing.get("contrast", 1.12))
+    if briefing.get("color_grade") == "cinematic":
+        arr = cinematic_grade(arr, briefing.get("cinematic_strength", 1.0))
 
     # Text segments
     brand_rgb  = tuple(briefing.get("brand_color", [255, 70, 0]))
@@ -377,6 +394,13 @@ def process_frame(
         bar_h = briefing.get("progress_bar_height", 5)
         arr   = draw_progress_bar(arr, t, total_duration, brand_rgb, bar_h)
 
+    # Letterbox — thin black bars for cinematic feel
+    lb = briefing.get("letterbox", 0)
+    if lb > 0:
+        arr = arr.copy()
+        arr[:lb]    = 0
+        arr[-lb:]   = 0
+
     return arr
 
 
@@ -390,15 +414,67 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
         briefing["_captions"] = json.loads(Path(caps_file).read_text(encoding="utf-8"))
         print(f"Loaded {len(briefing['_captions'])} caption chunks from {caps_file}")
 
-    clip_trim = briefing.get("clip_trim", [])
+    clip_trim  = briefing.get("clip_trim", [])
+    audio_fade = briefing.get("audio_fade", 0.0)
+    audio_vol  = briefing.get("audio_volume", 1.0)
+
     clips = []
     for i, p in enumerate(input_paths):
         c = VideoFileClip(p)
         if i < len(clip_trim) and clip_trim[i] and c.duration > clip_trim[i]:
             c = c.subclipped(0, clip_trim[i])
         clips.append(c)
+
+    # Audio smoothing at clip boundaries
+    if clips and (audio_fade > 0 or audio_vol != 1.0):
+        try:
+            from moviepy.audio.fx import AudioFadeOut, AudioFadeIn
+            smoothed = []
+            for i, c in enumerate(clips):
+                if c.audio is None:
+                    smoothed.append(c)
+                    continue
+                if audio_vol != 1.0:
+                    c = c.with_volume_scaled(audio_vol)
+                if audio_fade > 0:
+                    fade = min(audio_fade, c.duration * 0.4)
+                    effects = []
+                    if i < len(clips) - 1:
+                        effects.append(AudioFadeOut(fade))
+                    if i > 0:
+                        effects.append(AudioFadeIn(fade))
+                    if effects:
+                        c = c.with_effects(effects)
+                smoothed.append(c)
+            clips = smoothed
+        except Exception as e:
+            print(f"Audio fx skipped: {e}")
+
     clip = concatenate_videoclips(clips, method="compose") if len(clips) > 1 else clips[0]
     total_duration = clip.duration
+
+    # Optional background music overlay
+    music_path = briefing.get("music")
+    if music_path and Path(music_path).exists():
+        try:
+            from moviepy import AudioFileClip, concatenate_audioclips
+            from moviepy.audio import CompositeAudioClip
+            music = AudioFileClip(music_path)
+            if music.duration < total_duration:
+                loops = int(np.ceil(total_duration / music.duration))
+                music = concatenate_audioclips([music] * loops)
+            music = music.subclipped(0, total_duration).with_volume_scaled(
+                briefing.get("music_volume", 0.5)
+            )
+            orig = clip.audio
+            if orig:
+                from moviepy.audio import CompositeAudioClip
+                clip = clip.with_audio(CompositeAudioClip([orig, music]))
+            else:
+                clip = clip.with_audio(music)
+            print(f"Music overlay: {Path(music_path).name}")
+        except Exception as e:
+            print(f"Music overlay skipped: {e}")
 
     max_dur = briefing.get("duration")
     if max_dur and clip.duration > max_dur:
