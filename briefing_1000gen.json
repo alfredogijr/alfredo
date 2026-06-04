@@ -4,9 +4,8 @@
   "fps": 30,
   "transition_dur": 0.55,
   "vignette": 0.62,
-  "font_hook": 66,
-  "font_cap": 52,
-  "font_sub": 34,
+  "font_main": 52,
+  "font_sub": 32,
 
   "slides": [
     {

@@ -125,13 +125,12 @@ def grade(arr: np.ndarray, vignette: np.ndarray, contrast: float = 1.15) -> np.n
 
 
 def make_cta_bg(w: int, h: int, brand_color: list) -> np.ndarray:
-    """Very dark background with subtle brand color radial glow."""
-    Y = np.linspace(-1, 1, h)[:, None]
-    X = np.linspace(-1, 1, w)[None, :]
-    glow = np.clip(1 - np.sqrt(X**2 + Y**2) * 1.4, 0, 1)[:, :, None]
-    brand = np.array(brand_color[:3], dtype=np.float32) / 255
-    bg = glow * brand * 55
-    return np.clip(bg, 0, 255).astype(np.uint8)
+    """Deep navy-blue vertical gradient for CTA slides — white text on blue."""
+    top    = np.array([8, 30, 100], dtype=np.float32)
+    bottom = np.array([3, 14,  58], dtype=np.float32)
+    t_grad = np.linspace(0, 1, h)[:, None, None]
+    arr    = top * (1 - t_grad) + bottom * t_grad
+    return np.tile(arr, (1, w, 1)).astype(np.uint8)
 
 
 # ── Text rendering ────────────────────────────────────────────────────────────
@@ -146,57 +145,65 @@ def render_text_ov(
     main_lines: list, sub_lines: list,
     font_main, font_sub,
     position: str, alpha: float,
-    box_color: tuple, y_shift: int = 0, scale: float = 1.0,
+    brand_color: tuple, y_shift: int = 0, scale: float = 1.0,
+    accent: bool = False,
 ) -> Image.Image:
-    max_lw = 18 if position in ("center", "top") else 26
-    wm = sum([textwrap.wrap(l, max_lw) or [""] for l in main_lines], [])
-    ws = sum([textwrap.wrap(l, max_lw + 6) or [""] for l in sub_lines], [])
+    wm = sum([textwrap.wrap(l, 22) or [""] for l in main_lines], [])
+    ws = sum([textwrap.wrap(l, 28) or [""] for l in sub_lines], [])
 
-    lhm = font_main.size + 12
-    lhs = font_sub.size + 8
+    lhm = font_main.size + 8
+    lhs = font_sub.size + 6
     gap = 10
+    py  = 14
     tot = lhm * len(wm) + (gap + lhs * len(ws) if ws else 0)
-    px, py = 32, 18
 
-    ov = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ov   = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(ov)
+    by   = box_y(position, h, tot + 2 * py) + y_shift
 
-    mwm = max((draw.textlength(l, font=font_main) for l in wm), default=0)
-    mws = max((draw.textlength(l, font=font_sub)  for l in ws),  default=0)
-    bw = max(mwm, mws) + 2 * px
-    bx = (w - bw) / 2
-    by = box_y(position, h, tot + 2 * py) + y_shift
+    # Full-width scrim for bottom/top — cinematic, no rounded box
+    if position != "center":
+        draw.rectangle(
+            [0, by - py, w, by + tot + py],
+            fill=(0, 0, 0, int(72 * alpha)),
+        )
 
-    draw.rounded_rectangle(
-        [bx, by, bx + bw, by + tot + 2 * py], radius=14,
-        fill=(*box_color[:3], int(box_color[3] * alpha)),
-    )
-
-    def put(text, x, y, font):
-        draw.text((x + 2, y + 2), text, font=font, fill=(0, 0, 0, int(215 * alpha)))
-        draw.text((x,     y),     text, font=font, fill=(255, 255, 255, int(255 * alpha)))
-
-    y = by + py
+    # Main text — crisp white, no offset shadow
+    yt, widths = by, []
     for line in wm:
         lw = draw.textlength(line, font=font_main)
-        put(line, (w - lw) / 2, y, font_main)
-        y += lhm
+        widths.append(lw)
+        draw.text(((w - lw) / 2, yt), line, font=font_main,
+                  fill=(255, 255, 255, int(255 * alpha)))
+        yt += lhm
+
+    # Thin brand-color accent line
+    if accent and widths:
+        max_w = max(widths)
+        draw.rectangle(
+            [(w - max_w) / 2, yt + 5, (w + max_w) / 2, yt + 8],
+            fill=(*brand_color[:3], int(255 * alpha)),
+        )
+
+    # Sub text — slightly off-white
     if ws:
-        y += gap
+        yt += gap
         for line in ws:
             lw = draw.textlength(line, font=font_sub)
-            put(line, (w - lw) / 2, y, font_sub)
-            y += lhs
+            draw.text(((w - lw) / 2, yt), line, font=font_sub,
+                      fill=(205, 215, 230, int(215 * alpha)))
+            yt += lhs
 
-    # Scale around center for scale_fade
-    if scale < 1.0:
+    # Scale-in for scale_fade anim (center only — no scrim to distort)
+    if scale < 1.0 and position == "center":
         bbox = ov.getbbox()
         if bbox:
             region = ov.crop(bbox)
             nw2 = max(1, int((bbox[2] - bbox[0]) * scale))
             nh2 = max(1, int((bbox[3] - bbox[1]) * scale))
             region = region.resize((nw2, nh2), Image.LANCZOS)
-            cx, cy = (bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2
+            cx = (bbox[0] + bbox[2]) // 2
+            cy = (bbox[1] + bbox[3]) // 2
             ov = Image.new("RGBA", (w, h), (0, 0, 0, 0))
             ov.paste(region, (cx - nw2 // 2, cy - nh2 // 2), region)
 
@@ -246,9 +253,7 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
     main_l    = slide.get("main", [])
     sub_l     = slide.get("sub", [])
     accent    = slide.get("accent", False)
-    box_color = (*brand_color[:3], 215) if accent else (0, 0, 0, 165)
-    font_m    = fonts["hook"] if position in ("center", "top") else fonts["cap"]
-    font_s    = fonts["sub"]
+    brand_rgb = tuple(brand_color[:3])
 
     elapsed   = local_t
     remaining = dur - local_t
@@ -291,8 +296,8 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
     alpha = in_alpha * min(1.0, remaining / fade_out)
 
     base = Image.fromarray(arr).convert("RGBA")
-    ov   = render_text_ov(w, h, main_r, sub_r, font_m, font_s,
-                           position, alpha, box_color, y_shift, sc)
+    ov   = render_text_ov(w, h, main_r, sub_r, fonts["main"], fonts["sub"],
+                           position, alpha, brand_rgb, y_shift, sc, accent)
     return np.array(Image.alpha_composite(base, ov).convert("RGB"))
 
 
@@ -315,9 +320,9 @@ def run(briefing_path: str, output_path: str):
 
     vignette = build_vignette(out_h, out_w, strength=cfg.get("vignette", 0.62))
     fonts = {
-        "hook": load_font(cfg.get("font_hook", 66), role="title"),
-        "cap":  load_font(cfg.get("font_cap",  52), role="body"),
-        "sub":  load_font(cfg.get("font_sub",  34), role="body"),
+        # font_main > font_hook for backward-compat with existing briefings
+        "main": load_font(cfg.get("font_main", cfg.get("font_hook", 52)), role="title"),
+        "sub":  load_font(cfg.get("font_sub",  32), role="body"),
     }
 
     total_duration = sum(s["duration"] for s in slides_data)

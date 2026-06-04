@@ -20,7 +20,7 @@ import json
 import textwrap
 import numpy as np
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from moviepy import VideoFileClip, concatenate_videoclips
 
 
@@ -123,47 +123,53 @@ def render_overlay(
     font_main: ImageFont.FreeTypeFont,
     font_sub: ImageFont.FreeTypeFont,
     position: str, alpha: float, y_shift: int,
-    box_color: tuple,
+    brand_color: tuple, accent: bool = False,
 ) -> Image.Image:
-    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
+    wm = sum([textwrap.wrap(l, 22) or [""] for l in main_lines], [])
+    ws = sum([textwrap.wrap(l, 28) or [""] for l in sub_lines], [])
 
-    max_lw = 20 if position in ("center", "top") else 28
-    wm = sum([textwrap.wrap(l, max_lw) or [""] for l in main_lines], [])
-    ws = sum([textwrap.wrap(l, max_lw + 8) or [""] for l in sub_lines], [])
-
-    lhm = font_main.size + 12
-    lhs = font_sub.size + 8
+    lhm = font_main.size + 8
+    lhs = font_sub.size + 6
     gap = 10
+    py  = 14
     tot = lhm * len(wm) + (gap + lhs * len(ws) if ws else 0)
-    px, py = 30, 18
-
-    mwm = max((draw.textlength(l, font=font_main) for l in wm), default=0)
-    mws = max((draw.textlength(l, font=font_sub)  for l in ws),  default=0)
-    bw  = max(mwm, mws) + 2 * px
-    bx  = (w - bw) / 2
     by  = get_box_y(position, h, tot + 2 * py) + y_shift
-    bx2 = bx + bw
-    by2 = by + tot + 2 * py
 
-    draw.rounded_rectangle(
-        [bx, by, bx2, by2], radius=14,
-        fill=(*box_color[:3], int(box_color[3] * alpha)),
-    )
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw    = ImageDraw.Draw(overlay)
 
-    def put(text, x, y, font):
-        draw.text((x + 2, y + 2), text, font=font, fill=(0, 0, 0, int(210 * alpha)))
-        draw.text((x,     y),     text, font=font, fill=(255, 255, 255, int(255 * alpha)))
+    # Subtle full-width scrim at bottom/top — cinematic, no rounded box
+    if position != "center":
+        draw.rectangle(
+            [0, by - py, w, by + tot + py],
+            fill=(0, 0, 0, int(72 * alpha)),
+        )
 
-    y = by + py
+    # Main text — crisp white, no offset shadow
+    yt, widths = by, []
     for line in wm:
-        put(line, (w - draw.textlength(line, font=font_main)) / 2, y, font_main)
-        y += lhm
+        lw = draw.textlength(line, font=font_main)
+        widths.append(lw)
+        draw.text(((w - lw) / 2, yt), line, font=font_main,
+                  fill=(255, 255, 255, int(255 * alpha)))
+        yt += lhm
+
+    # Thin brand-color accent line below main text
+    if accent and widths:
+        max_w = max(widths)
+        draw.rectangle(
+            [(w - max_w) / 2, yt + 5, (w + max_w) / 2, yt + 8],
+            fill=(*brand_color[:3], int(255 * alpha)),
+        )
+
+    # Sub text — slightly off-white
     if ws:
-        y += gap
+        yt += gap
         for line in ws:
-            put(line, (w - draw.textlength(line, font=font_sub)) / 2, y, font_sub)
-            y += lhs
+            lw = draw.textlength(line, font=font_sub)
+            draw.text(((w - lw) / 2, yt), line, font=font_sub,
+                      fill=(205, 215, 230, int(215 * alpha)))
+            yt += lhs
 
     return overlay
 
@@ -240,7 +246,7 @@ def composite_scaled(base: Image.Image, ov: Image.Image, scale: float) -> Image.
 def process_frame(
     frame: np.ndarray, t: float,
     briefing: dict, boundaries: list,
-    font_hook, font_cap, font_sub, font_disc,
+    font_main, font_sub, font_disc,
     vignette: np.ndarray, total_duration: float,
 ) -> np.ndarray:
 
@@ -275,9 +281,6 @@ def process_frame(
         main_l    = seg.get("main", [])
         sub_l     = seg.get("sub", [])
         accent    = seg.get("accent", False)
-
-        font_m    = font_hook if position in ("center", "top") else font_cap
-        box_color = (*brand_rgb, 200) if accent else (0, 0, 0, 155)
 
         if anim == "typewriter":
             in_alpha, y_shift, scale = 1.0, 0, 1.0
@@ -320,10 +323,10 @@ def process_frame(
 
         h, w  = arr.shape[:2]
         base  = Image.fromarray(arr).convert("RGBA")
-        ov    = render_overlay(w, h, ml, sl, font_m, font_sub,
-                               position, alpha, y_shift, box_color)
+        ov    = render_overlay(w, h, ml, sl, font_main, font_sub,
+                               position, alpha, y_shift, brand_rgb, accent)
 
-        if anim == "scale_fade" and scale < 1.0:
+        if anim == "scale_fade" and scale < 1.0 and position == "center":
             result = composite_scaled(base, ov, scale)
         else:
             result = Image.alpha_composite(base, ov)
@@ -347,7 +350,7 @@ def process_frame(
                     h, w  = arr.shape[:2]
                     base  = Image.fromarray(arr).convert("RGBA")
                     cap_ov = render_auto_caption(
-                        w, h, cap, t, font_cap,
+                        w, h, cap, t, font_sub,
                         brand_rgb, captions_y,
                     )
                     arr = np.array(Image.alpha_composite(base, cap_ov).convert("RGB"))
@@ -403,15 +406,18 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
     h_px, w_px = clip.size[1], clip.size[0]
     vignette   = build_vignette(h_px, w_px, briefing.get("vignette", 0.55))
 
-    font_hook = load_font(briefing.get("font_size_hook",       66), role="title")
-    font_cap  = load_font(briefing.get("font_size_caption",    48), role="body")
-    font_sub  = load_font(briefing.get("font_size_sub",        32), role="body")
-    font_disc = load_font(briefing.get("font_size_disclaimer", 22), role="body")
+    # Backward-compatible: font_size_main > font_size_hook fallback
+    font_main = load_font(
+        briefing.get("font_size_main", briefing.get("font_size_hook", 44)),
+        role="title",
+    )
+    font_sub  = load_font(briefing.get("font_size_sub",        28), role="body")
+    font_disc = load_font(briefing.get("font_size_disclaimer", 20), role="body")
 
     def add_effects(get_frame, t):
         return process_frame(
             get_frame(t), t, briefing, boundaries,
-            font_hook, font_cap, font_sub, font_disc,
+            font_main, font_sub, font_disc,
             vignette, total_duration,
         )
 
