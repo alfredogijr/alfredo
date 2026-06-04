@@ -24,7 +24,6 @@ from PIL import Image, ImageDraw, ImageFont
 from moviepy import VideoFileClip, concatenate_videoclips
 
 
-def load_font(size: int, _cache: dict = {}) -> ImageFont.FreeTypeFont:
 FONTS_DIR = Path(__file__).parent / "fonts"
 
 # Font priority: Meta Kart brand fonts → system fallback
@@ -300,6 +299,17 @@ def process_frame(
             y_shift  = 0
             ml, sl   = main_l, sub_l
 
+        elif anim == "word_reveal":
+            words_all   = " ".join(main_l).split()
+            timings     = seg.get("word_timing", [i * 0.5 for i in range(len(words_all))])
+            shown_count = sum(1 for ts in timings if elapsed >= ts)
+            shown       = words_all[:shown_count]
+            ml          = [" ".join(shown)] if shown else [""]
+            sl          = sub_l
+            first_ts    = timings[0] if timings else 0.0
+            in_alpha    = min(1.0, max(0.0, elapsed - first_ts) / 0.20) if shown_count > 0 else 0.0
+            y_shift, scale = 0, 1.0
+
         else:  # fade
             in_alpha = min(1.0, elapsed / anim_dur)
             y_shift, scale = 0, 1.0
@@ -379,6 +389,11 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
     clips = [VideoFileClip(p) for p in input_paths]
     clip  = concatenate_videoclips(clips, method="compose") if len(clips) > 1 else clips[0]
     total_duration = clip.duration
+
+    max_dur = briefing.get("duration")
+    if max_dur and clip.duration > max_dur:
+        clip = clip.subclipped(0, max_dur)
+        total_duration = max_dur
 
     boundaries, t0 = [], 0.0
     for c in clips:

@@ -1,0 +1,60 @@
+{
+  "inputs": [
+    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4",
+    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/0b841776-snapinsta.com.br6a21bfd798a47.mp4"
+  ],
+  "duration": 16,
+
+  "brand_color": [190, 150, 35],
+  "progress_bar": false,
+
+  "ken_burns": 0.025,
+  "vignette": 0.65,
+  "contrast": 1.20,
+
+  "font_size_hook": 66,
+  "font_size_caption": 52,
+  "font_size_sub": 34,
+
+  "segments": [
+    {
+      "start": 0.2, "end": 4.0,
+      "anim": "word_reveal",
+      "word_timing": [0.3, 0.9, 1.5],
+      "main": ["IMAGINA VIVER ISSO."],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 4.2, "end": 7.2,
+      "anim": "fade",
+      "main": ["UMA SEMANA NO", "CORAÇÃO DA FÓRMULA 1."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 7.5, "end": 10.8,
+      "anim": "typewriter",
+      "main": ["MÔNACO · BARCELONA", "SILVERSTONE · SPA"],
+      "sub": [],
+      "position": "bottom"
+    },
+    {
+      "start": 11.0, "end": 14.5,
+      "anim": "slide_up",
+      "main": ["MÔNACO É UM SONHO.", "A TEMPORADA EUROPEIA", "É UMA JORNADA."],
+      "sub": [],
+      "position": "bottom"
+    },
+    {
+      "start": 14.7, "end": 16.0,
+      "anim": "scale_fade",
+      "main": ["TURISTA FC"],
+      "sub": ["Seu lugar na temporada europeia"],
+      "position": "center",
+      "accent": true
+    }
+  ]
+}
