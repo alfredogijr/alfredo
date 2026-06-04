@@ -390,8 +390,14 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
         briefing["_captions"] = json.loads(Path(caps_file).read_text(encoding="utf-8"))
         print(f"Loaded {len(briefing['_captions'])} caption chunks from {caps_file}")
 
-    clips = [VideoFileClip(p) for p in input_paths]
-    clip  = concatenate_videoclips(clips, method="compose") if len(clips) > 1 else clips[0]
+    clip_trim = briefing.get("clip_trim", [])
+    clips = []
+    for i, p in enumerate(input_paths):
+        c = VideoFileClip(p)
+        if i < len(clip_trim) and clip_trim[i] and c.duration > clip_trim[i]:
+            c = c.subclipped(0, clip_trim[i])
+        clips.append(c)
+    clip = concatenate_videoclips(clips, method="compose") if len(clips) > 1 else clips[0]
     total_duration = clip.duration
 
     max_dur = briefing.get("duration")

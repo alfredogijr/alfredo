@@ -1,8 +1,9 @@
 {
   "inputs": [
-    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4",
-    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/0b841776-snapinsta.com.br6a21bfd798a47.mp4"
+    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/0b841776-snapinsta.com.br6a21bfd798a47.mp4",
+    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4"
   ],
+  "clip_trim": [10, 8],
   "duration": 18,
 
   "brand_color": [20, 90, 210],
@@ -12,8 +13,8 @@
   "vignette": 0.68,
   "contrast": 1.18,
 
-  "font_size_main": 44,
-  "font_size_sub": 28,
+  "font_size_main": 40,
+  "font_size_sub": 24,
 
   "segments": [
     {
@@ -34,16 +35,16 @@
       "accent": false
     },
     {
-      "start": 7.5, "end": 10.8,
+      "start": 7.5, "end": 11.0,
       "anim": "typewriter",
-      "main": ["MÔNACO · BARCELONA · MADRID", "SILVERSTONE · SPA"],
+      "main": ["MÔNACO · SILVERSTONE · SPA", "MADRID · ENTRE OUTROS"],
       "sub": [],
       "position": "bottom"
     },
     {
-      "start": 11.0, "end": 14.5,
+      "start": 11.2, "end": 14.5,
       "anim": "slide_up",
-      "main": ["MÔNACO É UM SONHO.", "A TEMPORADA EUROPEIA", "É UMA JORNADA."],
+      "main": ["MÔNACO É UM SONHO.", "A TEMPORADA EUROPÉIA", "É UMA JORNADA."],
       "sub": [],
       "position": "bottom"
     },
@@ -51,7 +52,7 @@
       "start": 14.8, "end": 18.0,
       "anim": "scale_fade",
       "main": ["TURISTA FC"],
-      "sub": ["Seu lugar na temporada europeia"],
+      "sub": ["Seu lugar na temporada européia"],
       "position": "center",
       "accent": true
     }
