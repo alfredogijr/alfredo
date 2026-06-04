@@ -21,7 +21,7 @@ from typing import List, Optional
 from datetime import datetime
 
 import pdfplumber
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # OCR support (lazy imports — only used for scanned PDFs)
 try:
@@ -292,98 +292,156 @@ def font(style: str, size: int) -> ImageFont.FreeTypeFont:
 
 # ─── Drawing Helpers ───────────────────────────────────────────────────────────
 
+# Top-3 medal palette
+_MEDAL = {
+    1: {"bar_l": (215, 175, 28),  "bar_r": (155, 118, 12),  "num": (120, 90, 8)},
+    2: {"bar_l": (178, 183, 195), "bar_r": (128, 133, 145), "num": (95, 100, 112)},
+    3: {"bar_l": (188, 112, 42),  "bar_r": (145, 78, 25),   "num": (108, 55, 16)},
+}
+
+
+def _lerp_color(a: tuple, b: tuple, t: float) -> tuple:
+    return tuple(int(a[i] * (1 - t) + b[i] * t) for i in range(3))
+
+
 def center_text(draw: ImageDraw.Draw, y: int, text: str,
-                fnt: ImageFont.FreeTypeFont, color: tuple, canvas_w: int) -> int:
-    bb = draw.textbbox((0, 0), text, font=fnt)
-    x = (canvas_w - (bb[2] - bb[0])) // 2 - bb[0]
+                fnt: ImageFont.FreeTypeFont, color: tuple, canvas_w: int,
+                shadow: bool = False) -> int:
+    bb  = draw.textbbox((0, 0), text, font=fnt)
+    tw  = bb[2] - bb[0]
+    x   = (canvas_w - tw) // 2 - bb[0]
+    if shadow:
+        for ox, oy in [(3, 3), (2, 3), (3, 2)]:
+            draw.text((x + ox, y + oy), text, font=fnt, fill=(0, 0, 0, 120))
     draw.text((x, y), text, font=fnt, fill=color)
     return bb[3] - bb[1]
 
 
-def make_checker(size: int = 280, cell: int = 28, alpha: int = 90) -> Image.Image:
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+def _gradient_bar(w: int, h: int, col_l: tuple, col_r: tuple) -> Image.Image:
+    """1-row gradient stretched to full height — fast approach."""
+    bar = Image.new("RGB", (w, 1))
+    px  = bar.load()
+    for x in range(w):
+        px[x, 0] = _lerp_color(col_l, col_r, x / max(w - 1, 1))
+    return bar.resize((w, h), Image.NEAREST)
+
+
+def _add_radial_glow(img: Image.Image, cx: int, cy: int,
+                     radius: int, color: tuple, max_alpha: int = 60) -> Image.Image:
+    """Soft radial glow using concentric ellipses + gaussian blur."""
+    W, H  = img.size
+    glow  = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gdraw = ImageDraw.Draw(glow)
+    steps = 20
+    for i in range(steps, 0, -1):
+        r = int(radius * i / steps)
+        a = int(max_alpha * (i / steps) ** 1.8)
+        gdraw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(*color, a))
+    glow = glow.filter(ImageFilter.GaussianBlur(radius // 6))
+    return Image.alpha_composite(img.convert("RGBA"), glow).convert("RGB")
+
+
+def _make_checker_faded(size: int, cell: int) -> Image.Image:
+    """Checkered pattern that fades diagonally from the top-left corner."""
+    img  = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    n = size // cell + 2
+    n    = size // cell + 2
+    diag = (size ** 2 * 2) ** 0.5
     for r in range(n):
         for c in range(n):
             if (r + c) % 2 == 0:
-                x1, y1 = c * cell, r * cell
-                draw.rectangle([x1, y1, x1 + cell, y1 + cell],
-                                fill=(255, 255, 255, alpha))
+                dist  = ((r * cell) ** 2 + (c * cell) ** 2) ** 0.5
+                alpha = int(140 * max(0.0, 1.0 - (dist / diag) * 1.6) ** 1.4)
+                if alpha > 4:
+                    x1, y1 = c * cell, r * cell
+                    draw.rectangle([x1, y1, x1 + cell - 1, y1 + cell - 1],
+                                   fill=(255, 255, 255, alpha))
     return img
 
 
-def add_dot_texture(img: Image.Image, color: tuple,
-                    spacing: int = 20, radius: int = 2) -> Image.Image:
-    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-    r, g, b = color
-    for y in range(0, img.height + spacing, spacing):
-        for x in range(0, img.width + spacing, spacing):
-            draw.ellipse([x - radius, y - radius, x + radius, y + radius],
-                         fill=(r, g, b, 30))
-    base = img.convert("RGBA")
-    return Image.alpha_composite(base, overlay).convert("RGB")
-
-
-def gradient_fill(size: tuple, top: tuple, bottom: tuple) -> Image.Image:
-    img = Image.new("RGB", size)
+def _vertical_gradient(size: tuple, top: tuple, bottom: tuple) -> Image.Image:
+    img  = Image.new("RGB", size)
     draw = ImageDraw.Draw(img)
     w, h = size
     for y in range(h):
-        t = y / h
-        c = tuple(int(top[i] * (1 - t) + bottom[i] * t) for i in range(3))
-        draw.line([(0, y), (w, y)], fill=c)
+        draw.line([(0, y), (w, y)], fill=_lerp_color(top, bottom, y / h))
     return img
 
 
-def place_logo(img: Image.Image, y_center: int, max_w: int, max_h: int) -> None:
-    logo = Image.open(LOGO).convert("RGBA")
-    scale = min(max_w / logo.width, max_h / logo.height)
-    lw = int(logo.width  * scale)
-    lh = int(logo.height * scale)
-    logo = logo.resize((lw, lh), Image.LANCZOS)
-    x = (img.width - lw) // 2
-    y = y_center - lh // 2
-    img.paste(logo, (x, y), logo)
+def _place_logo(img: Image.Image, y_center: int, max_w: int, max_h: int) -> None:
+    logo   = Image.open(LOGO).convert("RGBA")
+    sc     = min(max_w / logo.width, max_h / logo.height)
+    lw, lh = int(logo.width * sc), int(logo.height * sc)
+    logo   = logo.resize((lw, lh), Image.LANCZOS)
+    img.paste(logo, ((img.width - lw) // 2, y_center - lh // 2), logo)
 
 
-def draw_row(draw: ImageDraw.Draw, x: int, y: int,
-             w: int, h: int, entry: Entry, cfg: dict) -> None:
-    gap = 3
+def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
+              x: int, y: int, w: int, h: int,
+              entry: Entry, cfg: dict) -> None:
+    gap   = 4
     bar_h = h - gap
+    pos_w = int(h * 0.92)
+    r_corner = max(5, int(bar_h * 0.13))
 
-    # Colored row bar
-    draw.rectangle([x, y, x + w, y + bar_h], fill=cfg["row_bg"])
+    # Choose colors (medal or track)
+    if entry.pos in _MEDAL:
+        mc    = _MEDAL[entry.pos]
+        bar_l, bar_r = mc["bar_l"], mc["bar_r"]
+        num_c = mc["num"]
+    else:
+        bar_l = cfg["row_bg"]
+        bar_r = _lerp_color(cfg["row_bg"], cfg["bg"], 0.38)
+        num_c = cfg["num_bg"]
 
-    # Darker position box (left side)
-    pos_w = int(h * 0.88)
-    draw.rectangle([x, y, x + pos_w, y + bar_h], fill=cfg["num_bg"])
+    # Gradient bar (full width, will be masked by rounded rect below)
+    grad  = _gradient_bar(w, bar_h, bar_l, bar_r)
+    img.paste(grad, (x, y))
+
+    # Position box overlay
+    num_img = Image.new("RGBA", (pos_w, bar_h), (*num_c, 245))
+    img.paste(num_img, (x, y), num_img)
+
+    # Left accent stripe (3 px, bright primary_light)
+    draw.rectangle([x, y, x + 4, y + bar_h - 1], fill=cfg["primary_light"])
+
+    # Re-acquire draw (img was modified by paste)
+    draw = ImageDraw.Draw(img)
 
     # Position number
-    f_pos = font("bold", int(h * 0.45))
-    bb = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
+    f_pos  = font("bold", int(h * 0.46))
+    bb     = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
     pw, ph = bb[2] - bb[0], bb[3] - bb[1]
     draw.text(
-        (x + (pos_w - pw) // 2 - bb[0], y + (bar_h - ph) // 2),
+        (x + 4 + (pos_w - 4 - pw) // 2 - bb[0],
+         y + (bar_h - ph) // 2 - bb[1]),
         str(entry.pos), font=f_pos, fill=(255, 255, 255)
     )
 
-    # Name
-    f_name = font("bold", int(h * 0.29))
-    bb = draw.textbbox((0, 0), entry.name, font=f_name)
-    nh = bb[3] - bb[1]
+    # Name (truncate if too wide)
+    f_name    = font("bold", int(h * 0.295))
+    name_x    = x + pos_w + 16
+    max_name_w = w - pos_w - 20 - 160   # leave room for time
+    name_str   = entry.name
+    while True:
+        bb = draw.textbbox((0, 0), name_str, font=f_name)
+        if (bb[2] - bb[0]) <= max_name_w or len(name_str) < 4:
+            break
+        name_str = name_str[:-1]
+    if name_str != entry.name:
+        name_str = name_str.rstrip() + "…"
+    bb = draw.textbbox((0, 0), name_str, font=f_name)
     draw.text(
-        (x + pos_w + 14, y + (bar_h - nh) // 2 - bb[1]),
-        entry.name, font=f_name, fill=(255, 255, 255)
+        (name_x, y + (bar_h - (bb[3] - bb[1])) // 2 - bb[1]),
+        name_str, font=f_name, fill=(255, 255, 255)
     )
 
-    # Time (right-aligned)
-    f_time = font("bold", int(h * 0.32))
-    bb = draw.textbbox((0, 0), entry.time, font=f_time)
+    # Time (right-aligned, mono-spaced feel)
+    f_time = font("bold", int(h * 0.33))
+    bb     = draw.textbbox((0, 0), entry.time, font=f_time)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
     draw.text(
-        (x + w - tw - 14, y + (bar_h - th) // 2 - bb[1]),
+        (x + w - tw - 18, y + (bar_h - th) // 2 - bb[1]),
         entry.time, font=f_time, fill=(255, 255, 255)
     )
 
@@ -391,40 +449,60 @@ def draw_row(draw: ImageDraw.Draw, x: int, y: int,
 # ─── Cover Slide ───────────────────────────────────────────────────────────────
 
 def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
-    W, H = size
-    # Scale to fit both dimensions (Instagram reference: 1080×1350)
+    W, H  = size
     scale = min(W / 1080, H / 1350)
 
-    img = gradient_fill(size, cfg["primary_dark"], cfg["bg"])
-    img = add_dot_texture(img, cfg["primary"])
+    # Background: vertical gradient + radial glow
+    img = _vertical_gradient(size, cfg["primary_dark"], cfg["bg"])
+    img = _add_radial_glow(img, W // 2, int(H * 0.28),
+                           int(min(W, H) * 0.72), cfg["primary"], max_alpha=50)
+
+    # Faint watermark "RANKING" in background
+    wm_size = int(210 * scale)
+    f_wm    = font("title", wm_size)
+    wm_img  = Image.new("RGBA", size, (0, 0, 0, 0))
+    wm_draw = ImageDraw.Draw(wm_img)
+    bb      = wm_draw.textbbox((0, 0), "RANKING", font=f_wm)
+    wm_x    = (W - (bb[2] - bb[0])) // 2 - bb[0]
+    wm_draw.text((wm_x, int(H * 0.38)), "RANKING", font=f_wm,
+                 fill=(*cfg["primary"], 22))
+    img = Image.alpha_composite(img.convert("RGBA"), wm_img).convert("RGB")
+
     draw = ImageDraw.Draw(img)
 
     # Logo
-    place_logo(img, int(330 * scale), int(500 * scale), int(200 * scale))
+    _place_logo(img, int(295 * scale), int(480 * scale), int(185 * scale))
+    draw = ImageDraw.Draw(img)
 
     # "RANKING"
-    f_r = font("title", int(155 * scale))
-    center_text(draw, int(580 * scale), "RANKING", f_r, (255, 255, 255), W)
+    f_r = font("title", int(168 * scale))
+    center_text(draw, int(555 * scale), "RANKING", f_r, (255, 255, 255), W, shadow=True)
 
     # "DA SEMANA"
-    f_s = font("title", int(108 * scale))
-    center_text(draw, int(750 * scale), "DA SEMANA", f_s, cfg["primary_light"], W)
+    f_s = font("title", int(115 * scale))
+    center_text(draw, int(728 * scale), "DA SEMANA", f_s, cfg["primary_light"], W, shadow=True)
 
-    # Divider
-    lw = int(380 * scale)
+    # Divider line (with dots at ends)
+    lw = int(360 * scale)
     lx = (W - lw) // 2
-    ly = int(895 * scale)
-    draw.line([(lx, ly), (lx + lw, ly)], fill=cfg["primary"], width=3)
+    ly = int(880 * scale)
+    draw.line([(lx, ly), (lx + lw, ly)], fill=cfg["primary"], width=2)
+    dot_r = 4
+    draw.ellipse([lx - dot_r, ly - dot_r, lx + dot_r, ly + dot_r],
+                 fill=cfg["primary_light"])
+    draw.ellipse([lx + lw - dot_r, ly - dot_r, lx + lw + dot_r, ly + dot_r],
+                 fill=cfg["primary_light"])
 
     # Period
     if track.period_start and track.period_end:
-        period_text = f"{track.period_start} ATÉ {track.period_end}"
-        f_period = font("bold", int(36 * scale))
-        center_text(draw, int(912 * scale), period_text, f_period, (255, 255, 255), W)
+        f_p = font("semibold", int(34 * scale))
+        center_text(draw, int(898 * scale),
+                    f"{track.period_start}  ·  {track.period_end}",
+                    f_p, (200, 200, 200), W)
 
     # Track name
-    f_track = font("bold", int(54 * scale))
-    center_text(draw, int(975 * scale), cfg["name"], f_track, (255, 255, 255), W)
+    f_t = font("bold", int(58 * scale))
+    center_text(draw, int(958 * scale), cfg["name"], f_t, (255, 255, 255), W, shadow=True)
 
     return img
 
@@ -432,41 +510,58 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
 # ─── Ranking Slide ─────────────────────────────────────────────────────────────
 
 def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Image:
-    W, H = size
+    W, H  = size
     scale = min(W / 1080, H / 1350)
 
+    # Background
     img = Image.new("RGB", size, cfg["bg"])
-    img = add_dot_texture(img, cfg["primary"])
+    img = _add_radial_glow(img, int(W * 0.55), int(H * 0.32),
+                           int(min(W, H) * 0.85), cfg["primary"], max_alpha=42)
 
-    # Checkered flag (top-left corner)
-    checker = make_checker(size=int(300 * scale), cell=int(30 * scale), alpha=80)
-    img.paste(checker, (-int(15 * scale), -int(15 * scale)), checker)
+    # Checkered flag (top-left, faded diagonally)
+    flag_sz = int(310 * scale)
+    checker = _make_checker_faded(flag_sz, int(31 * scale))
+    img.paste(checker, (-int(12 * scale), -int(12 * scale)), checker)
 
     draw = ImageDraw.Draw(img)
 
-    # Title
-    f_title = font("title", int(80 * scale))
-    center_text(draw, int(205 * scale), "RANKING DA SEMANA", f_title, (255, 255, 255), W)
+    # Thin colored top border
+    draw.rectangle([0, 0, W, int(6 * scale)], fill=cfg["primary_light"])
 
-    # Category label
-    f_cat = font("semibold", int(33 * scale))
-    center_text(draw, int(303 * scale), f"CATEGORIA: {cat.label}", f_cat,
-                cfg["primary_light"], W)
+    # Title "RANKING DA SEMANA"
+    f_title = font("title", int(84 * scale))
+    center_text(draw, int(195 * scale), "RANKING DA SEMANA",
+                f_title, (255, 255, 255), W, shadow=True)
+
+    # Category label with underline accent
+    f_cat  = font("semibold", int(31 * scale))
+    cat_y  = int(296 * scale)
+    cat_h  = center_text(draw, cat_y, f"CATEGORIA:  {cat.label}",
+                         f_cat, cfg["primary_light"], W)
+    # Underline
+    cat_text = f"CATEGORIA:  {cat.label}"
+    bb = draw.textbbox((0, 0), cat_text, font=f_cat)
+    uw = bb[2] - bb[0]
+    ux = (W - uw) // 2
+    uy = cat_y + cat_h + int(6 * scale)
+    draw.line([(ux, uy), (ux + uw, uy)], fill=cfg["primary"], width=2)
 
     # Rows
-    row_margin = int(65 * scale)
-    row_w      = W - row_margin * 2
-    row_h      = int(80 * scale)
-    row_gap    = int(5  * scale)
-    start_y    = int(368 * scale)
+    row_m  = int(62 * scale)
+    row_w  = W - row_m * 2
+    row_h  = int(80 * scale)
+    row_g  = int(6  * scale)
+    start_y = int(362 * scale)
 
     for entry in cat.entries:
-        ry = start_y + (entry.pos - 1) * (row_h + row_gap)
-        draw_row(draw, row_margin, ry, row_w, row_h, entry, cfg)
+        ry = start_y + (entry.pos - 1) * (row_h + row_g)
+        _draw_row(img, draw, row_m, ry, row_w, row_h, entry, cfg)
+        draw = ImageDraw.Draw(img)   # refresh after paste ops
 
     # Logo
-    logo_area_top = start_y + 10 * (row_h + row_gap) + int(10 * scale)
-    place_logo(img, logo_area_top + int(55 * scale), int(340 * scale), int(85 * scale))
+    rows_end = start_y + 10 * (row_h + row_g)
+    logo_y   = rows_end + (H - rows_end) // 2
+    _place_logo(img, logo_y, int(330 * scale), int(82 * scale))
 
     return img
 
