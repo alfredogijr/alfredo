@@ -148,8 +148,9 @@ def render_text_ov(
     brand_color: tuple, y_shift: int = 0, scale: float = 1.0,
     accent: bool = False,
 ) -> Image.Image:
-    wm = sum([textwrap.wrap(l, 22) or [""] for l in main_lines], [])
-    ws = sum([textwrap.wrap(l, 28) or [""] for l in sub_lines], [])
+    max_m = 22 if position == "center" else 28
+    wm = sum([textwrap.wrap(l, max_m) or [""] for l in main_lines], [])
+    ws = sum([textwrap.wrap(l, 32) or [""] for l in sub_lines], [])
 
     lhm = font_main.size + 8
     lhs = font_sub.size + 6

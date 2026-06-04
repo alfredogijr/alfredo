@@ -3,7 +3,7 @@
     "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4",
     "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/0b841776-snapinsta.com.br6a21bfd798a47.mp4"
   ],
-  "duration": 16,
+  "duration": 18,
 
   "brand_color": [20, 90, 210],
   "progress_bar": false,
@@ -36,7 +36,7 @@
     {
       "start": 7.5, "end": 10.8,
       "anim": "typewriter",
-      "main": ["MÔNACO · BARCELONA", "SILVERSTONE · SPA"],
+      "main": ["MÔNACO · BARCELONA · MADRID", "SILVERSTONE · SPA"],
       "sub": [],
       "position": "bottom"
     },
@@ -48,7 +48,7 @@
       "position": "bottom"
     },
     {
-      "start": 14.7, "end": 16.0,
+      "start": 14.8, "end": 18.0,
       "anim": "scale_fade",
       "main": ["TURISTA FC"],
       "sub": ["Seu lugar na temporada europeia"],
