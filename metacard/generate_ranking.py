@@ -62,12 +62,12 @@ TRACKS = {
     },
     "campo_grande": {
         "name":          "CAMPO GRANDE",
-        "primary":       (245, 100,   0),
-        "primary_dark":  ( 52,  18,   0),
-        "primary_light": (255, 152,  30),
-        "bg":            (  8,   4,   0),
-        "row_bg":        (198,  78,   6),
-        "num_bg":        ( 16,   6,   0),
+        "primary":       (248, 100,   0),
+        "primary_dark":  ( 85,  34,   3),
+        "primary_light": (255, 155,  28),
+        "bg":            ( 28,  13,   2),   # orange-tinted background
+        "row_bg":        (200,  80,   5),
+        "num_bg":        ( 48,  20,   3),   # orange-tinted number box
     },
 }
 
@@ -297,9 +297,9 @@ def _lerp_color(a: tuple, b: tuple, t: float) -> tuple:
 
 
 def _row_palette(pos: int, cfg: dict) -> Tuple[tuple, tuple, tuple]:
-    """Returns (bar_l, bar_r, num_c) using track-color tints — no medals."""
+    """(bar_l, bar_r, num_c) using track-color tints for all positions."""
     if pos == 1:
-        bar_l = _lerp_color(cfg["primary_light"], (255, 255, 255), 0.22)
+        bar_l = _lerp_color(cfg["primary_light"], (255, 255, 255), 0.24)
         bar_r = cfg["primary_light"]
         num_c = cfg["primary"]
     elif pos == 2:
@@ -308,11 +308,11 @@ def _row_palette(pos: int, cfg: dict) -> Tuple[tuple, tuple, tuple]:
         num_c = _lerp_color(cfg["primary_dark"], cfg["primary"], 0.28)
     elif pos == 3:
         bar_l = cfg["primary"]
-        bar_r = _lerp_color(cfg["primary"], cfg["row_bg"], 0.48)
+        bar_r = _lerp_color(cfg["primary"], cfg["row_bg"], 0.50)
         num_c = cfg["primary_dark"]
     else:
         bar_l = cfg["row_bg"]
-        bar_r = _lerp_color(cfg["row_bg"], cfg["bg"], 0.42)
+        bar_r = _lerp_color(cfg["row_bg"], cfg["bg"], 0.44)
         num_c = cfg["num_bg"]
     return bar_l, bar_r, num_c
 
@@ -325,7 +325,7 @@ def center_text(draw: ImageDraw.Draw, y: int, text: str,
     x   = (canvas_w - tw) // 2 - bb[0]
     if shadow:
         for ox, oy in [(3, 3), (2, 3), (3, 2)]:
-            draw.text((x + ox, y + oy), text, font=fnt, fill=(0, 0, 0, 130))
+            draw.text((x + ox, y + oy), text, font=fnt, fill=(0, 0, 0, 140))
     draw.text((x, y), text, font=fnt, fill=color)
     return bb[3] - bb[1]
 
@@ -336,6 +336,16 @@ def _gradient_bar(w: int, h: int, col_l: tuple, col_r: tuple) -> Image.Image:
     for x in range(w):
         px[x, 0] = _lerp_color(col_l, col_r, x / max(w - 1, 1))
     return bar.resize((w, h), Image.NEAREST)
+
+
+def _para_mask(w: int, h: int, slant: int) -> Image.Image:
+    """Parallelogram alpha mask — right-leaning (F1 timing-panel style)."""
+    mask = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(mask).polygon([
+        (slant, 0), (w - 1, 0),
+        (w - 1 - slant, h - 1), (0, h - 1),
+    ], fill=255)
+    return mask
 
 
 def _add_radial_glow(img: Image.Image, cx: int, cy: int,
@@ -361,7 +371,7 @@ def _make_checker_faded(size: int, cell: int) -> Image.Image:
         for c in range(n):
             if (r + c) % 2 == 0:
                 dist  = ((r * cell) ** 2 + (c * cell) ** 2) ** 0.5
-                alpha = int(130 * max(0.0, 1.0 - (dist / diag) * 1.5) ** 1.5)
+                alpha = int(120 * max(0.0, 1.0 - (dist / diag) * 1.5) ** 1.5)
                 if alpha > 4:
                     x1, y1 = c * cell, r * cell
                     draw.rectangle([x1, y1, x1 + cell - 1, y1 + cell - 1],
@@ -378,6 +388,22 @@ def _vertical_gradient(size: tuple, top: tuple, bottom: tuple) -> Image.Image:
     return img
 
 
+def _add_diagonal_band(img: Image.Image, color: tuple,
+                       y_left: float = 0.52, y_right: float = 0.30,
+                       thickness: float = 0.22, alpha: int = 28) -> Image.Image:
+    """Wide diagonal color band — F1 livery element."""
+    W, H = img.size
+    overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    yl = int(H * y_left)
+    yr = int(H * y_right)
+    t  = int(H * thickness)
+    ImageDraw.Draw(overlay).polygon([
+        (0, yl - t // 2), (W, yr - t // 2),
+        (W, yr + t // 2), (0, yl + t // 2),
+    ], fill=(*color, alpha))
+    return Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
+
+
 def _place_logo(img: Image.Image, y_center: int, max_w: int, max_h: int) -> None:
     logo   = Image.open(LOGO).convert("RGBA")
     sc     = min(max_w / logo.width, max_h / logo.height)
@@ -389,68 +415,63 @@ def _place_logo(img: Image.Image, y_center: int, max_w: int, max_h: int) -> None
 def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
               x: int, y: int, w: int, h: int,
               entry: Entry, cfg: dict, scale: float = 1.0) -> None:
-    gap     = int(4 * scale)
-    bar_h   = h - gap
-    pos_w   = int(h * 0.92)
-    radius  = max(6, int(bar_h * 0.16))
-    stripe  = max(4, int(5 * scale))
+    gap    = int(4 * scale)
+    bar_h  = h - gap
+    pos_w  = int(h * 0.90)
+    slant  = int(bar_h * 0.16)   # parallelogram lean (F1 timing-panel look)
+    stripe = max(5, int(5 * scale))
 
     bar_l, bar_r, num_c = _row_palette(entry.pos, cfg)
 
-    # ── Gradient pill (RGBA with rounded corners) ──────────────────────────────
-    grad_raw = _gradient_bar(w, bar_h, bar_l, bar_r).convert("RGBA")
-    mask     = Image.new("L", (w, bar_h), 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, w - 1, bar_h - 1],
-                                           radius=radius, fill=255)
-    grad_raw.putalpha(mask)
-
-    # Subtle top-shine (glossy effect)
-    shine_h = max(3, bar_h // 4)
-    shine   = Image.new("RGBA", (w, bar_h), (0, 0, 0, 0))
+    # ── Row gradient with parallelogram mask ───────────────────────────────────
+    grad = _gradient_bar(w, bar_h, bar_l, bar_r).convert("RGBA")
+    # Top-shine
+    shine_h = max(3, bar_h // 5)
     for sy in range(shine_h):
-        a = int(40 * (1.0 - sy / shine_h) ** 1.4)
-        ImageDraw.Draw(shine).line([(0, sy), (w - 1, sy)], fill=(255, 255, 255, a))
-    shine.putalpha(mask)
-    grad_raw = Image.alpha_composite(grad_raw, shine)
+        a = int(40 * (1.0 - sy / shine_h) ** 1.5)
+        ImageDraw.Draw(grad).line([(0, sy), (w - 1, sy)], fill=(255, 255, 255, a))
+    grad.putalpha(_para_mask(w, bar_h, slant))
+    img.paste(grad, (x, y), grad)
 
-    img.paste(grad_raw, (x, y), grad_raw)
+    # ── Position badge (left parallelogram) ────────────────────────────────────
+    badge_w = pos_w + slant
+    badge   = Image.new("RGBA", (badge_w, bar_h), (*num_c, 240))
+    badge.putalpha(_para_mask(badge_w, bar_h, slant))
+    img.paste(badge, (x, y), badge)
 
-    # ── Position badge (left-side, half-rounded) ───────────────────────────────
-    pos_img  = Image.new("RGBA", (pos_w, bar_h), (*num_c, 240))
-    pos_mask = Image.new("L", (pos_w, bar_h), 0)
-    pm_draw  = ImageDraw.Draw(pos_mask)
-    pm_draw.rounded_rectangle([0, 0, pos_w - 1, bar_h - 1], radius=radius, fill=255)
-    pm_draw.rectangle([pos_w // 2, 0, pos_w - 1, bar_h - 1], fill=255)
-    pos_img.putalpha(pos_mask)
-    img.paste(pos_img, (x, y), pos_img)
-
-    # ── Left accent stripe ──────────────────────────────────────────────────────
-    accent_img  = Image.new("RGBA", (stripe, bar_h), (0, 0, 0, 0))
-    accent_mask = Image.new("L", (stripe, bar_h), 0)
-    am_draw     = ImageDraw.Draw(accent_mask)
-    am_draw.rounded_rectangle([0, 0, stripe - 1, bar_h - 1], radius=radius, fill=255)
-    am_draw.rectangle([stripe // 2, 0, stripe - 1, bar_h - 1], fill=255)
-    ImageDraw.Draw(accent_img).rectangle([0, 0, stripe - 1, bar_h - 1],
-                                         fill=(*cfg["primary_light"], 255))
-    accent_img.putalpha(accent_mask)
-    img.paste(accent_img, (x, y), accent_img)
+    # ── Left accent stripe (diagonal, track color) ─────────────────────────────
+    acc_w  = stripe + slant
+    accent = Image.new("RGBA", (acc_w, bar_h), (0, 0, 0, 0))
+    ImageDraw.Draw(accent).polygon([
+        (slant, 0), (slant + stripe - 1, 0),
+        (stripe - 1, bar_h - 1), (0, bar_h - 1),
+    ], fill=(*cfg["primary_light"], 255))
+    img.paste(accent, (x, y), accent)
 
     draw = ImageDraw.Draw(img)
 
+    # ── Thin separator between badge and name area ─────────────────────────────
+    sep_x = x + pos_w + slant
+    draw.line(
+        [(sep_x, y + int(bar_h * 0.18)), (sep_x, y + int(bar_h * 0.82))],
+        fill=(*cfg["primary_light"], 55), width=1,
+    )
+
     # ── Position number ─────────────────────────────────────────────────────────
-    f_pos  = font("bold", int(h * 0.46))
+    f_pos  = font("bold", int(h * 0.44))
     bb     = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
     pw, ph = bb[2] - bb[0], bb[3] - bb[1]
     draw.text(
-        (x + stripe + (pos_w - stripe - pw) // 2 - bb[0],
+        (x + slant + stripe + (pos_w - stripe - pw) // 2 - bb[0],
          y + (bar_h - ph) // 2 - bb[1]),
-        str(entry.pos), font=f_pos, fill=(255, 255, 255)
+        str(entry.pos), font=f_pos, fill=(255, 255, 255),
     )
 
     # ── Name ────────────────────────────────────────────────────────────────────
-    f_name     = font("bold", int(h * 0.30))
-    name_x     = x + pos_w + int(14 * scale)
-    max_name_w = w - pos_w - int(20 * scale) - int(155 * scale)
+    f_name     = font("bold", int(h * 0.295))
+    name_x     = x + pos_w + slant + int(12 * scale)
+    time_resv  = int(150 * scale)
+    max_name_w = w - pos_w - slant - int(18 * scale) - time_resv
     name_str   = entry.name
     while True:
         bb = draw.textbbox((0, 0), name_str, font=f_name)
@@ -462,16 +483,17 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
     bb = draw.textbbox((0, 0), name_str, font=f_name)
     draw.text(
         (name_x, y + (bar_h - (bb[3] - bb[1])) // 2 - bb[1]),
-        name_str, font=f_name, fill=(255, 255, 255)
+        name_str, font=f_name, fill=(255, 255, 255),
     )
 
     # ── Time ────────────────────────────────────────────────────────────────────
-    f_time = font("semibold", int(h * 0.315))
+    f_time = font("semibold", int(h * 0.305))
     bb     = draw.textbbox((0, 0), entry.time, font=f_time)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    # Right-align inside the parallelogram (account for slant)
     draw.text(
-        (x + w - tw - int(16 * scale), y + (bar_h - th) // 2 - bb[1]),
-        entry.time, font=f_time, fill=(230, 230, 230)
+        (x + w - slant - tw - int(14 * scale), y + (bar_h - th) // 2 - bb[1]),
+        entry.time, font=f_time, fill=(225, 225, 225),
     )
 
 
@@ -481,56 +503,59 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
     W, H  = size
     scale = min(W / 1080, H / 1350)
 
-    # Background: dark vertical gradient
+    # Background: dark gradient (primary_dark → bg)
     img = _vertical_gradient(size, cfg["primary_dark"], cfg["bg"])
 
-    # Two radial glows: large soft one + smaller bright one
+    # Radial glow — large soft center + tighter bright core
     img = _add_radial_glow(img, W // 2, int(H * 0.30),
-                           int(min(W, H) * 0.80), cfg["primary"], max_alpha=55)
+                           int(min(W, H) * 0.82), cfg["primary"], max_alpha=58)
     img = _add_radial_glow(img, W // 2, int(H * 0.26),
-                           int(min(W, H) * 0.30), cfg["primary_light"], max_alpha=28)
+                           int(min(W, H) * 0.28), cfg["primary_light"], max_alpha=30)
 
-    # Large faint track-name watermark behind everything
+    # F1 livery: wide diagonal color band in background
+    img = _add_diagonal_band(img, cfg["primary"],
+                             y_left=0.54, y_right=0.30, thickness=0.24, alpha=30)
+
+    # Faint track-name watermark (behind diagonal band)
     wm_img  = Image.new("RGBA", size, (0, 0, 0, 0))
-    wm_draw = ImageDraw.Draw(wm_img)
-    f_wm    = font("title", int(230 * scale))
-    bb      = wm_draw.textbbox((0, 0), cfg["name"], font=f_wm)
-    wm_draw.text(((W - (bb[2] - bb[0])) // 2 - bb[0], int(H * 0.36)),
-                 cfg["name"], font=f_wm, fill=(*cfg["primary"], 16))
+    f_wm    = font("title", int(240 * scale))
+    bb      = ImageDraw.Draw(wm_img).textbbox((0, 0), cfg["name"], font=f_wm)
+    ImageDraw.Draw(wm_img).text(
+        ((W - (bb[2] - bb[0])) // 2 - bb[0], int(H * 0.35)),
+        cfg["name"], font=f_wm, fill=(*cfg["primary"], 14),
+    )
     img = Image.alpha_composite(img.convert("RGBA"), wm_img).convert("RGB")
 
-    # Faded checkered flag — bottom-right corner
-    flag_sz = int(340 * scale)
-    checker = _make_checker_faded(flag_sz, int(34 * scale))
-    # Rotate to corner and paste bottom-right
-    checker = checker.rotate(180)
-    cx = W - flag_sz + int(18 * scale)
-    cy = H - flag_sz + int(18 * scale)
-    img.paste(checker, (cx, cy), checker)
+    # Faded checkered flag — bottom-right corner, rotated
+    flag_sz = int(360 * scale)
+    checker = _make_checker_faded(flag_sz, int(36 * scale)).rotate(180)
+    img.paste(checker, (W - flag_sz + int(20 * scale), H - flag_sz + int(20 * scale)), checker)
 
     draw = ImageDraw.Draw(img)
 
-    # Thick colored top accent bar
+    # Top accent bar + bottom thin line
     bar_thick = max(8, int(10 * scale))
     draw.rectangle([0, 0, W, bar_thick], fill=cfg["primary_light"])
+    draw.rectangle([0, H - max(3, int(3 * scale)), W, H], fill=cfg["primary"])
 
-    # Logo (upper third)
-    _place_logo(img, int(285 * scale), int(460 * scale), int(195 * scale))
+    # Logo
+    _place_logo(img, int(288 * scale), int(460 * scale), int(195 * scale))
     draw = ImageDraw.Draw(img)
 
-    # "RANKING"
-    f_r = font("title", int(178 * scale))
-    center_text(draw, int(548 * scale), "RANKING", f_r, (255, 255, 255), W, shadow=True)
+    # "RANKING" — hero title
+    f_r = font("title", int(182 * scale))
+    center_text(draw, int(544 * scale), "RANKING", f_r, (255, 255, 255), W, shadow=True)
 
-    # "DA SEMANA" in track light color
+    # "DA SEMANA" — subtitle in track light
     f_s = font("title", int(118 * scale))
-    center_text(draw, int(728 * scale), "DA SEMANA", f_s, cfg["primary_light"], W, shadow=True)
+    center_text(draw, int(726 * scale), "DA SEMANA", f_s, cfg["primary_light"], W, shadow=True)
 
-    # Divider with dot endpoints
+    # Divider line with endpoints
     lw  = int(380 * scale)
     lx  = (W - lw) // 2
     ly  = int(892 * scale)
-    draw.line([(lx, ly), (lx + lw, ly)], fill=cfg["primary"], width=max(2, int(2 * scale)))
+    draw.line([(lx, ly), (lx + lw, ly)], fill=cfg["primary"],
+              width=max(2, int(2 * scale)))
     dot_r = max(4, int(5 * scale))
     for ex in (lx, lx + lw):
         draw.ellipse([ex - dot_r, ly - dot_r, ex + dot_r, ly + dot_r],
@@ -538,29 +563,28 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
 
     # Period
     if track.period_start and track.period_end:
-        f_p = font("regular", int(33 * scale))
-        center_text(draw, int(912 * scale),
+        f_p = font("regular", int(32 * scale))
+        center_text(draw, int(910 * scale),
                     f"{track.period_start}  ·  {track.period_end}",
-                    f_p, (185, 185, 185), W)
+                    f_p, (180, 180, 180), W)
 
-    # Track name badge (colored pill at bottom)
-    f_t    = font("bold", int(52 * scale))
-    bb     = draw.textbbox((0, 0), cfg["name"], font=f_t)
-    tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    pill_pad_x = int(36 * scale)
-    pill_pad_y = int(14 * scale)
-    pill_w  = tw + pill_pad_x * 2
-    pill_h  = th + pill_pad_y * 2
-    pill_x  = (W - pill_w) // 2
-    pill_y  = int(978 * scale)
-    pill_img = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
-    pill_draw = ImageDraw.Draw(pill_img)
-    pill_draw.rounded_rectangle([0, 0, pill_w - 1, pill_h - 1],
-                                 radius=pill_h // 2,
-                                 fill=(*cfg["primary"], 220))
-    img.paste(pill_img, (pill_x, pill_y), pill_img)
+    # Track name — colored pill badge
+    f_t      = font("bold", int(52 * scale))
+    bb       = draw.textbbox((0, 0), cfg["name"], font=f_t)
+    tw, th   = bb[2] - bb[0], bb[3] - bb[1]
+    px_, py_ = int(36 * scale), int(13 * scale)
+    pill_w   = tw + px_ * 2
+    pill_h   = th + py_ * 2
+    pill_x   = (W - pill_w) // 2
+    pill_y   = int(975 * scale)
+    pill     = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
+    ImageDraw.Draw(pill).rounded_rectangle(
+        [0, 0, pill_w - 1, pill_h - 1], radius=pill_h // 2,
+        fill=(*cfg["primary"], 225),
+    )
+    img.paste(pill, (pill_x, pill_y), pill)
     draw = ImageDraw.Draw(img)
-    draw.text((pill_x + pill_pad_x - bb[0], pill_y + pill_pad_y - bb[1]),
+    draw.text((pill_x + px_ - bb[0], pill_y + py_ - bb[1]),
               cfg["name"], font=f_t, fill=(255, 255, 255))
 
     return img
@@ -572,80 +596,102 @@ def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Im
     W, H  = size
     scale = min(W / 1080, H / 1350)
 
-    # Background
+    # Background with two radial glows for depth
     img = Image.new("RGB", size, cfg["bg"])
-    img = _add_radial_glow(img, int(W * 0.58), int(H * 0.28),
-                           int(min(W, H) * 0.90), cfg["primary"], max_alpha=45)
-    img = _add_radial_glow(img, int(W * 0.18), int(H * 0.75),
-                           int(min(W, H) * 0.35), cfg["primary_dark"], max_alpha=30)
+    img = _add_radial_glow(img, int(W * 0.60), int(H * 0.26),
+                           int(min(W, H) * 0.92), cfg["primary"], max_alpha=48)
+    img = _add_radial_glow(img, int(W * 0.15), int(H * 0.78),
+                           int(min(W, H) * 0.38), cfg["primary_dark"], max_alpha=32)
 
-    # Checkered flag — top-left
-    flag_sz = int(300 * scale)
+    # F1 livery diagonal band (subtle)
+    img = _add_diagonal_band(img, cfg["primary"],
+                             y_left=0.72, y_right=0.50, thickness=0.15, alpha=18)
+
+    # Checkered flag — top-left, faded
+    flag_sz = int(295 * scale)
     checker = _make_checker_faded(flag_sz, int(30 * scale))
     img.paste(checker, (-int(10 * scale), -int(10 * scale)), checker)
 
     draw = ImageDraw.Draw(img)
 
-    # Thick colored top border
+    # Top accent bar + bottom line
     bar_thick = max(8, int(10 * scale))
     draw.rectangle([0, 0, W, bar_thick], fill=cfg["primary_light"])
+    draw.rectangle([0, H - max(3, int(3 * scale)), W, H], fill=cfg["primary"])
 
-    # Header: track name (left) and "RANKING DA SEMANA" (right) — small
-    f_head  = font("bold", int(26 * scale))
-    head_y  = int(26 * scale)
-    draw.text((int(62 * scale), head_y), cfg["name"], font=f_head,
-              fill=cfg["primary_light"])
-    right_text = "RANKING DA SEMANA"
-    bb = draw.textbbox((0, 0), right_text, font=f_head)
-    draw.text((W - (bb[2] - bb[0]) - int(62 * scale), head_y),
-              right_text, font=f_head, fill=(140, 140, 140))
+    # Small header row: track name left, "RANKING DA SEMANA" right
+    f_head = font("bold", int(24 * scale))
+    hy = int(22 * scale)
+    draw.text((int(60 * scale), hy), cfg["name"],
+              font=f_head, fill=cfg["primary_light"])
+    rt = "RANKING DA SEMANA"
+    bb = draw.textbbox((0, 0), rt, font=f_head)
+    draw.text((W - (bb[2] - bb[0]) - int(60 * scale), hy),
+              rt, font=f_head, fill=(120, 120, 120))
 
-    # Large title "RANKING DA SEMANA"
-    f_title = font("title", int(90 * scale))
-    center_text(draw, int(72 * scale), "RANKING DA SEMANA",
+    # Hero title
+    f_title = font("title", int(88 * scale))
+    center_text(draw, int(68 * scale), "RANKING DA SEMANA",
                 f_title, (255, 255, 255), W, shadow=True)
 
-    # Category badge (colored pill)
-    f_cat   = font("bold", int(28 * scale))
-    cat_lbl = cat.label.upper()
-    bb      = draw.textbbox((0, 0), cat_lbl, font=f_cat)
-    tw, th  = bb[2] - bb[0], bb[3] - bb[1]
-    p_x, p_y = int(32 * scale), int(16 * scale)
-    pill_w  = tw + p_x * 2
-    pill_h  = th + p_y * 2
-    pill_x  = (W - pill_w) // 2
-    pill_y  = int(176 * scale)
-    pill    = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
-    ImageDraw.Draw(pill).rounded_rectangle([0, 0, pill_w - 1, pill_h - 1],
-                                            radius=pill_h // 2,
-                                            fill=(*cfg["primary"], 210))
+    # Category pill badge
+    f_cat  = font("bold", int(27 * scale))
+    c_lbl  = cat.label.upper()
+    bb     = draw.textbbox((0, 0), c_lbl, font=f_cat)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    px_, py_ = int(30 * scale), int(14 * scale)
+    pill_w = tw + px_ * 2
+    pill_h = th + py_ * 2
+    pill_x = (W - pill_w) // 2
+    pill_y = int(172 * scale)
+    pill   = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
+    ImageDraw.Draw(pill).rounded_rectangle(
+        [0, 0, pill_w - 1, pill_h - 1], radius=pill_h // 2,
+        fill=(*cfg["primary"], 215),
+    )
     img.paste(pill, (pill_x, pill_y), pill)
     draw = ImageDraw.Draw(img)
-    draw.text((pill_x + p_x - bb[0], pill_y + p_y - bb[1]),
-              cat_lbl, font=f_cat, fill=(255, 255, 255))
+    draw.text((pill_x + px_ - bb[0], pill_y + py_ - bb[1]),
+              c_lbl, font=f_cat, fill=(255, 255, 255))
 
-    # Rows — 1st place is 12% taller for visual hierarchy
-    row_m    = int(60 * scale)
-    row_w    = W - row_m * 2
-    row_h    = int(79 * scale)
-    row_h_1  = int(row_h * 1.12)
-    row_g    = int(6 * scale)
-    start_y  = int(255 * scale)
+    # Column labels
+    f_lbl  = font("regular", int(19 * scale))
+    row_m  = int(60 * scale)
+    row_w  = W - row_m * 2
+    slant  = int(int(79 * scale) * 0.16)
+    lbl_y  = int(233 * scale)
+    draw.text((row_m + slant + int(12 * scale), lbl_y),
+              "COMPETIDOR", font=f_lbl, fill=(100, 100, 100))
+    bb_t = draw.textbbox((0, 0), "TEMPO", font=f_lbl)
+    draw.text((row_m + row_w - slant - (bb_t[2] - bb_t[0]) - int(14 * scale), lbl_y),
+              "TEMPO", font=f_lbl, fill=(100, 100, 100))
+
+    # Rows — 1st place 12% taller
+    row_h   = int(79 * scale)
+    row_h_1 = int(row_h * 1.12)
+    row_g   = int(6 * scale)
+    start_y = int(258 * scale)
 
     y_cursor = start_y
     for entry in cat.entries:
         rh = row_h_1 if entry.pos == 1 else row_h
-        # Subtle background glow behind 1st row only
+
+        # Podium separator after 3rd place
+        if entry.pos == 4:
+            sep_y = y_cursor - row_g // 2
+            draw.line([(row_m, sep_y), (row_m + row_w, sep_y)],
+                      fill=(*cfg["primary"], 55), width=max(1, int(1 * scale)))
+
         if entry.pos == 1:
             img = _add_radial_glow(img, W // 2, y_cursor + rh // 2,
-                                   int(rh * 3.5), cfg["primary_light"], max_alpha=18)
+                                   int(rh * 3.2), cfg["primary_light"], max_alpha=16)
         _draw_row(img, draw, row_m, y_cursor, row_w, rh, entry, cfg, scale)
         draw = ImageDraw.Draw(img)
         y_cursor += rh + row_g
 
-    # Logo
+    # Logo centered below rows
     logo_y = y_cursor + (H - y_cursor) // 2
-    _place_logo(img, logo_y, int(300 * scale), int(75 * scale))
+    _place_logo(img, logo_y, int(295 * scale), int(72 * scale))
 
     return img
 
