@@ -1,9 +1,10 @@
 {
   "inputs": [
     "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/0b841776-snapinsta.com.br6a21bfd798a47.mp4",
-    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4"
+    "/root/.claude/uploads/d035657c-b32d-4488-bde6-e06254a66af7/885162ab-snapinsta.com.br6a21c6543f145.mp4",
+    "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/89172216-snapinsta.com.br6a22213147e00.mp4"
   ],
-  "clip_trim": [10, 8],
+  "clip_trim": [6, 6, 6],
   "duration": 18,
 
   "brand_color": [20, 90, 210],
