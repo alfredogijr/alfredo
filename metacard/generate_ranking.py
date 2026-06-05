@@ -364,34 +364,41 @@ def _place_logo_white(img: Image.Image, y_center: int,
 
 
 def _row_palette(pos: int, cfg: dict) -> Tuple[tuple, tuple, tuple, tuple]:
+    """Returns (bar_l, bar_r, num_c, text_c, stripe_c) — premium motorsport podium hierarchy.
+
+    Benchmark: F1/WEC/IndyCar confirm gold P1, silver P2, bronze P3 accent stripes.
+    We tint these with the track's primary_light to keep brand identity intact.
     """
-    Dark-bg style. Returns (bar_l, bar_r, num_c, text_c).
-    pos 1 = primary_light → primary (brightest, hero row).
-    pos 2-3 = primary tints.  pos 4+ = row_bg tints.
-    All text white on dark.
-    """
-    white = (255, 255, 255)
+    white  = (255, 255, 255)
+    gold   = (212, 175,  55)   # #D4AF37 — motorsport championship gold
+    silver = (168, 169, 173)   # #A8A9AD — podium silver
+    bronze = (205, 127,  50)   # #CD7F32 — podium bronze
+
     if pos == 1:
-        bar_l  = cfg["primary_light"]
-        bar_r  = _lerp_color(cfg["primary_light"], cfg["primary"], 0.45)
-        num_c  = cfg["primary_dark"]
-        text_c = white
+        bar_l   = _lerp_color(cfg["primary_light"], white, 0.48)
+        bar_r   = _lerp_color(cfg["primary_light"], cfg["primary"], 0.55)
+        num_c   = cfg["primary_dark"]
+        text_c  = white
+        stripe_c = _lerp_color(gold, cfg["primary_light"], 0.35)   # gold → track tint
     elif pos == 2:
-        bar_l  = _lerp_color(cfg["primary_light"], cfg["primary"], 0.45)
-        bar_r  = cfg["primary"]
-        num_c  = cfg["primary_dark"]
-        text_c = white
+        bar_l   = cfg["primary_light"]
+        bar_r   = _lerp_color(cfg["primary_light"], cfg["primary"], 0.60)
+        num_c   = cfg["primary_dark"]
+        text_c  = white
+        stripe_c = _lerp_color(silver, cfg["primary_light"], 0.40)
     elif pos == 3:
-        bar_l  = cfg["primary"]
-        bar_r  = _lerp_color(cfg["primary"], cfg["row_bg"], 0.40)
-        num_c  = cfg["primary_dark"]
-        text_c = white
+        bar_l   = _lerp_color(cfg["primary_light"], cfg["primary"], 0.50)
+        bar_r   = _lerp_color(cfg["primary"], cfg["row_bg"], 0.25)
+        num_c   = cfg["primary_dark"]
+        text_c  = white
+        stripe_c = _lerp_color(bronze, cfg["primary_light"], 0.45)
     else:
-        bar_l  = cfg["row_bg"]
-        bar_r  = _lerp_color(cfg["row_bg"], cfg["bg"], 0.50)
-        num_c  = cfg["num_bg"]
-        text_c = white
-    return bar_l, bar_r, num_c, text_c
+        bar_l   = cfg["row_bg"]
+        bar_r   = _lerp_color(cfg["row_bg"], cfg["num_bg"], 0.50)
+        num_c   = cfg["num_bg"]
+        text_c  = white
+        stripe_c = cfg["primary"]
+    return bar_l, bar_r, num_c, text_c, stripe_c
 
 
 def center_text(draw: ImageDraw.Draw, y: int, text: str,
@@ -492,64 +499,81 @@ def _place_logo(img: Image.Image, y_center: int, max_w: int, max_h: int) -> None
 def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
               x: int, y: int, w: int, h: int,
               entry: Entry, cfg: dict, scale: float = 1.0) -> None:
-    gap    = int(3 * scale)
-    bar_h  = h - gap
-    pos_w  = int(h * 0.88)
-    slant  = int(bar_h * 0.16)
-    stripe = max(4, int(5 * scale))
+    gap   = int(3 * scale)
+    bar_h = h - gap
 
-    bar_l, bar_r, num_c, text_c = _row_palette(entry.pos, cfg)
+    # Steeper slant = more dynamic motorsport feel
+    slant = int(bar_h * 0.22)
 
-    # ── Row gradient (parallelogram) ───────────────────────────────────────────
+    # Position badge width scales with importance
+    pos_w = int(h * (0.94 if entry.pos == 1 else 0.86))
+
+    # Accent stripe width signals podium tier
+    if entry.pos == 1:
+        stripe = max(9, int(11 * scale))
+    elif entry.pos <= 3:
+        stripe = max(6, int(7 * scale))
+    else:
+        stripe = max(3, int(4 * scale))
+
+    bar_l, bar_r, num_c, text_c, stripe_c = _row_palette(entry.pos, cfg)
+
+    # ── Row gradient (parallelogram) ──────────────────────────────────────────
     grad = _gradient_bar(w, bar_h, bar_l, bar_r).convert("RGBA")
-    # Subtle shine at top (stronger for pos 1)
-    shine_h = max(3, bar_h // (3 if entry.pos == 1 else 6))
-    for sy in range(shine_h):
-        a = int((52 if entry.pos == 1 else 32) * (1.0 - sy / shine_h) ** 1.4)
-        ImageDraw.Draw(grad).line([(0, sy), (w - 1, sy)], fill=(255, 255, 255, a))
+
+    # Metallic shine — very strong on P1, subtle on P2-P3, absent on field
+    if entry.pos == 1:
+        shine_h = max(5, int(bar_h * 0.45))
+        for sy in range(shine_h):
+            a = int(70 * (1.0 - sy / shine_h) ** 1.1)
+            ImageDraw.Draw(grad).line([(0, sy), (w - 1, sy)], fill=(255, 255, 255, a))
+    elif entry.pos <= 3:
+        shine_h = max(3, int(bar_h * 0.25))
+        for sy in range(shine_h):
+            a = int(40 * (1.0 - sy / shine_h) ** 1.4)
+            ImageDraw.Draw(grad).line([(0, sy), (w - 1, sy)], fill=(255, 255, 255, a))
+
     grad.putalpha(_para_mask(w, bar_h, slant))
     img.paste(grad, (x, y), grad)
 
-    # ── Position badge (left parallelogram) ────────────────────────────────────
+    # ── Position badge (darker left panel, parallelogram) ─────────────────────
     badge_w = pos_w + slant
-    badge   = Image.new("RGBA", (badge_w, bar_h), (*num_c, 245))
+    badge   = Image.new("RGBA", (badge_w, bar_h), (*num_c, 252))
     badge.putalpha(_para_mask(badge_w, bar_h, slant))
     img.paste(badge, (x, y), badge)
 
-    # ── Left accent stripe — primary_light for pos 1, subtle for others ────────
-    acc_color = cfg["primary_light"] if entry.pos == 1 else cfg["primary_light"]
-    acc_alpha = 255 if entry.pos <= 3 else 180
+    # ── Left accent stripe — gold/silver/bronze blended with track color ─────
     acc_w  = stripe + slant
     accent = Image.new("RGBA", (acc_w, bar_h), (0, 0, 0, 0))
     ImageDraw.Draw(accent).polygon([
         (slant, 0), (slant + stripe - 1, 0),
         (stripe - 1, bar_h - 1), (0, bar_h - 1),
-    ], fill=(*acc_color, acc_alpha))
+    ], fill=(*stripe_c, 255))
     img.paste(accent, (x, y), accent)
 
     draw = ImageDraw.Draw(img)
 
-    # ── Position number — Bebas Neue (bigger, more impactful) ──────────────────
-    f_pos  = font("title", int(h * 0.68))
-    bb     = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
+    # ── Position number — Bebas Neue, dominant ────────────────────────────────
+    f_pos = font("title", int(h * 0.80))
+    bb    = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
     pw, ph = bb[2] - bb[0], bb[3] - bb[1]
-    draw.text(
-        (x + slant + stripe + (pos_w - stripe - pw) // 2 - bb[0],
-         y + (bar_h - ph) // 2 - bb[1]),
-        str(entry.pos), font=f_pos, fill=(255, 255, 255),
-    )
+    num_x  = x + slant + stripe + (pos_w - stripe - pw) // 2 - bb[0]
+    num_y  = y + (bar_h - ph) // 2 - bb[1]
+    draw.text((num_x, num_y), str(entry.pos), font=f_pos, fill=(255, 255, 255))
 
-    # ── Pre-compute time position ──────────────────────────────────────────────
-    f_time  = font("bold", int(h * 0.33))
+    # ── Pre-compute time position ─────────────────────────────────────────────
+    f_time  = font("bold", int(h * 0.34))
     bb_t    = draw.textbbox((0, 0), entry.time, font=f_time)
     time_tw = bb_t[2] - bb_t[0]
     time_th = bb_t[3] - bb_t[1]
-    time_x  = x + w - slant - time_tw - int(16 * scale)
+    time_x  = x + w - slant - time_tw - int(18 * scale)
 
-    # ── Name ──────────────────────────────────────────────────────────────────
-    f_name     = font("bold", int(h * 0.32))
-    name_x     = x + pos_w + slant + int(14 * scale)
-    max_name_w = time_x - name_x - int(18 * scale)
+    # ── Name ─────────────────────────────────────────────────────────────────
+    name_sz    = int(h * (0.35 if entry.pos == 1 else 0.31))
+    name_style = "bold" if entry.pos <= 3 else "semibold"
+    f_name     = font(name_style, name_sz)
+    name_x     = x + pos_w + slant + int(16 * scale)
+    max_name_w = time_x - name_x - int(20 * scale)
     name_str   = entry.name
     while True:
         bb = draw.textbbox((0, 0), name_str, font=f_name)
@@ -564,19 +588,19 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
         name_str, font=f_name, fill=text_c,
     )
 
-    # ── Dot leader (fills wide gap — TV / landscape) ─────────────────────────
+    # ── Dot leader ────────────────────────────────────────────────────────────
     leader_x1 = name_x + (bb_name[2] - bb_name[0]) + int(12 * scale)
     leader_x2 = time_x - int(12 * scale)
     if leader_x2 > leader_x1 + int(30 * scale):
-        dot_c    = _lerp_color(text_c, bar_r, 0.60)
-        dot_r    = max(1, int(2 * scale))
+        dot_c    = _lerp_color(text_c, bar_r, 0.68)
+        dot_r_px = max(1, int(2 * scale))
         dot_step = max(8, int(14 * scale))
         dot_y    = y + bar_h // 2
         for dx in range(int(leader_x1), int(leader_x2), dot_step):
-            draw.ellipse([dx, dot_y - dot_r, dx + dot_r * 2, dot_y + dot_r],
+            draw.ellipse([dx, dot_y - dot_r_px, dx + dot_r_px * 2, dot_y + dot_r_px],
                          fill=dot_c)
 
-    # ── Time — primary_light on dark rows, white on hero row ──────────────────
+    # ── Time ─────────────────────────────────────────────────────────────────
     time_c = (255, 255, 255) if entry.pos == 1 else cfg["primary_light"]
     draw.text(
         (time_x, y + (bar_h - time_th) // 2 - bb_t[1]),
@@ -585,6 +609,24 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
 
 
 # ─── Cover Slide ───────────────────────────────────────────────────────────────
+
+def _add_speed_lines(img: Image.Image, color: tuple,
+                     alpha: int = 14, count: int = 18) -> Image.Image:
+    """Horizontal speed-streak texture — gives motion/racing feel to background."""
+    W, H  = img.size
+    ov    = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw  = ImageDraw.Draw(ov)
+    import random
+    rng = random.Random(42)
+    for _ in range(count):
+        yp   = rng.randint(0, H)
+        th   = rng.randint(1, max(2, H // 110))
+        x0   = rng.randint(-W // 4, 0)
+        x1   = rng.randint(W, W + W // 4)
+        fade = max(8, int(alpha * rng.uniform(0.4, 1.0)))
+        draw.rectangle([x0, yp, x1, yp + th], fill=(*color, fade))
+    return Image.alpha_composite(img.convert("RGBA"), ov).convert("RGB")
+
 
 def _dark_bg(cfg: dict, size: tuple) -> Image.Image:
     """Dark track-color background with radial depth and halftone dots — brand style."""
@@ -608,24 +650,27 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
     is_tv = W > H
     scale = H / 1080 if is_tv else min(W / 1080, H / 1350)
 
-    img  = _dark_bg(cfg, size)
+    img = _dark_bg(cfg, size)
+
+    # Diagonal livery bands — two semi-transparent stripes (racing livery language)
+    img = _add_diagonal_band(img, cfg["primary"],
+                             y_left=0.72, y_right=0.48, thickness=0.30, alpha=35)
+    img = _add_diagonal_band(img, cfg["primary_light"],
+                             y_left=0.68, y_right=0.44, thickness=0.04, alpha=55)
+
     draw = ImageDraw.Draw(img)
 
     if is_tv:
         # ── TV Cover ──────────────────────────────────────────────────────────
-        # Logo centered in top 35%
         _place_logo_white(img, int(H * 0.26), int(H * 0.55), int(H * 0.28))
         draw = ImageDraw.Draw(img)
 
-        # "RANKING" centered
         f_r = font("title", int(195 * scale))
-        center_text(draw, int(H * 0.40), "RANKING", f_r, (255, 255, 255), W)
+        center_text(draw, int(H * 0.40), "RANKING", f_r, (255, 255, 255), W, shadow=True)
 
-        # "DA SEMANA" in primary_light
         f_s = font("title", int(120 * scale))
         center_text(draw, int(H * 0.60), "DA SEMANA", f_s, cfg["primary_light"], W)
 
-        # Period + track name
         if track.period_start and track.period_end:
             f_p = font("bold", int(28 * scale))
             period_str = f"{track.period_start} ATÉ {track.period_end}"
@@ -635,28 +680,35 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
         center_text(draw, int(H * 0.88), cfg["name"], f_t, cfg["primary_light"], W)
 
     else:
-        # ── Instagram Cover — exact match to brand production style ───────────
-        # Logo centered in top 30%
-        _place_logo_white(img, int(H * 0.22), int(W * 0.62), int(H * 0.20))
+        # ── Instagram Cover ───────────────────────────────────────────────────
+        _place_logo_white(img, int(H * 0.22), int(W * 0.65), int(H * 0.22))
         draw = ImageDraw.Draw(img)
 
-        # "RANKING" — white, massive
+        # "RANKING" — white, massive, with shadow for depth
         f_r = font("title", int(205 * scale))
-        center_text(draw, int(H * 0.385), "RANKING", f_r, (255, 255, 255), W)
+        center_text(draw, int(H * 0.385), "RANKING", f_r, (255, 255, 255), W, shadow=True)
 
-        # "DA SEMANA" — primary_light, slightly smaller
+        # "DA SEMANA" — primary_light
         f_s = font("title", int(130 * scale))
         center_text(draw, int(H * 0.534), "DA SEMANA", f_s, cfg["primary_light"], W)
 
-        # Period: "25/05/2026 ATÉ 31/05/2026" — white semibold
+        # Thin underline stripe below "DA SEMANA"
+        stripe_y = int(H * 0.534) + int(128 * scale) + int(8 * scale)
+        stripe_w = int(280 * scale)
+        stripe_x = (W - stripe_w) // 2
+        draw.rectangle([stripe_x, stripe_y, stripe_x + stripe_w,
+                        stripe_y + max(3, int(4 * scale))],
+                       fill=cfg["primary_light"])
+
+        # Period
         if track.period_start and track.period_end:
             f_p = font("semibold", int(34 * scale))
             period_str = f"{track.period_start} ATÉ {track.period_end}"
-            center_text(draw, int(H * 0.698), period_str, f_p, (255, 255, 255), W)
+            center_text(draw, int(H * 0.705), period_str, f_p, (255, 255, 255), W)
 
-        # Track name — bold white centered
+        # Track name
         f_t = font("bold", int(46 * scale))
-        center_text(draw, int(H * 0.775), cfg["name"], f_t, cfg["primary_light"], W)
+        center_text(draw, int(H * 0.780), cfg["name"], f_t, cfg["primary_light"], W)
 
     return img
 
@@ -666,8 +718,9 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
 def _gen_ranking_tv(track: Track, cat: Category, cfg: dict, W: int, H: int) -> Image.Image:
     s = H / 1080
 
-    # ── Background: dark track color + halftone ───────────────────────────────
+    # ── Background: dark track color + halftone + speed lines ────────────────
     img  = _dark_bg(cfg, (W, H))
+    img  = _add_speed_lines(img, cfg["primary_light"], alpha=8, count=12)
     draw = ImageDraw.Draw(img)
 
     # ── Left sidebar darker overlay ────────────────────────────────────────────
@@ -740,34 +793,39 @@ def _gen_ranking_tv(track: Track, cat: Category, cfg: dict, W: int, H: int) -> I
     sep_th = max(2, int(3 * s))
     draw.rectangle([cx, sep_y, W - int(36 * s), sep_y + sep_th], fill=cfg["primary"])
 
-    # Column labels
-    row_h  = int(84 * s)
-    row_h1 = int(row_h * 1.12)
-    row_g  = int(5 * s)
-    lbl_y  = sep_y + sep_th + int(6 * s)
-    f_lbl  = font("regular", int(16 * s))
-    lbl_col = (180, 180, 200)
-    slant_r = int(row_h * 0.16)
-    pos_r   = int(row_h * 0.88)
+    # Rows — podium hierarchy (same proportions as IG)
+    row_g    = int(5 * s)
+    lbl_y    = sep_y + sep_th + int(6 * s)
+    f_lbl    = font("regular", int(16 * s))
+    lbl_col  = (180, 180, 200)
+    base_rh  = int(80 * s)
+    rh_tv_p1 = int(base_rh * 1.38)
+    rh_tv_p2 = int(base_rh * 1.12)
+    rh_tv_p3 = int(base_rh * 1.05)
+
+    slant_r = int(base_rh * 0.22)
+    pos_r   = int(base_rh * 0.86)
     draw.text((cx + pos_r + slant_r + int(14 * s), lbl_y),
               "COMPETIDOR", font=f_lbl, fill=lbl_col)
     bb_lbl = draw.textbbox((0, 0), "TEMPO", font=f_lbl)
     draw.text((W - int(36 * s) - slant_r - (bb_lbl[2]-bb_lbl[0]) - int(16*s), lbl_y),
               "TEMPO", font=f_lbl, fill=lbl_col)
 
-    # Rows
     start_y  = lbl_y + int(f_lbl.size) + int(8 * s)
     y_cursor = start_y
 
     for entry in cat.entries:
-        rh = row_h1 if entry.pos == 1 else row_h
+        if entry.pos == 1:   rh = rh_tv_p1
+        elif entry.pos == 2: rh = rh_tv_p2
+        elif entry.pos == 3: rh = rh_tv_p3
+        else:                rh = base_rh
         if entry.pos == 4:
             pd_y = y_cursor - row_g // 2
             draw.line([(cx, pd_y), (W - int(36*s), pd_y)],
-                      fill=(*cfg["primary"], 60), width=max(1, int(1*s)))
+                      fill=(*cfg["primary_light"], 55), width=max(1, int(1*s)))
         if entry.pos == 1:
             img = _add_radial_glow(img, cx + int(cw * 0.5), y_cursor + rh // 2,
-                                   int(rh * 2.8), cfg["primary_light"], max_alpha=18)
+                                   int(rh * 3.0), cfg["primary_light"], max_alpha=25)
         _draw_row(img, draw, cx, y_cursor, cw, rh, entry, cfg, s)
         draw = ImageDraw.Draw(img)
         y_cursor += rh + row_g
@@ -787,82 +845,106 @@ def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Im
 
     scale = min(W / 1080, H / 1350)
 
-    # ── Background: dark track color + halftone (same as cover) ───────────────
+    # ── Background ────────────────────────────────────────────────────────────
     img  = _dark_bg(cfg, (W, H))
+    img  = _add_speed_lines(img, cfg["primary_light"], alpha=10, count=14)
     draw = ImageDraw.Draw(img)
 
-    # ── Top accent bar ─────────────────────────────────────────────────────────
-    draw.rectangle([0, 0, W, max(10, int(12 * scale))], fill=cfg["primary_light"])
+    # ── Top accent bar (thin, primary_light) ──────────────────────────────────
+    bar_th = max(8, int(10 * scale))
+    draw.rectangle([0, 0, W, bar_th], fill=cfg["primary_light"])
 
-    # ── Header ─────────────────────────────────────────────────────────────────
-    # "RANKING DA SEMANA" — white title
-    f_title = font("title", int(80 * scale))
-    center_text(draw, int(20 * scale), "RANKING DA SEMANA",
-                f_title, (255, 255, 255), W)
+    # ── Header: title left, category badge right ──────────────────────────────
+    hdr_pad = int(44 * scale)
+    f_title = font("title", int(76 * scale))
+    f_cat   = font("bold",  int(22 * scale))
+    c_lbl   = cat.label.upper()
+    bb_cat  = draw.textbbox((0, 0), c_lbl, font=f_cat)
+    cat_tw, cat_th = bb_cat[2] - bb_cat[0], bb_cat[3] - bb_cat[1]
+    cpx, cpy = int(18 * scale), int(8 * scale)
+    badge_w  = cat_tw + cpx * 2
+    badge_h  = cat_th + cpy * 2
 
-    # Category pill — primary_light fill
-    f_cat  = font("bold", int(26 * scale))
-    c_lbl  = cat.label.upper()
-    bb     = draw.textbbox((0, 0), c_lbl, font=f_cat)
-    tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    px_, py_ = int(30 * scale), int(11 * scale)
-    pill_w = tw + px_ * 2
-    pill_h = th + py_ * 2
-    pill_x = (W - pill_w) // 2
-    pill_y = int(H * 0.108)
-    pill   = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
-    ImageDraw.Draw(pill).rounded_rectangle([0, 0, pill_w-1, pill_h-1],
-                                           radius=pill_h//2,
-                                           fill=(*cfg["primary_light"], 240))
-    img.paste(pill, (pill_x, pill_y), pill)
+    # Category badge — right-aligned, top aligned with title
+    badge_x = W - hdr_pad - badge_w
+    badge_y = bar_th + int(12 * scale)
+
+    badge_img = Image.new("RGBA", (badge_w, badge_h), (0, 0, 0, 0))
+    # Chevron shape (motorsport race class designation)
+    ch = badge_h
+    ImageDraw.Draw(badge_img).polygon([
+        (int(ch * 0.35), 0), (badge_w, 0),
+        (badge_w - int(ch * 0.35), badge_h), (0, badge_h),
+    ], fill=(*cfg["primary"], 255))
+    img.paste(badge_img, (badge_x, badge_y), badge_img)
     draw = ImageDraw.Draw(img)
-    draw.text((pill_x + px_ - bb[0], pill_y + py_ - bb[1]),
-              c_lbl, font=f_cat, fill=_text_on(cfg["primary_light"]))
+    draw.text((badge_x + cpx - bb_cat[0] + int(ch * 0.10),
+               badge_y + cpy - bb_cat[1]),
+              c_lbl, font=f_cat, fill=(255, 255, 255))
+
+    # Title — left-aligned, vertically centered with badge
+    bb_title = draw.textbbox((0, 0), "RANKING DA SEMANA", font=f_title)
+    title_h  = bb_title[3] - bb_title[1]
+    title_y  = badge_y + (badge_h - title_h) // 2 - bb_title[1]
+    draw.text((hdr_pad, title_y), "RANKING DA SEMANA",
+              font=f_title, fill=(255, 255, 255))
 
     # ── Separator ─────────────────────────────────────────────────────────────
-    sep_y  = pill_y + pill_h + int(14 * scale)
+    sep_y  = badge_y + badge_h + int(10 * scale)
     sep_th = max(2, int(2 * scale))
-    draw.rectangle([int(52 * scale), sep_y, W - int(52 * scale), sep_y + sep_th],
-                   fill=(*cfg["primary_light"], 100))
+    draw.rectangle([hdr_pad, sep_y, W - hdr_pad, sep_y + sep_th],
+                   fill=(*cfg["primary_light"], 90))
 
-    # ── Column labels ─────────────────────────────────────────────────────────
-    f_lbl   = font("regular", int(17 * scale))
-    row_m   = int(44 * scale)
+    # ── Row dimensions (premium podium hierarchy) ─────────────────────────────
+    # P1: 1.42x  P2: 1.14x  P3: 1.06x  P4+: 1.0x
+    # Sized to fill space between separator and footer comfortably
+    footer_reserve = int(88 * scale)
+    row_gap        = int(5 * scale)
+    available      = H - sep_y - sep_th - int(8 * scale) - footer_reserve
+    # Solve for base: 1.42x + 1.14x + 1.06x + 7x + 9 gaps = available
+    base_h  = max(70, int((available - 9 * row_gap) / (1.42 + 1.14 + 1.06 + 7.0)))
+    rh_p1   = int(base_h * 1.42)
+    rh_p2   = int(base_h * 1.14)
+    rh_p3   = int(base_h * 1.06)
+
+    def _row_h(pos: int) -> int:
+        if pos == 1: return rh_p1
+        if pos == 2: return rh_p2
+        if pos == 3: return rh_p3
+        return base_h
+
+    row_m   = hdr_pad
     row_w   = W - row_m * 2
-    lbl_y   = sep_y + sep_th + int(10 * scale)
-    lbl_col = (180, 180, 200)
-    slant_r = int(int(84 * scale) * 0.16)
-    pos_r   = int(int(84 * scale) * 0.88)
-    draw.text((row_m + pos_r + slant_r + int(14 * scale), lbl_y),
-              "COMPETIDOR", font=f_lbl, fill=lbl_col)
-    bb_t = draw.textbbox((0, 0), "TEMPO", font=f_lbl)
-    draw.text((row_m + row_w - slant_r - (bb_t[2]-bb_t[0]) - int(16*scale), lbl_y),
-              "TEMPO", font=f_lbl, fill=lbl_col)
+    y_cursor = sep_y + sep_th + int(8 * scale)
 
-    # ── Rows ──────────────────────────────────────────────────────────────────
-    row_h_base = int(84 * scale)
-    row_h_1    = int(row_h_base * 1.14)
-    row_g      = int(5 * scale)
-    start_y    = lbl_y + int(f_lbl.size) + int(9 * scale)
-
-    y_cursor = start_y
     for entry in cat.entries:
-        rh = row_h_1 if entry.pos == 1 else row_h_base
+        rh = _row_h(entry.pos)
+
+        # Podium separator (vivid thin line BEFORE P4 — universal motorsport convention)
         if entry.pos == 4:
-            pd_y = y_cursor - row_g // 2
-            draw.line([(row_m, pd_y), (row_m + row_w, pd_y)],
-                      fill=(*cfg["primary_light"], 50), width=max(1, int(1 * scale)))
+            sep2_y = y_cursor - row_gap // 2 - 1
+            draw.line([(row_m, sep2_y), (row_m + row_w, sep2_y)],
+                      fill=(*cfg["primary_light"], 70), width=max(1, int(1 * scale)))
+
+        # Champion glow behind P1 row
         if entry.pos == 1:
             img = _add_radial_glow(img, W // 2, y_cursor + rh // 2,
-                                   int(rh * 3.5), cfg["primary_light"], max_alpha=22)
+                                   int(rh * 3.8), cfg["primary_light"], max_alpha=28)
+
         _draw_row(img, draw, row_m, y_cursor, row_w, rh, entry, cfg, scale)
         draw = ImageDraw.Draw(img)
-        y_cursor += rh + row_g
 
-    # ── Footer: logo branca ────────────────────────────────────────────────────
-    footer_y   = y_cursor + int(10 * scale)
-    footer_mid = footer_y + (H - footer_y) // 2
-    _place_logo_white(img, footer_mid, int(240 * scale), int(70 * scale))
+        # 1px dark depth separator at bottom of each row (F1/IndyCar benchmark)
+        if entry.pos < len(cat.entries):
+            draw.line([(row_m, y_cursor + rh - 1), (row_m + row_w, y_cursor + rh - 1)],
+                      fill=(0, 0, 0, 80), width=1)
+
+        y_cursor += rh + row_gap
+
+    # ── Footer: logo centered, vertically centered in remaining space ─────────
+    footer_start = y_cursor + int(6 * scale)
+    footer_mid   = footer_start + (H - footer_start) // 2
+    _place_logo_white(img, footer_mid, int(210 * scale), int(62 * scale))
 
     return img
 
