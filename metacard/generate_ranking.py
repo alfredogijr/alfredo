@@ -308,18 +308,18 @@ def _text_on(bg: tuple) -> tuple:
 
 
 def _row_palette(pos: int, cfg: dict) -> Tuple[tuple, tuple, tuple]:
-    """(bar_l, bar_r, num_c) using track-color tints for all positions."""
+    """Top-3 use tone variations of the track color — no white mixing."""
     if pos == 1:
-        bar_l = _lerp_color(cfg["primary_light"], (255, 255, 255), 0.24)
-        bar_r = cfg["primary_light"]
-        num_c = cfg["primary"]
-    elif pos == 2:
         bar_l = cfg["primary_light"]
+        bar_r = _lerp_color(cfg["primary_light"], cfg["primary"], 0.40)
+        num_c = _lerp_color(cfg["primary_dark"], cfg["primary"], 0.30)
+    elif pos == 2:
+        bar_l = _lerp_color(cfg["primary_light"], cfg["primary"], 0.40)
         bar_r = cfg["primary"]
-        num_c = _lerp_color(cfg["primary_dark"], cfg["primary"], 0.28)
+        num_c = cfg["primary_dark"]
     elif pos == 3:
         bar_l = cfg["primary"]
-        bar_r = _lerp_color(cfg["primary"], cfg["row_bg"], 0.50)
+        bar_r = _lerp_color(cfg["primary"], cfg["row_bg"], 0.42)
         num_c = cfg["primary_dark"]
     else:
         bar_l = cfg["row_bg"]
@@ -528,20 +528,31 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
 
 def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
     W, H  = size
-    scale = min(W / 1080, H / 1350)
+    # TV landscape: scale by height so elements fill the screen
+    scale = H / 1080 if W > H else min(W / 1080, H / 1350)
 
-    # Background: dark gradient (primary_dark → bg)
-    img = _vertical_gradient(size, cfg["primary_dark"], cfg["bg"])
+    bright_bg = _lum(cfg["bg"]) > 0.25  # True for Campo Grande orange
 
-    # Radial glow — large soft center + tighter bright core
+    # Background gradient — stays in the track color range for bright-bg tracks
+    if bright_bg:
+        top_c  = _lerp_color(cfg["bg"], (0, 0, 0), 0.14)          # only slightly darker
+        bot_c  = _lerp_color(cfg["bg"], cfg["primary"], 0.28)       # slightly more vivid
+        img = _vertical_gradient(size, top_c, bot_c)
+    else:
+        img = _vertical_gradient(size, cfg["primary_dark"], cfg["bg"])
+
+    # Radial glow — large soft center
     img = _add_radial_glow(img, W // 2, int(H * 0.30),
-                           int(min(W, H) * 0.82), cfg["primary"], max_alpha=58)
+                           int(min(W, H) * 0.82), cfg["primary"],
+                           max_alpha=75 if bright_bg else 58)
+    # Secondary glow: bright core (always primary_light, never darkens)
     img = _add_radial_glow(img, W // 2, int(H * 0.26),
                            int(min(W, H) * 0.28), cfg["primary_light"], max_alpha=30)
 
-    # F1 livery: wide diagonal color band in background
-    img = _add_diagonal_band(img, cfg["primary"],
-                             y_left=0.54, y_right=0.30, thickness=0.24, alpha=30)
+    # Diagonal band — visible on dark bg, subtle on bright bg
+    img = _add_diagonal_band(img, cfg["primary_light"] if bright_bg else cfg["primary"],
+                             y_left=0.54, y_right=0.30, thickness=0.24,
+                             alpha=18 if bright_bg else 30)
 
     # Faint track-name watermark (behind diagonal band)
     wm_img  = Image.new("RGBA", size, (0, 0, 0, 0))
@@ -619,18 +630,165 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
     return img
 
 
-# ─── Ranking Slide ─────────────────────────────────────────────────────────────
+# ─── TV Ranking Layout (1920×1080) ─────────────────────────────────────────────
+
+def _gen_ranking_tv(track: Track, cat: Category, cfg: dict, W: int, H: int) -> Image.Image:
+    s          = H / 1080
+    bright_bg  = _lum(cfg["bg"]) > 0.25
+
+    # ── Background ────────────────────────────────────────────────────────────
+    if bright_bg:
+        top_c = _lerp_color(cfg["bg"], (0,0,0), 0.12)
+        bot_c = _lerp_color(cfg["bg"], cfg["primary"], 0.22)
+        img = _vertical_gradient((W, H), top_c, bot_c)
+    else:
+        img = _vertical_gradient((W, H), cfg["primary_dark"], cfg["bg"])
+    img = _add_radial_glow(img, W // 2, int(H * 0.42),
+                           int(min(W, H) * 1.1), cfg["primary"],
+                           max_alpha=70 if bright_bg else 48)
+    # Second glow: always a lighter color (never darkens the image)
+    img = _add_radial_glow(img, int(W * 0.12), int(H * 0.85),
+                           int(H * 0.55), cfg["primary_light"], max_alpha=18)
+
+    # Faint track-name watermark
+    wm = Image.new("RGBA", (W, H), (0,0,0,0))
+    f_wm = font("title", int(260 * s))
+    bb = ImageDraw.Draw(wm).textbbox((0,0), cfg["name"], font=f_wm)
+    ImageDraw.Draw(wm).text(
+        ((W - (bb[2]-bb[0]))//2 - bb[0], (H - (bb[3]-bb[1]))//2 - bb[1]),
+        cfg["name"], font=f_wm, fill=(*cfg["primary"], 10))
+    img = Image.alpha_composite(img.convert("RGBA"), wm).convert("RGB")
+
+    # Checker decoration — top-right corner
+    flag_sz = int(260 * s)
+    checker = _make_checker_faded(flag_sz, int(28 * s))
+    cx = W - flag_sz + int(15 * s)
+    img.paste(checker, (cx, -int(10 * s)), checker)
+
+    draw = ImageDraw.Draw(img)
+
+    # ── Top accent bar ─────────────────────────────────────────────────────────
+    bar = max(8, int(10 * s))
+    draw.rectangle([0, 0, W, bar], fill=cfg["primary_light"])
+
+    # ── Header (logo · title · category · track) ───────────────────────────────
+    hdr_h  = int(88 * s)
+    hdr_y  = bar
+
+    # Logo — left side
+    logo_cx = int(130 * s)
+    _place_logo(img, hdr_y + hdr_h // 2, int(200 * s), int(70 * s))
+
+    draw = ImageDraw.Draw(img)
+
+    # Title "RANKING DA SEMANA" — centered
+    f_title = font("title", int(72 * s))
+    center_text(draw, hdr_y + int(12 * s), "RANKING DA SEMANA",
+                f_title, (255, 255, 255), W, shadow=True)
+
+    # Category pill — right side
+    f_cat  = font("bold", int(24 * s))
+    c_lbl  = cat.label.upper()
+    bb     = draw.textbbox((0,0), c_lbl, font=f_cat)
+    tw, th = bb[2]-bb[0], bb[3]-bb[1]
+    px_, py_ = int(26*s), int(11*s)
+    pill_w = tw + px_*2
+    pill_h = th + py_*2
+    pill_x = W - pill_w - int(60*s)
+    pill_y = hdr_y + (hdr_h - pill_h) // 2
+    cf     = cfg["primary_dark"] if bright_bg else cfg["primary"]
+    pill   = Image.new("RGBA", (pill_w, pill_h), (0,0,0,0))
+    ImageDraw.Draw(pill).rounded_rectangle([0,0,pill_w-1,pill_h-1],
+                                            radius=pill_h//2, fill=(*cf,220))
+    img.paste(pill, (pill_x, pill_y), pill)
+    draw = ImageDraw.Draw(img)
+    draw.text((pill_x+px_-bb[0], pill_y+py_-bb[1]), c_lbl, font=f_cat,
+              fill=_text_on(cf))
+
+    # Track name — small, below pill
+    f_trk = font("bold", int(17*s))
+    bb_t  = draw.textbbox((0,0), cfg["name"], font=f_trk)
+    trk_x = pill_x + (pill_w - (bb_t[2]-bb_t[0])) // 2 - bb_t[0]
+    trk_c = cfg["primary_light"] if not bright_bg else cfg["primary_dark"]
+    draw.text((trk_x, pill_y + pill_h + int(4*s)), cfg["name"], font=f_trk, fill=trk_c)
+
+    # Period — far right, small
+    if track.period_start and track.period_end:
+        f_per = font("regular", int(16*s))
+        per_str = f"{track.period_start} · {track.period_end}"
+        bb_p = draw.textbbox((0,0), per_str, font=f_per)
+        per_x = W - (bb_p[2]-bb_p[0]) - int(60*s)
+        per_c = (160,160,160) if not bright_bg else cfg["primary_dark"]
+        draw.text((per_x, hdr_y + hdr_h - int(22*s)), per_str, font=f_per, fill=per_c)
+
+    # Header separator line
+    sep_y  = hdr_y + hdr_h
+    sep_th = max(2, int(3*s))
+    draw.rectangle([0, sep_y, W, sep_y + sep_th], fill=cfg["primary"])
+
+    # ── Column labels ──────────────────────────────────────────────────────────
+    row_m  = int(68 * s)
+    row_w  = W - row_m * 2
+    row_h  = int(85 * s)              # base height (calculated for 10 rows)
+    row_h1 = int(row_h * 1.10)        # 1st place taller
+    row_g  = int(8 * s)
+    lbl_y  = sep_y + sep_th + int(10 * s)
+    f_lbl  = font("regular", int(18 * s))
+    slant_ref  = int(row_h * 0.16)
+    pos_w_ref  = int(row_h * 0.90)
+    lbl_col    = (90, 90, 90) if not bright_bg else cfg["primary_dark"]
+    draw.text((row_m + pos_w_ref + slant_ref + int(12*s), lbl_y),
+              "COMPETIDOR", font=f_lbl, fill=lbl_col)
+    bb_lbl = draw.textbbox((0,0), "TEMPO", font=f_lbl)
+    draw.text((row_m + row_w - slant_ref - (bb_lbl[2]-bb_lbl[0]) - int(14*s), lbl_y),
+              "TEMPO", font=f_lbl, fill=lbl_col)
+
+    # ── Rows ──────────────────────────────────────────────────────────────────
+    start_y  = lbl_y + int(f_lbl.size) + int(10 * s)
+    y_cursor = start_y
+
+    for entry in cat.entries:
+        rh = row_h1 if entry.pos == 1 else row_h
+        if entry.pos == 4:
+            pd_y = y_cursor - row_g // 2
+            draw.line([(row_m, pd_y), (row_m+row_w, pd_y)],
+                      fill=(*cfg["primary"], 55), width=1)
+        if entry.pos == 1:
+            img = _add_radial_glow(img, W//2, y_cursor+rh//2,
+                                   int(rh*2.5), cfg["primary_light"], max_alpha=14)
+        _draw_row(img, draw, row_m, y_cursor, row_w, rh, entry, cfg, s)
+        draw = ImageDraw.Draw(img)
+        y_cursor += rh + row_g
+
+    # Bottom accent bar
+    draw.rectangle([0, H - max(5, int(5*s)), W, H], fill=cfg["primary"])
+
+    return img
+
+
+# ─── Ranking Slide (Instagram portrait) ────────────────────────────────────────
 
 def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Image:
     W, H  = size
-    scale = min(W / 1080, H / 1350)
+    if W > H:  # TV landscape → dedicated layout
+        return _gen_ranking_tv(track, cat, cfg, W, H)
 
-    # Background with two radial glows for depth
-    img = Image.new("RGB", size, cfg["bg"])
-    img = _add_radial_glow(img, int(W * 0.60), int(H * 0.26),
-                           int(min(W, H) * 0.92), cfg["primary"], max_alpha=48)
-    img = _add_radial_glow(img, int(W * 0.15), int(H * 0.78),
-                           int(min(W, H) * 0.38), cfg["primary_dark"], max_alpha=32)
+    scale      = min(W / 1080, H / 1350)
+    bright_bg  = _lum(cfg["bg"]) > 0.25
+
+    # Background — stays orange for bright-bg tracks
+    if bright_bg:
+        img = Image.new("RGB", (W, H), cfg["bg"])
+        img = _add_radial_glow(img, int(W*0.60), int(H*0.26),
+                               int(min(W,H)*0.92), cfg["primary"], max_alpha=72)
+        img = _add_radial_glow(img, int(W*0.15), int(H*0.78),
+                               int(H*0.55), cfg["primary_light"], max_alpha=22)
+    else:
+        img = Image.new("RGB", (W, H), cfg["bg"])
+        img = _add_radial_glow(img, int(W * 0.60), int(H * 0.26),
+                               int(min(W, H) * 0.92), cfg["primary"], max_alpha=48)
+        img = _add_radial_glow(img, int(W * 0.15), int(H * 0.78),
+                               int(min(W, H) * 0.38), cfg["primary_dark"], max_alpha=32)
 
     # F1 livery diagonal band (subtle)
     img = _add_diagonal_band(img, cfg["primary"],
@@ -687,16 +845,17 @@ def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Im
               c_lbl, font=f_cat, fill=_text_on(cat_fill))
 
     # Column labels
-    f_lbl  = font("regular", int(19 * scale))
-    row_m  = int(60 * scale)
-    row_w  = W - row_m * 2
-    slant  = int(int(79 * scale) * 0.16)
-    lbl_y  = int(233 * scale)
+    f_lbl   = font("regular", int(19 * scale))
+    row_m   = int(60 * scale)
+    row_w   = W - row_m * 2
+    slant   = int(int(79 * scale) * 0.16)
+    lbl_y   = int(233 * scale)
+    lbl_col = cfg["primary_dark"] if bright_bg else (100, 100, 100)
     draw.text((row_m + slant + int(12 * scale), lbl_y),
-              "COMPETIDOR", font=f_lbl, fill=(100, 100, 100))
+              "COMPETIDOR", font=f_lbl, fill=lbl_col)
     bb_t = draw.textbbox((0, 0), "TEMPO", font=f_lbl)
     draw.text((row_m + row_w - slant - (bb_t[2] - bb_t[0]) - int(14 * scale), lbl_y),
-              "TEMPO", font=f_lbl, fill=(100, 100, 100))
+              "TEMPO", font=f_lbl, fill=lbl_col)
 
     # Rows — 1st place 12% taller
     row_h   = int(79 * scale)
