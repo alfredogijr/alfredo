@@ -389,6 +389,35 @@ def process_frame(
         dd.text((dx,     dy),     disc_text, font=font_disc, fill=(255, 255, 255, 200))
         arr   = np.array(Image.alpha_composite(base, dov).convert("RGB"))
 
+    # Logo overlay
+    logo_img = briefing.get("_logo_img")
+    if logo_img is not None:
+        segs          = briefing.get("segments", [])
+        logo_start    = briefing.get("logo_start", segs[-1]["start"] if segs else 0)
+        logo_end      = briefing.get("logo_end",   segs[-1]["end"]   if segs else total_duration)
+        if logo_start <= t < logo_end:
+            elapsed_logo   = t - logo_start
+            remaining_logo = logo_end - t
+            fade_dur = briefing.get("logo_fade_dur", 0.55)
+            in_a     = min(1.0, elapsed_logo   / fade_dur)
+            out_a    = min(1.0, remaining_logo / 0.30)
+            logo_alpha = (1 - (1 - in_a) ** 2) * out_a   # ease-out in, hard out
+
+            h, w = arr.shape[:2]
+            lw, lh = logo_img.size
+            lx = (w - lw) // 2
+            y_frac = briefing.get("logo_y_frac", 0.38)
+            ly = int(h * y_frac) - lh // 2
+
+            # Apply alpha by scaling logo's A channel
+            r, g, b, a = logo_img.split()
+            a = a.point(lambda x: int(x * logo_alpha))
+            logo_frame = Image.merge("RGBA", (r, g, b, a))
+
+            base_img = Image.fromarray(arr).convert("RGBA")
+            base_img.paste(logo_frame, (lx, ly), logo_frame)
+            arr = np.array(base_img.convert("RGB"))
+
     # Progress bar
     if briefing.get("progress_bar", True):
         bar_h = briefing.get("progress_bar_height", 5)
@@ -488,6 +517,19 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
 
     h_px, w_px = clip.size[1], clip.size[0]
     vignette   = build_vignette(h_px, w_px, briefing.get("vignette", 0.55))
+
+    # Preload logo PNG (RGBA) into briefing so process_frame can access it
+    logo_path = briefing.get("logo", "")
+    if logo_path and Path(logo_path).exists():
+        logo_img = Image.open(logo_path).convert("RGBA")
+        logo_w_pct = briefing.get("logo_width_pct", 0.55)
+        target_w   = int(w_px * logo_w_pct)
+        ratio      = target_w / logo_img.width
+        target_h   = max(1, int(logo_img.height * ratio))
+        briefing["_logo_img"] = logo_img.resize((target_w, target_h), Image.LANCZOS)
+        print(f"Logo: {Path(logo_path).name}  →  {target_w}×{target_h}px")
+    else:
+        briefing.pop("_logo_img", None)
 
     # Backward-compatible: font_size_main > font_size_hook fallback
     font_main = load_font(

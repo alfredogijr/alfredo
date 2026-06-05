@@ -57,10 +57,15 @@
     {
       "start": 14.8, "end": 18.0,
       "anim": "scale_fade",
-      "main": ["TURISTA FC"],
+      "main": [],
       "sub": ["Seu lugar na temporada européia"],
       "position": "center",
-      "accent": true
+      "accent": false
     }
-  ]
+  ],
+
+  "logo": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+  "logo_width_pct": 0.58,
+  "logo_y_frac": 0.42,
+  "logo_fade_dur": 0.55
 }
