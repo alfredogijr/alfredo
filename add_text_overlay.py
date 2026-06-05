@@ -56,6 +56,16 @@ def load_font(size: int, role: str = "body", _cache: dict = {}) -> ImageFont.Fre
     return _cache[key]
 
 
+def remove_white_bg(img: Image.Image, threshold: int = 235) -> Image.Image:
+    """Remove near-white background from logos that lack transparency."""
+    img = img.convert("RGBA")
+    data = np.array(img, dtype=np.float32)
+    r, g, b, a = data[:,:,0], data[:,:,1], data[:,:,2], data[:,:,3]
+    white = (r > threshold) & (g > threshold) & (b > threshold)
+    data[:,:,3] = np.where(white, 0, a)
+    return Image.fromarray(data.astype(np.uint8), "RGBA")
+
+
 def build_vignette(h: int, w: int, strength: float) -> np.ndarray:
     Y = np.linspace(-1, 1, h)[:, None]
     X = np.linspace(-1, 1, w)[None, :]
@@ -154,14 +164,7 @@ def render_overlay(
     overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw    = ImageDraw.Draw(overlay)
 
-    # Subtle full-width scrim at bottom/top — cinematic, no rounded box
-    if position != "center":
-        draw.rectangle(
-            [0, by - py, w, by + tot + py],
-            fill=(0, 0, 0, int(72 * alpha)),
-        )
-
-    # Main text — crisp white, no offset shadow
+    # Main text — crisp white, no background, no shadow
     yt, widths = by, []
     for line in wm:
         lw = draw.textlength(line, font=font_main)
@@ -389,7 +392,34 @@ def process_frame(
         dd.text((dx,     dy),     disc_text, font=font_disc, fill=(255, 255, 255, 200))
         arr   = np.array(Image.alpha_composite(base, dov).convert("RGB"))
 
-    # Logo overlay
+    # Multi-logo overlay (logos array)
+    logos_list = briefing.get("_logos", [])
+    if logos_list:
+        segs        = briefing.get("segments", [])
+        lg_start    = briefing.get("logos_start", segs[-1]["start"] if segs else 0)
+        lg_end      = briefing.get("logos_end",   segs[-1]["end"]   if segs else total_duration)
+        if lg_start <= t < lg_end:
+            elapsed_lg  = t - lg_start
+            remain_lg   = lg_end - t
+            fade_dur    = briefing.get("logos_fade_dur", 0.55)
+            in_a        = min(1.0, elapsed_lg / fade_dur)
+            out_a       = min(1.0, remain_lg  / 0.30)
+            lg_alpha    = (1 - (1 - in_a) ** 2) * out_a
+
+            h, w = arr.shape[:2]
+            base_img = Image.fromarray(arr).convert("RGBA")
+            for lcfg in logos_list:
+                limg = lcfg["_img"]
+                lw, lh = limg.size
+                lx = int(w * lcfg.get("x_frac", 0.5)) - lw // 2
+                ly = int(h * lcfg.get("y_frac", 0.45)) - lh // 2
+                r2, g2, b2, a2 = limg.split()
+                a2 = a2.point(lambda x: int(x * lg_alpha))
+                lframe = Image.merge("RGBA", (r2, g2, b2, a2))
+                base_img.paste(lframe, (lx, ly), lframe)
+            arr = np.array(base_img.convert("RGB"))
+
+    # Single logo overlay
     logo_img = briefing.get("_logo_img")
     if logo_img is not None:
         segs          = briefing.get("segments", [])
@@ -518,7 +548,23 @@ def run(briefing_path: str, output_path: str, extra_inputs: list = None):
     h_px, w_px = clip.size[1], clip.size[0]
     vignette   = build_vignette(h_px, w_px, briefing.get("vignette", 0.55))
 
-    # Preload logo PNG (RGBA) into briefing so process_frame can access it
+    # Preload multi-logo array
+    preloaded = []
+    for lcfg in briefing.get("logos", []):
+        p = lcfg.get("path", "")
+        if p and Path(p).exists():
+            limg = Image.open(p).convert("RGBA")
+            if lcfg.get("remove_white_bg"):
+                limg = remove_white_bg(limg, lcfg.get("white_threshold", 235))
+            tw = int(w_px * lcfg.get("width_pct", 0.4))
+            th = max(1, int(limg.height * tw / limg.width))
+            preloaded.append({**lcfg, "_img": limg.resize((tw, th), Image.LANCZOS)})
+            print(f"Logo: {Path(p).name}  →  {tw}×{th}px")
+        else:
+            print(f"Logo not found: {p}")
+    briefing["_logos"] = preloaded
+
+    # Preload single logo PNG (RGBA) into briefing so process_frame can access it
     logo_path = briefing.get("logo", "")
     if logo_path and Path(logo_path).exists():
         logo_img = Image.open(logo_path).convert("RGBA")
