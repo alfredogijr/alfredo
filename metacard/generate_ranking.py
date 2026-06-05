@@ -36,6 +36,7 @@ except ImportError:
 BASE_DIR = Path(__file__).parent
 FONTS    = BASE_DIR / "assets" / "fonts"
 LOGO     = BASE_DIR / "assets" / "logo_metakart.png"
+LOGO_W   = BASE_DIR / "assets" / "logo_metakart_white.png"
 OUT_IG   = BASE_DIR / "output" / "instagram"
 OUT_TV   = BASE_DIR / "output" / "tv"
 
@@ -328,15 +329,17 @@ def _add_halftone(img: Image.Image, step: int = 14, dot_r: int = 3,
 
 def _place_logo_white(img: Image.Image, y_center: int,
                       max_w: int, max_h: int, x_center: int = -1) -> None:
-    """Place logo converted to pure white (for dark backgrounds)."""
-    logo  = Image.open(LOGO).convert("RGBA")
-    r, g, b, a = logo.split()
-    logo  = Image.merge("RGBA", (
-        Image.new("L", logo.size, 255),
-        Image.new("L", logo.size, 255),
-        Image.new("L", logo.size, 255),
-        a,
-    ))
+    """Place white logo (transparent bg) for dark backgrounds."""
+    src  = LOGO_W if LOGO_W.exists() else LOGO
+    logo = Image.open(src).convert("RGBA")
+    if src == LOGO:
+        r, g, b, a = logo.split()
+        logo = Image.merge("RGBA", (
+            Image.new("L", logo.size, 255),
+            Image.new("L", logo.size, 255),
+            Image.new("L", logo.size, 255),
+            a,
+        ))
     sc   = min(max_w / logo.width, max_h / logo.height)
     lw, lh = int(logo.width * sc), int(logo.height * sc)
     logo = logo.resize((lw, lh), Image.LANCZOS)
