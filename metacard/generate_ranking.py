@@ -62,12 +62,12 @@ TRACKS = {
     },
     "campo_grande": {
         "name":          "CAMPO GRANDE",
-        "primary":       (248, 100,   0),
-        "primary_dark":  ( 85,  34,   3),
-        "primary_light": (255, 155,  28),
-        "bg":            ( 28,  13,   2),   # orange-tinted background
-        "row_bg":        (200,  80,   5),
-        "num_bg":        ( 48,  20,   3),   # orange-tinted number box
+        "primary":       (252, 108,   0),   # vivid orange
+        "primary_dark":  ( 88,  30,   0),   # dark orange
+        "primary_light": (255, 172,  45),   # bright warm orange
+        "bg":            (152,  55,   0),   # ORANGE background — not dark
+        "row_bg":        ( 62,  20,   0),   # dark rows for contrast on orange bg
+        "num_bg":        ( 40,  13,   0),   # darkest number badge
     },
 }
 
@@ -296,6 +296,17 @@ def _lerp_color(a: tuple, b: tuple, t: float) -> tuple:
     return tuple(int(a[i] * (1 - t) + b[i] * t) for i in range(3))
 
 
+def _lum(c: tuple) -> float:
+    return (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255
+
+
+def _text_on(bg: tuple) -> tuple:
+    """White or near-black — whichever contrasts best with the given background."""
+    if _lum(bg) > 0.52:
+        return (max(0, bg[0] // 7), max(0, bg[1] // 7), max(0, bg[2] // 7))
+    return (255, 255, 255)
+
+
 def _row_palette(pos: int, cfg: dict) -> Tuple[tuple, tuple, tuple]:
     """(bar_l, bar_r, num_c) using track-color tints for all positions."""
     if pos == 1:
@@ -418,14 +429,13 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
     gap    = int(4 * scale)
     bar_h  = h - gap
     pos_w  = int(h * 0.90)
-    slant  = int(bar_h * 0.16)   # parallelogram lean (F1 timing-panel look)
+    slant  = int(bar_h * 0.16)
     stripe = max(5, int(5 * scale))
 
     bar_l, bar_r, num_c = _row_palette(entry.pos, cfg)
 
-    # ── Row gradient with parallelogram mask ───────────────────────────────────
+    # ── Row gradient (parallelogram) ───────────────────────────────────────────
     grad = _gradient_bar(w, bar_h, bar_l, bar_r).convert("RGBA")
-    # Top-shine
     shine_h = max(3, bar_h // 5)
     for sy in range(shine_h):
         a = int(40 * (1.0 - sy / shine_h) ** 1.5)
@@ -439,7 +449,7 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
     badge.putalpha(_para_mask(badge_w, bar_h, slant))
     img.paste(badge, (x, y), badge)
 
-    # ── Left accent stripe (diagonal, track color) ─────────────────────────────
+    # ── Left accent stripe (diagonal) ──────────────────────────────────────────
     acc_w  = stripe + slant
     accent = Image.new("RGBA", (acc_w, bar_h), (0, 0, 0, 0))
     ImageDraw.Draw(accent).polygon([
@@ -450,28 +460,34 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
 
     draw = ImageDraw.Draw(img)
 
-    # ── Thin separator between badge and name area ─────────────────────────────
+    # ── Separator between badge and name area ──────────────────────────────────
     sep_x = x + pos_w + slant
     draw.line(
         [(sep_x, y + int(bar_h * 0.18)), (sep_x, y + int(bar_h * 0.82))],
         fill=(*cfg["primary_light"], 55), width=1,
     )
 
-    # ── Position number ─────────────────────────────────────────────────────────
+    # ── Position number (adaptive text color) ──────────────────────────────────
     f_pos  = font("bold", int(h * 0.44))
     bb     = draw.textbbox((0, 0), str(entry.pos), font=f_pos)
     pw, ph = bb[2] - bb[0], bb[3] - bb[1]
     draw.text(
         (x + slant + stripe + (pos_w - stripe - pw) // 2 - bb[0],
          y + (bar_h - ph) // 2 - bb[1]),
-        str(entry.pos), font=f_pos, fill=(255, 255, 255),
+        str(entry.pos), font=f_pos, fill=_text_on(num_c),
     )
 
-    # ── Name ────────────────────────────────────────────────────────────────────
+    # ── Pre-compute time position (needed for dot leader) ──────────────────────
+    f_time  = font("semibold", int(h * 0.305))
+    bb_t    = draw.textbbox((0, 0), entry.time, font=f_time)
+    time_tw = bb_t[2] - bb_t[0]
+    time_th = bb_t[3] - bb_t[1]
+    time_x  = x + w - slant - time_tw - int(14 * scale)
+
+    # ── Name (adaptive text color) ─────────────────────────────────────────────
     f_name     = font("bold", int(h * 0.295))
     name_x     = x + pos_w + slant + int(12 * scale)
-    time_resv  = int(150 * scale)
-    max_name_w = w - pos_w - slant - int(18 * scale) - time_resv
+    max_name_w = time_x - name_x - int(16 * scale)
     name_str   = entry.name
     while True:
         bb = draw.textbbox((0, 0), name_str, font=f_name)
@@ -480,20 +496,31 @@ def _draw_row(img: Image.Image, draw: ImageDraw.Draw,
         name_str = name_str[:-1]
     if name_str != entry.name:
         name_str = name_str.rstrip() + "…"
-    bb = draw.textbbox((0, 0), name_str, font=f_name)
+    bb_name = draw.textbbox((0, 0), name_str, font=f_name)
+    name_mid_c = _lerp_color(bar_l, bar_r, (name_x - x) / max(w - 1, 1))
     draw.text(
-        (name_x, y + (bar_h - (bb[3] - bb[1])) // 2 - bb[1]),
-        name_str, font=f_name, fill=(255, 255, 255),
+        (name_x, y + (bar_h - (bb_name[3] - bb_name[1])) // 2 - bb_name[1]),
+        name_str, font=f_name, fill=_text_on(name_mid_c),
     )
 
-    # ── Time ────────────────────────────────────────────────────────────────────
-    f_time = font("semibold", int(h * 0.305))
-    bb     = draw.textbbox((0, 0), entry.time, font=f_time)
-    tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    # Right-align inside the parallelogram (account for slant)
+    # ── Dot leader between name and time (fills gap on TV) ────────────────────
+    leader_x1 = name_x + (bb_name[2] - bb_name[0]) + int(10 * scale)
+    leader_x2 = time_x - int(10 * scale)
+    if leader_x2 > leader_x1 + int(28 * scale):
+        dot_r    = max(1, int(2 * scale))
+        dot_step = max(7, int(13 * scale))
+        dot_y    = y + bar_h // 2
+        for dx in range(int(leader_x1), int(leader_x2), dot_step):
+            t  = (dx - x) / max(w - 1, 1)
+            dc = _lerp_color(_lerp_color(bar_l, bar_r, t), (255, 255, 255), 0.28)
+            draw.ellipse([dx, dot_y - dot_r, dx + dot_r * 2, dot_y + dot_r],
+                         fill=dc)
+
+    # ── Time (adaptive text color) ─────────────────────────────────────────────
+    time_mid_c = _lerp_color(bar_l, bar_r, (time_x - x) / max(w - 1, 1))
     draw.text(
-        (x + w - slant - tw - int(14 * scale), y + (bar_h - th) // 2 - bb[1]),
-        entry.time, font=f_time, fill=(225, 225, 225),
+        (time_x, y + (bar_h - time_th) // 2 - bb_t[1]),
+        entry.time, font=f_time, fill=_text_on(time_mid_c),
     )
 
 
@@ -577,15 +604,17 @@ def gen_cover(track: Track, cfg: dict, size: tuple) -> Image.Image:
     pill_h   = th + py_ * 2
     pill_x   = (W - pill_w) // 2
     pill_y   = int(975 * scale)
+    # Badge fill: use primary_dark on bright bg (Campo Grande), primary on dark bg
+    badge_fill = cfg["primary_dark"] if _lum(cfg["bg"]) > 0.25 else cfg["primary"]
     pill     = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
     ImageDraw.Draw(pill).rounded_rectangle(
         [0, 0, pill_w - 1, pill_h - 1], radius=pill_h // 2,
-        fill=(*cfg["primary"], 225),
+        fill=(*badge_fill, 230),
     )
     img.paste(pill, (pill_x, pill_y), pill)
     draw = ImageDraw.Draw(img)
     draw.text((pill_x + px_ - bb[0], pill_y + py_ - bb[1]),
-              cfg["name"], font=f_t, fill=(255, 255, 255))
+              cfg["name"], font=f_t, fill=_text_on(badge_fill))
 
     return img
 
@@ -620,14 +649,16 @@ def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Im
     draw.rectangle([0, H - max(3, int(3 * scale)), W, H], fill=cfg["primary"])
 
     # Small header row: track name left, "RANKING DA SEMANA" right
-    f_head = font("bold", int(24 * scale))
-    hy = int(22 * scale)
-    draw.text((int(60 * scale), hy), cfg["name"],
-              font=f_head, fill=cfg["primary_light"])
+    f_head   = font("bold", int(24 * scale))
+    hy       = int(22 * scale)
+    bg_lum   = _lum(cfg["bg"])
+    hdr_main = cfg["primary_light"] if bg_lum < 0.30 else cfg["primary_dark"]
+    hdr_sec  = (120, 120, 120) if bg_lum < 0.30 else (60, 22, 0)
+    draw.text((int(60 * scale), hy), cfg["name"], font=f_head, fill=hdr_main)
     rt = "RANKING DA SEMANA"
     bb = draw.textbbox((0, 0), rt, font=f_head)
     draw.text((W - (bb[2] - bb[0]) - int(60 * scale), hy),
-              rt, font=f_head, fill=(120, 120, 120))
+              rt, font=f_head, fill=hdr_sec)
 
     # Hero title
     f_title = font("title", int(88 * scale))
@@ -644,15 +675,16 @@ def gen_ranking(track: Track, cat: Category, cfg: dict, size: tuple) -> Image.Im
     pill_h = th + py_ * 2
     pill_x = (W - pill_w) // 2
     pill_y = int(172 * scale)
+    cat_fill = cfg["primary_dark"] if _lum(cfg["bg"]) > 0.25 else cfg["primary"]
     pill   = Image.new("RGBA", (pill_w, pill_h), (0, 0, 0, 0))
     ImageDraw.Draw(pill).rounded_rectangle(
         [0, 0, pill_w - 1, pill_h - 1], radius=pill_h // 2,
-        fill=(*cfg["primary"], 215),
+        fill=(*cat_fill, 220),
     )
     img.paste(pill, (pill_x, pill_y), pill)
     draw = ImageDraw.Draw(img)
     draw.text((pill_x + px_ - bb[0], pill_y + py_ - bb[1]),
-              c_lbl, font=f_cat, fill=(255, 255, 255))
+              c_lbl, font=f_cat, fill=_text_on(cat_fill))
 
     # Column labels
     f_lbl  = font("regular", int(19 * scale))
