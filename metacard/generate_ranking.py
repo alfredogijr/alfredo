@@ -63,12 +63,12 @@ TRACKS = {
     },
     "campo_grande": {
         "name":          "CAMPO GRANDE",
-        "primary":       (240,  98,   0),
-        "primary_dark":  (140,  48,   0),
-        "primary_light": (255, 170,  55),
-        "bg":            (200,  72,   0),   # vivid orange bg — matches cover
-        "row_bg":        (165,  55,   0),
-        "num_bg":        (120,  38,   0),
+        "primary":       (253, 131,  48),   # #fd8330 — cor oficial
+        "primary_dark":  (160,  65,   0),
+        "primary_light": (255, 180,  95),
+        "bg":            (210,  85,   8),   # tom escuro do #fd8330
+        "row_bg":        (175,  68,   0),
+        "num_bg":        (130,  50,   0),
     },
 }
 
