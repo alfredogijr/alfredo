@@ -1,0 +1,67 @@
+{
+  "inputs": [
+    "/root/.claude/uploads/ed148a66-b473-4b46-91ed-22583bd8036c/f5f1cf19-IMG_9893.MOV",
+    "/root/.claude/uploads/ed148a66-b473-4b46-91ed-22583bd8036c/1ed15f63-IMG_9938.MOV",
+    "/root/.claude/uploads/ed148a66-b473-4b46-91ed-22583bd8036c/6cf31cbb-20260509_111637.mp4",
+    "/root/.claude/uploads/ed148a66-b473-4b46-91ed-22583bd8036c/0e5efdf4-20260509_111548.mp4"
+  ],
+  "clip_trim": [5, 5, 5, 5],
+  "duration": 20,
+
+  "brand_color": [90, 60, 150],
+  "progress_bar": false,
+
+  "ken_burns": 0.03,
+  "vignette": 0.65,
+  "contrast": 1.16,
+  "color_grade": "cinematic",
+  "letterbox": 45,
+
+  "audio_fade": 1.5,
+  "audio_volume": 0.82,
+
+  "font_size_main": 40,
+  "font_size_sub": 24,
+
+  "segments": [
+    {
+      "start": 0.2, "end": 4.5,
+      "anim": "word_reveal",
+      "word_timing": [0.3, 0.7, 1.1, 1.5, 1.9],
+      "main": ["VOCÊ É DA ZONA NORTE?"],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 5.2, "end": 9.5,
+      "anim": "fade",
+      "main": ["TEM UMA PISTA DE KART", "BEM DO SEU LADO."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 10.2, "end": 14.5,
+      "anim": "typewriter",
+      "main": ["O KART INDOOR", "MAIS MODERNO DO BRASIL."],
+      "sub": [],
+      "position": "bottom"
+    },
+    {
+      "start": 15.0, "end": 18.2,
+      "anim": "slide_up",
+      "main": ["NO SUBSOLO DO", "NORTESHOPPING."],
+      "sub": [],
+      "position": "bottom"
+    },
+    {
+      "start": 18.3, "end": 20.0,
+      "anim": "scale_fade",
+      "main": ["NEW GENERATION"],
+      "sub": ["Vem pra pista!", "(21) 96645-2862"],
+      "position": "center",
+      "accent": true
+    }
+  ]
+}
