@@ -328,8 +328,14 @@ def _add_halftone(img: Image.Image, step: int = 14, dot_r: int = 3,
 
 
 def _place_logo_white(img: Image.Image, y_center: int,
-                      max_w: int, max_h: int, x_center: int = -1) -> None:
-    """Place white logo (transparent bg) for dark backgrounds."""
+                      max_w: int, max_h: int,
+                      x_center: int = -1, container_w: int = -1) -> None:
+    """Place white logo (transparent bg) for dark backgrounds.
+
+    container_w: if >= 0, center logo within a container of this width starting at x=0.
+    x_center: if >= 0, use as left x of the paste operation (overrides container_w).
+    Default: center on full image width.
+    """
     src  = LOGO_W if LOGO_W.exists() else LOGO
     logo = Image.open(src).convert("RGBA")
     if src == LOGO:
@@ -340,10 +346,20 @@ def _place_logo_white(img: Image.Image, y_center: int,
             Image.new("L", logo.size, 255),
             a,
         ))
+    # Crop transparent padding so the logo fills the available space correctly
+    _, _, _, a = logo.split()
+    bbox = a.getbbox()
+    if bbox:
+        logo = logo.crop(bbox)
     sc   = min(max_w / logo.width, max_h / logo.height)
     lw, lh = int(logo.width * sc), int(logo.height * sc)
     logo = logo.resize((lw, lh), Image.LANCZOS)
-    cx   = x_center if x_center >= 0 else (img.width - lw) // 2
+    if x_center >= 0:
+        cx = x_center
+    elif container_w >= 0:
+        cx = (container_w - lw) // 2
+    else:
+        cx = (img.width - lw) // 2
     img.paste(logo, (cx, y_center - lh // 2), logo)
 
 
@@ -670,7 +686,8 @@ def _gen_ranking_tv(track: Track, cat: Category, cfg: dict, W: int, H: int) -> I
     draw.rectangle([0, 0, W, bar_th], fill=cfg["primary_light"])
 
     # ── Sidebar: white logo + track name + period ──────────────────────────────
-    _place_logo_white(img, int(H * 0.20), int(panel_w * 0.80), int(panel_w * 0.32))
+    _place_logo_white(img, int(H * 0.20), int(panel_w * 0.80), int(panel_w * 0.32),
+                      container_w=panel_w)
     draw = ImageDraw.Draw(img)
 
     f_trk = font("title", int(58 * s))
