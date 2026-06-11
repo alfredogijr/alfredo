@@ -1,4 +1,4 @@
-# Squad de Desenvolvimento de Produtos Digitais
+# Squad Dev
 
 Time de agentes de IA especializados para desenvolvimento de aplicativos e produtos de tecnologia, baseado na metodologia Lean Startup.
 
