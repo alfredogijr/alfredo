@@ -115,12 +115,11 @@ async function parsePDF(file) {
   // Carrega pdf.js dinamicamente
   let pdfjsLib;
   try {
-    pdfjsLib = await import('pdfjs-dist/build/pdf');
-    // Worker pode ser servido pelo próprio bundler ou via CDN
-    const workerSrc = pdfjsLib.GlobalWorkerOptions?.workerSrc;
-    if (!workerSrc) {
+    pdfjsLib = (await import('pdfjs-dist')).default ?? await import('pdfjs-dist');
+    // Worker CDN com versão dinâmica — evita mismatch entre pacote e worker
+    if (!pdfjsLib.GlobalWorkerOptions?.workerSrc) {
       pdfjsLib.GlobalWorkerOptions.workerSrc =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
     }
   } catch {
     throw new Error(
@@ -244,7 +243,7 @@ export default function MetaKartApp() {
   const [period,   setPeriod]   = useState('');
   const [entries,  setEntries]  = useState(DEMO_ENTRIES);
   const [logoUrl,  setLogoUrl]  = useState(null);
-  const [usePDF,   setUsePDF]   = useState(false);
+  const [usePDF,   setUsePDF]   = useState(true);
 
   // Dados parseados do PDF, por pista
   const [pdfData, setPdfData] = useState({});

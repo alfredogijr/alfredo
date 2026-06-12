@@ -135,8 +135,8 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
     ? lerpHex(cfg.primary, cfg.numBg, 0.20)
     : lerpHex(cfg.rowBg, cfg.numBg, 0.40);
 
-  // Cor do texto do tempo: branco em P1, primaryLight nos demais
-  const timeColor  = isP1 ? '#ffffff' : cfg.primaryLight;
+  // Cor do texto do tempo: dourado no P1 (destaque championship), primaryLight nos demais
+  const timeColor  = isP1 ? PODIUM[1].accent : cfg.primaryLight;
 
   // Tamanho da fonte de nome: maior no P1
   const nameFontSize   = format === 'tv'
@@ -223,7 +223,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
         <span style={{
           fontFamily:  "'Bebas Neue', 'BebasNeue-Regular', Impact, sans-serif",
           fontSize:    numFontSize,
-          color:       '#ffffff',
+          color:       podium ? podium.accent : '#ffffff',
           lineHeight:  1,
           letterSpacing: '0.02em',
           textShadow: isP1
@@ -796,7 +796,7 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
 // ─── Badge de Categoria ────────────────────────────────────────────────────────
 
 function CategoryBadge({ label, cfg, size = 'instagram' }) {
-  const fontSize  = size === 'tv' ? 22 : 22;
+  const fontSize  = size === 'tv' ? 26 : 20;
   const padX      = size === 'tv' ? 20 : 18;
   const padY      = size === 'tv' ? 8  : 8;
   // Clip chevron (estilo designação de classe motorsport)
@@ -886,8 +886,8 @@ function ExportPanel({ cardProps, format, track, category }) {
             scale: 1, // escala real — sem transform
           })
         );
-        // Aguarda o microtask queue esvaziar (React flush)
-        setTimeout(resolve, 120);
+        // 300ms conservador para React flush + concurrent mode
+        setTimeout(resolve, 300);
       });
 
       // Aguarda fontes carregarem no documento clonado
@@ -920,11 +920,7 @@ function ExportPanel({ cardProps, format, track, category }) {
         },
       });
 
-      // 4. Cleanup
-      root.unmount();
-      document.body.removeChild(offscreen);
-
-      // 5. Download
+      // 4. Download (cleanup vai no finally)
       const trackSlug = track.replace(/_/g, '-');
       const catSlug   = category
         .toLowerCase()
@@ -949,6 +945,13 @@ function ExportPanel({ cardProps, format, track, category }) {
       console.error('[MetaKart export]', err);
       alert(`Erro ao exportar: ${err.message}`);
     } finally {
+      // Cleanup garantido mesmo se html2canvas lançar exceção
+      if (typeof root !== 'undefined' && root) {
+        try { root.unmount(); } catch (_) {}
+      }
+      if (typeof offscreen !== 'undefined' && offscreen && document.body.contains(offscreen)) {
+        document.body.removeChild(offscreen);
+      }
       setExporting(false);
     }
   }, [cardProps, format, track, category]);
@@ -1009,6 +1012,21 @@ function ExportPanel({ cardProps, format, track, category }) {
  * @param {Array<{pos:number,name:string,time:string}>} props.entries
  * @param {string} props.logoUrl   - URL do logo Meta Kart (PNG com fundo transparente)
  */
+// ─── Dados de demonstração ────────────────────────────────────────────────────
+// Declarado ANTES do componente para evitar ReferenceError (const não sofre hoisting)
+export const DEMO_ENTRIES = [
+  { pos: 1,  name: 'CARLOS SILVA',     time: '31.245' },
+  { pos: 2,  name: 'PEDRO SANTOS',     time: '31.892' },
+  { pos: 3,  name: 'JOAO COSTA',       time: '32.100' },
+  { pos: 4,  name: 'ANA LIMA',         time: '32.450' },
+  { pos: 5,  name: 'MARCOS OLIVEIRA',  time: '32.811' },
+  { pos: 6,  name: 'RAFAEL GOMES',     time: '33.120' },
+  { pos: 7,  name: 'LUCAS FERREIRA',   time: '33.490' },
+  { pos: 8,  name: 'GABRIEL SOUZA',    time: '33.721' },
+  { pos: 9,  name: 'MATEUS BARBOSA',   time: '34.010' },
+  { pos: 10, name: 'THIAGO CARVALHO',  time: '34.350' },
+];
+
 export default function MetaKartRankingCard({
   track    = 'barra',
   format   = 'instagram',
@@ -1049,7 +1067,8 @@ export default function MetaKartRankingCard({
         fontFamily:    "'Montserrat', sans-serif",
       }}
     >
-      {/* Preview escalado para o browser */}
+      {/* Preview escalado para o browser — transform no wrapper interno,
+          não no card, para não quebrar o box model do layout pai */}
       <div style={{
         width:        Math.round(width  * previewScale),
         height:       Math.round(height * previewScale),
@@ -1059,10 +1078,19 @@ export default function MetaKartRankingCard({
         boxShadow:    '0 4px 32px rgba(0,0,0,0.7)',
         flexShrink:   0,
       }}>
-        <CardComponent
-          {...cardProps}
-          scale={previewScale}
-        />
+        <div style={{
+          width:           width,
+          height:          height,
+          transform:       `scale(${previewScale})`,
+          transformOrigin: 'top left',
+          marginRight:  -(width  - Math.round(width  * previewScale)),
+          marginBottom: -(height - Math.round(height * previewScale)),
+        }}>
+          <CardComponent
+            {...cardProps}
+            scale={1}
+          />
+        </div>
       </div>
 
       {/* Painel de export — usa container offscreen em resolução real */}
@@ -1075,21 +1103,6 @@ export default function MetaKartRankingCard({
     </div>
   );
 }
-
-// ─── Dados de demonstração (remova em produção) ───────────────────────────────
-
-export const DEMO_ENTRIES = [
-  { pos: 1,  name: 'CARLOS SILVA',     time: '31.245' },
-  { pos: 2,  name: 'PEDRO SANTOS',     time: '31.892' },
-  { pos: 3,  name: 'JOAO COSTA',       time: '32.100' },
-  { pos: 4,  name: 'ANA LIMA',         time: '32.450' },
-  { pos: 5,  name: 'MARCOS OLIVEIRA',  time: '32.811' },
-  { pos: 6,  name: 'RAFAEL GOMES',     time: '33.120' },
-  { pos: 7,  name: 'LUCAS FERREIRA',   time: '33.490' },
-  { pos: 8,  name: 'GABRIEL SOUZA',    time: '33.721' },
-  { pos: 9,  name: 'MATEUS BARBOSA',   time: '34.010' },
-  { pos: 10, name: 'THIAGO CARVALHO',  time: '34.350' },
-];
 
 // ─── Página de preview completa (para uso no Base44 como rota /ranking) ───────
 
