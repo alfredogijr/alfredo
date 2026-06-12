@@ -1,13 +1,26 @@
 # Fluxo: Produção Mensal de Conteúdo
 
-Sequência completa do calendário à publicação para qualquer cliente.
+Pipeline completo do calendário à publicação, com 8 agentes.
 
 ## Visão Geral
 
 ```
-Início do mês         Toda semana            Aprovação              Publicação
-[Estrategista]  →    [Criador]         →    [Editor]          →    [Gestor]
-Calendário           Pautas + legendas       Revisão + WL           Pacote final
+INÍCIO DO MÊS
+─────────────
+[01 Estrategista] → Calendário editorial aprovado
+
+TODA SEMANA
+───────────
+[02 Pesquisador]   → Referências e dados por post
+[03 Verificador]   → Referências validadas (✅ / ⚠️ / ❌)
+[04 Redator]       → Pautas aprovadas → Legendas escritas
+[06 Dir. Arte]     → Briefing visual por post (paralelo ao Redator)
+[07 Esp. Vídeo]    → Roteiro dos posts em vídeo (quando aplicável)
+[05 Editor]        → Copy revisada + versão white label
+
+PUBLICAÇÃO
+──────────
+[08 Gestor]        → Checklist → Agendamento → Distribuição
 ```
 
 ---
@@ -15,78 +28,133 @@ Calendário           Pautas + legendas       Revisão + WL           Pacote fin
 ## Fase 1: Planejamento (uma vez por mês)
 
 **Agente**: Estrategista  
-**Quando**: Últimos dias do mês anterior ou primeiro dia do mês  
-**Entrega**: Calendário editorial aprovado
+**Quando**: Último dia do mês anterior ou 1º dia do mês  
+**Entrega**: Calendário editorial aprovado com 12 posts, 1 campanha temática, 3 ideias de stories
 
-**Prompt**: Ver `agentes/01-estrategista.md`
-
-**Critério de saída**: Calendário com 12 posts, 1 campanha temática e 3 ideias de stories aprovados por você.
+**Critério de saída**: Calendário aprovado por você antes de começar a semana 1.
 
 ---
 
-## Fase 2: Produção Semanal
+## Fase 2: Pesquisa (início de cada semana)
 
-**Agente**: Criador de Conteúdo  
-**Quando**: Segunda-feira de cada semana  
-**Entrega**: Pautas → aprovação → legendas + briefings criativos
+**Agente**: Pesquisador  
+**Quando**: Segunda-feira  
+**Entrada**: Posts da semana do calendário aprovado  
+**Entrega**: 2 referências por post (dado, notícia ou exemplo real com fonte e data) + oportunidades da semana
 
-### Passo 2a — Pautas
-Solicite as pautas dos posts da semana e aprove antes de continuar.
-
-```
-Se aprovado tudo → "Aprovado. Pode escrever todas as legendas."
-Se mudar algo   → "Post 2: troca o ângulo para [X]. Aprovado o resto."
-Se mudar tema   → "Post 2 não faz sentido. Troca por [tema]. Refaz a pauta."
-```
-
-### Passo 2b — Produção
-Após aprovação, solicite legendas + material criativo.
-
-**Critério de saída**: Legendas escritas com briefing criativo para cada post.
+**Critério de saída**: Material de pesquisa entregue para o Verificador.
 
 ---
 
-## Fase 3: Revisão e White Label
+## Fase 3: Verificação (logo após pesquisa)
+
+**Agente**: Verificador  
+**Quando**: Segunda-feira (após Pesquisador)  
+**Entrada**: Output do Pesquisador  
+**Entrega**: Status de cada referência (✅ / ⚠️ / ❌) com justificativa e alternativas
+
+**Critério de saída**: Material verificado entregue para o Redator. Se muitas referências reprovadas, volta para o Pesquisador.
+
+---
+
+## Fase 4: Produção de Copy (terça / quarta)
+
+**Agente**: Redator  
+**Quando**: Após verificação  
+**Entrada**: Referências verificadas + calendário  
+**Entrega em 2 etapas**:
+
+### 4a — Pautas (aguarda aprovação)
+Gancho + ângulo + referência + justificativa por post.
+
+```
+Se aprovado tudo    → "Aprovado. Pode escrever todas as legendas."
+Se mudar algo       → "Post 2: troca o ângulo para [X]. Aprovado o resto."
+Se mudar tema       → "Post 2 não faz sentido. Troca por [tema]."
+```
+
+### 4b — Legendas (após aprovação das pautas)
+Copy completa, hashtags, horário sugerido e versão stories.
+
+**Critério de saída**: Legendas aprovadas por você.
+
+---
+
+## Fase 5a: Direção Visual (paralela à Fase 4)
+
+**Agente**: Diretor de Arte  
+**Quando**: Junto com o Redator (após pautas aprovadas)  
+**Entrada**: Pautas e legendas aprovadas + identidade visual do cliente  
+**Entrega**: Briefing para designer + prompt para IA + formato por post
+
+**Critério de saída**: Briefing visual entregue para produção criativa.
+
+---
+
+## Fase 5b: Roteiro de Vídeo (quando houver posts em vídeo)
+
+**Agente**: Especialista em Vídeo  
+**Quando**: Junto com Fase 5a, apenas para posts em Reels ou Stories vídeo  
+**Entrada**: Legenda aprovada + estilo do cliente  
+**Entrega**: Roteiro cena a cena, checklist de gravação, sugestão de trilha
+
+**Critério de saída**: Roteiro aprovado para gravação.
+
+---
+
+## Fase 6: Revisão e White Label
 
 **Agente**: Editor de Copy  
-**Quando**: Após legendas produzidas  
-**Entrega**: Legendas revisadas + versões white label (quando aplicável)
+**Quando**: Após legendas prontas  
+**Entrada**: Legendas do Redator  
+**Entrega**: Copy revisada + versão white label (quando o cliente tem parceiros)
 
-**Prompt**: Ver `agentes/03-editor-copy.md`
-
-**Critério de saída**: Copy revisada e aprovada. White label gerado para todos os posts que serão distribuídos para parceiros.
-
----
-
-## Fase 4: Organização e Publicação
-
-**Agente**: Gestor de Calendário  
-**Quando**: Antes de publicar / enviar para parceiros  
-**Entrega**: Checklist completo + pacote WhatsApp
-
-**Critério de saída**: Todos os posts com criativo confirmado, agendados, pacote enviado para parceiros.
+**Critério de saída**: Copy aprovada, white label gerado.
 
 ---
 
-## Checklist por Semana
+## Fase 7: Publicação
+
+**Agente**: Gestor de Publicação  
+**Quando**: Ao final da semana, antes de publicar  
+**Entrada**: Copy + visual + roteiro de vídeo + versões white label  
+**Entrega**: Checklist de status + pacote agendado + distribuição para parceiros
+
+**Critério de saída**: Todos os posts agendados, parceiros notificados.
+
+---
+
+## Checklist Semanal
 
 ```
-[ ] Calendário aprovado (fase 1, feito uma vez)
-[ ] Pautas da semana aprovadas
-[ ] Legendas escritas e revisadas
-[ ] Briefing criativo feito para cada post
+Pesquisa
+[ ] Referências levantadas pelo Pesquisador
+[ ] Referências verificadas pelo Verificador
+
+Copy
+[ ] Pautas apresentadas e aprovadas
+[ ] Legendas escritas e aprovadas
 [ ] Versão white label gerada (se aplicável)
-[ ] Pacote semanal consolidado
-[ ] Enviado para parceiros (se aplicável)
+
+Visual
+[ ] Briefing criativo entregue pelo Diretor de Arte
+[ ] Roteiro de vídeo entregue (posts em vídeo)
+[ ] Criativo produzido (imagem ou vídeo)
+
+Publicação
+[ ] Checklist do Gestor aprovado
 [ ] Posts agendados
+[ ] Parceiros notificados (se aplicável)
 ```
 
 ---
 
-## Adaptação para Clientes sem Parceiros
+## Modo Simplificado (clientes menores)
 
-Se o cliente não tem distribuição white label, pule a Fase 3 (Editor de White Label) e vá direto do Criador para o Gestor.
+Quando o cliente não tem parceiros e o volume é baixo, pule as fases de Pesquisador, Verificador e white label:
 
 ```
-Estrategista → Criador → Gestor → Publicação
+Estrategista → Redator → Editor → Diretor de Arte → Gestor
 ```
+
+Adicione Pesquisador e Verificador conforme o cliente cresce e o conteúdo precisa de mais profundidade.
