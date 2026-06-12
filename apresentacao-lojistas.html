@@ -283,6 +283,78 @@
 
   .slide-footer .brand { font-weight:700; color:var(--blue-dark); }
 
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    .nav button { font-size: 11px; padding: 5px 9px; }
+    .slide { min-height: auto; border-radius: 12px; }
+
+    /* Capa mobile */
+    .slide-capa { padding: 32px 24px; }
+    .slide-capa .top { margin-bottom: 28px; gap: 14px; }
+    .slide-capa .logo-wrap { width: 70px; height: 70px; }
+    .slide-capa .brand-name h1 { font-size: 22px; }
+    .slide-capa .brand-name p { font-size: 11px; }
+    .slide-capa .headline { font-size: 28px; margin-bottom: 14px; }
+    .slide-capa .sub { font-size: 14px; margin-bottom: 24px; }
+    .pill { font-size: 12px; padding: 8px 16px; }
+
+    /* Header mobile */
+    .slide-header { padding: 18px 20px 16px; gap: 12px; }
+    .slide-header h2 { font-size: 17px; }
+    .logo-sm { width: 38px; height: 38px; }
+
+    /* Body mobile */
+    .slide-body { padding: 20px 24px; }
+    .item-list li { font-size: 14px; gap: 10px; }
+
+    /* Passos mobile */
+    .steps { padding: 20px 24px; gap: 16px; }
+    .step { gap: 14px; }
+    .step-num { width: 36px; height: 36px; font-size: 15px; flex-shrink: 0; }
+    .step-text h3 { font-size: 14px; }
+    .step-text p { font-size: 12px; }
+
+    /* Benefícios — 2 colunas */
+    .benefits-grid { grid-template-columns: repeat(2,1fr); padding: 20px 20px; gap: 12px; }
+    .benefit-card { padding: 16px 12px; }
+    .benefit-card .icon { font-size: 22px; }
+    .benefit-card h3 { font-size: 13px; }
+    .benefit-card p { font-size: 12px; }
+
+    /* Quem já está — 2 colunas */
+    .brands-grid { grid-template-columns: repeat(2,1fr); padding: 20px; gap: 10px; }
+    .brand-card { padding: 12px; }
+    .brand-card .cat-tag { font-size: 10px; }
+    .brand-card h3 { font-size: 13px; }
+    .brand-card p { font-size: 12px; }
+
+    /* Problema mobile */
+    .problem-body { padding: 20px 24px; gap: 14px; }
+    .problem-item { padding: 14px 16px; gap: 12px; }
+    .problem-item .icon { font-size: 22px; }
+    .problem-item p { font-size: 14px; }
+    .solution-banner { padding: 12px 20px; }
+    .solution-banner p { font-size: 14px; text-align: center; }
+
+    /* CTA mobile */
+    .slide-cta { padding: 36px 24px; }
+    .slide-cta h2 { font-size: 26px; margin-bottom: 12px; }
+    .slide-cta p { font-size: 15px; margin-bottom: 28px; }
+    .cta-cards { gap: 10px; margin-bottom: 28px; }
+    .cta-card { padding: 14px 16px; min-width: 120px; }
+    .cta-card .icon { font-size: 20px; }
+    .cta-card strong { font-size: 13px; }
+    .cta-card span { font-size: 12px; }
+    .cta-btn { font-size: 16px; padding: 14px 32px; }
+
+    /* Rodapé mobile */
+    .slide-footer { padding: 10px 20px; font-size: 11px; }
+
+    /* Controles mobile */
+    .controls { gap: 16px; margin-top: 16px; }
+    .controls button { width: 40px; height: 40px; font-size: 16px; }
+  }
+
   @media print {
     body { background:white; padding:0; }
     .nav, .controls { display:none; }
