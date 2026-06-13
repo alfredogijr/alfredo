@@ -6,6 +6,7 @@
   "vignette": 0.60,
   "font_main": 46,
   "font_sub": 28,
+  "fit_mode": "blur_bg",
 
   "slides": [
     {

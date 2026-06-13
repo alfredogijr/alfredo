@@ -11,7 +11,7 @@ import json
 import textwrap
 import numpy as np
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from moviepy import VideoClip
 
 
@@ -49,11 +49,37 @@ def load_font(size: int, role: str = "body") -> ImageFont.FreeTypeFont:
 
 
 # ── Image utils ───────────────────────────────────────────────────────────────
-def load_portrait(path: str, out_w: int = 1080, out_h: int = 1920) -> np.ndarray:
-    """Load image and crop to portrait (9:16) using cover strategy."""
+def load_portrait(path: str, out_w: int = 1080, out_h: int = 1920,
+                  fit_mode: str = "cover") -> np.ndarray:
+    """Load image into portrait frame.
+
+    fit_mode="cover"   – fill frame, center-crop (default, good for portrait photos)
+    fit_mode="blur_bg" – show full photo, fill gaps with heavily blurred background
+    """
     img = Image.open(path).convert("RGB")
     w, h = img.size
-    if (w / h) > (out_w / out_h):
+    aspect = w / h
+    frame_aspect = out_w / out_h  # 0.5625 for 9:16
+
+    if fit_mode == "blur_bg" and aspect > frame_aspect + 0.05:
+        # Background: cover-crop and heavy blur
+        scale_bg = out_h / h
+        bg = img.resize((int(w * scale_bg), out_h), Image.LANCZOS)
+        x0 = (bg.width - out_w) // 2
+        bg = bg.crop((x0, 0, x0 + out_w, out_h))
+        bg = bg.filter(ImageFilter.GaussianBlur(radius=28))
+        # Darken background slightly so the sharp photo pops
+        bg = Image.fromarray((np.array(bg) * 0.55).astype(np.uint8))
+
+        # Foreground: fit to width
+        scale_fg = out_w / w
+        fg = img.resize((out_w, max(1, int(h * scale_fg))), Image.LANCZOS)
+        y0 = (out_h - fg.height) // 2
+        bg.paste(fg, (0, y0))
+        return np.array(bg)
+
+    # cover (default)
+    if aspect > frame_aspect:
         scale = out_h / h
         img = img.resize((int(w * scale), out_h), Image.LANCZOS)
         x0 = (img.width - out_w) // 2
@@ -312,12 +338,14 @@ def run(briefing_path: str, output_path: str):
     slides_data = cfg["slides"]
 
     # Pre-load images
+    default_fit = cfg.get("fit_mode", "cover")
     imgs = {}
     for slide in slides_data:
         path = slide.get("image", "")
         if path and path not in imgs:
-            print(f"Loading {Path(path).name}...")
-            imgs[path] = load_portrait(path, out_w, out_h)
+            fit = slide.get("fit_mode", default_fit)
+            print(f"Loading {Path(path).name}  [{fit}]")
+            imgs[path] = load_portrait(path, out_w, out_h, fit_mode=fit)
 
     vignette = build_vignette(out_h, out_w, strength=cfg.get("vignette", 0.62))
     fonts = {
