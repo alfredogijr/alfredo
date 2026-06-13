@@ -149,6 +149,7 @@ def render_overlay(
     font_sub: ImageFont.FreeTypeFont,
     position: str, alpha: float, y_shift: int,
     brand_color: tuple, accent: bool = False,
+    drop_shadow: bool = False,
 ) -> Image.Image:
     max_m = 22 if position == "center" else 28
     wm = sum([textwrap.wrap(l, max_m) or [""] for l in main_lines], [])
@@ -156,7 +157,7 @@ def render_overlay(
 
     lhm = font_main.size + 8
     lhs = font_sub.size + 6
-    gap = 10
+    gap = 14
     py  = 14
     tot = lhm * len(wm) + (gap + lhs * len(ws) if ws else 0)
     by  = get_box_y(position, h, tot + 2 * py) + y_shift
@@ -164,30 +165,39 @@ def render_overlay(
     overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw    = ImageDraw.Draw(overlay)
 
-    # Main text — crisp white, no background, no shadow
+    def _text(x, y, line, font, fill):
+        if drop_shadow:
+            # Soft drop shadow: 3-pass blur offset
+            sh = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+            ImageDraw.Draw(sh).text((x + 2, y + 3), line, font=font,
+                                    fill=(0, 0, 0, int(110 * alpha)))
+            overlay.alpha_composite(sh.filter(ImageFilter.GaussianBlur(4)))
+        draw.text((x, y), line, font=font, fill=fill)
+
+    # Main text
     yt, widths = by, []
     for line in wm:
         lw = draw.textlength(line, font=font_main)
         widths.append(lw)
-        draw.text(((w - lw) / 2, yt), line, font=font_main,
-                  fill=(255, 255, 255, int(255 * alpha)))
+        _text((w - lw) / 2, yt, line, font_main,
+              (255, 255, 255, int(255 * alpha)))
         yt += lhm
 
-    # Thin brand-color accent line below main text
+    # Thin brand-color accent line
     if accent and widths:
         max_w = max(widths)
         draw.rectangle(
-            [(w - max_w) / 2, yt + 5, (w + max_w) / 2, yt + 8],
+            [(w - max_w) / 2, yt + 6, (w + max_w) / 2, yt + 9],
             fill=(*brand_color[:3], int(255 * alpha)),
         )
 
-    # Sub text — slightly off-white
+    # Sub text
     if ws:
         yt += gap
         for line in ws:
             lw = draw.textlength(line, font=font_sub)
-            draw.text(((w - lw) / 2, yt), line, font=font_sub,
-                      fill=(205, 215, 230, int(215 * alpha)))
+            _text((w - lw) / 2, yt, line, font_sub,
+                  (210, 220, 235, int(220 * alpha)))
             yt += lhs
 
     return overlay
@@ -344,8 +354,10 @@ def process_frame(
 
         h, w  = arr.shape[:2]
         base  = Image.fromarray(arr).convert("RGBA")
+        drop_shadow = seg.get("drop_shadow", False)
         ov    = render_overlay(w, h, ml, sl, font_main, font_sub,
-                               position, alpha, y_shift, brand_rgb, accent)
+                               position, alpha, y_shift, brand_rgb, accent,
+                               drop_shadow=drop_shadow)
 
         if anim == "scale_fade" and scale < 1.0 and position == "center":
             result = composite_scaled(base, ov, scale)

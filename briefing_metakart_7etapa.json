@@ -1,0 +1,226 @@
+{
+  "brand_color": [90, 60, 150],
+  "output_size": [1080, 1920],
+  "fps": 30,
+  "transition_dur": 0.5,
+  "vignette": 0.60,
+  "font_main": 46,
+  "font_sub": 28,
+
+  "slides": [
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/0ff1c8d0-170518.jpg",
+      "duration": 2.8,
+      "kb_direction": "in_center",
+      "transition": "dissolve",
+      "main": ["A EMOÇÃO DA PISTA"],
+      "sub": [],
+      "position": "center",
+      "anim": "word_reveal",
+      "word_timing": [0.3, 0.9, 1.5, 2.1],
+      "accent": true
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/70854332-170525.jpg",
+      "duration": 2.0,
+      "kb_direction": "up",
+      "transition": "cut",
+      "main": ["CONTINUA DEPOIS", "DA BANDEIRADA."],
+      "sub": [],
+      "position": "center",
+      "anim": "fade",
+      "accent": false
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/fed9116d-170555.jpg",
+      "duration": 2.0,
+      "kb_direction": "right",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/a42ce8d0-170558.jpg",
+      "duration": 2.0,
+      "kb_direction": "left",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/ef4a8abf-170559.jpg",
+      "duration": 2.0,
+      "kb_direction": "diagonal",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/f3b11db0-170562.jpg",
+      "duration": 2.0,
+      "kb_direction": "in_br",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/4b5c4bfe-170561.jpg",
+      "duration": 2.0,
+      "kb_direction": "up",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/c0bda0a8-170563.jpg",
+      "duration": 2.5,
+      "kb_direction": "in_tl",
+      "transition": "cut",
+      "main": ["7ª ETAPA DO", "CAMPEONATO META KART"],
+      "sub": [],
+      "position": "bottom",
+      "anim": "typewriter"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/3d45836e-170570.jpg",
+      "duration": 2.0,
+      "kb_direction": "right",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/0bc3072e-170583.jpg",
+      "duration": 2.0,
+      "kb_direction": "left",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/46dd24a2-170582.jpg",
+      "duration": 2.0,
+      "kb_direction": "up",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/3e58c0e4-170585.jpg",
+      "duration": 2.0,
+      "kb_direction": "diagonal",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/4ef344ba-170587.jpg",
+      "duration": 2.0,
+      "kb_direction": "in_center",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/78eb87ec-170604.jpg",
+      "duration": 2.0,
+      "kb_direction": "right",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/3a43d59e-170610.jpg",
+      "duration": 2.0,
+      "kb_direction": "up",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/0b1d2e7a-170612.jpg",
+      "duration": 2.0,
+      "kb_direction": "left",
+      "transition": "cut",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/850a79a5-170635.jpg",
+      "duration": 2.5,
+      "kb_direction": "in_tl",
+      "transition": "dissolve",
+      "main": ["PARABÉNS A TODOS", "OS PARTICIPANTES."],
+      "sub": [],
+      "position": "bottom",
+      "anim": "slide_up"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/06d015ef-170636.jpg",
+      "duration": 2.5,
+      "kb_direction": "up",
+      "transition": "cut",
+      "main": ["NOS VEMOS", "NA PRÓXIMA!"],
+      "sub": [],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/56deab7d-170637.jpg",
+      "duration": 2.0,
+      "kb_direction": "diagonal",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "image": "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/02311757-170639.jpg",
+      "duration": 2.0,
+      "kb_direction": "in_center",
+      "transition": "dissolve",
+      "main": [],
+      "sub": [],
+      "position": "bottom",
+      "anim": "fade"
+    },
+    {
+      "type": "cta",
+      "duration": 4.0,
+      "transition": "dissolve",
+      "main": ["META KART"],
+      "sub": ["Indoor Karting · NorteShopping", "(21) 96645-2862"],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    }
+  ]
+}

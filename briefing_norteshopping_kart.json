@@ -58,19 +58,20 @@
     {
       "start": 19.0, "end": 22.0,
       "anim": "scale_fade",
-      "main": [],
-      "sub": ["Vem pra pista!  ·  (21) 96645-2862"],
-      "position": "center",
-      "accent": false
+      "main": ["VEM PRA PISTA!"],
+      "sub": ["(21) 96645-2862"],
+      "position": "bottom",
+      "accent": true,
+      "drop_shadow": true
     }
   ],
 
   "logos": [
     {
       "path": "/root/.claude/uploads/1f16a562-b586-47a3-b92f-29672541131c/00671956-META_KART_LOGO01_3_20260530_123808_0000.png",
-      "width_pct": 0.55,
+      "width_pct": 0.48,
       "x_frac": 0.50,
-      "y_frac": 0.42
+      "y_frac": 0.36
     }
   ],
   "logos_start": 19.0,
