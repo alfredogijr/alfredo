@@ -1,0 +1,99 @@
+{
+  "inputs": ["/home/user/alfredo/wimbledon_bg.mp4"],
+  "clip_trim": [0],
+  "duration": 28.5,
+
+  "brand_color": [20, 90, 210],
+  "progress_bar": false,
+
+  "ken_burns": 0.015,
+  "vignette": 0.72,
+  "contrast": 1.08,
+  "color_grade": "cinematic",
+  "letterbox": 0,
+
+  "audio_fade": 1.0,
+  "audio_volume": 0.0,
+
+  "font_size_main": 58,
+  "font_size_sub": 32,
+
+  "segments": [
+    {
+      "start": 0.3, "end": 2.8,
+      "anim": "scale_fade",
+      "main": ["O SILÊNCIO"],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 3.3, "end": 5.8,
+      "anim": "fade",
+      "main": ["ANTES DO SAQUE."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 6.3, "end": 9.2,
+      "anim": "typewriter",
+      "main": ["A QUADRA.", "O CALOR DA MULTIDÃO."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 9.8, "end": 13.0,
+      "anim": "scale_fade",
+      "main": ["WIMBLEDON."],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 13.3, "end": 15.8,
+      "anim": "fade",
+      "main": ["AO VIVO."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 16.3, "end": 20.0,
+      "anim": "scale_fade",
+      "main": ["IMAGINA ESTAR LÁ."],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 20.3, "end": 23.2,
+      "anim": "slide_up",
+      "main": ["NOS MAIORES PALCOS", "DO ESPORTE MUNDIAL."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 23.8, "end": 28.2,
+      "anim": "fade",
+      "main": [],
+      "sub": ["Seu lugar nos grandes momentos."],
+      "position": "center",
+      "accent": false
+    }
+  ],
+
+  "logos": [
+    {
+      "path": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+      "width_pct": 0.60,
+      "x_frac": 0.50,
+      "y_frac": 0.40
+    }
+  ],
+  "logos_start": 23.8,
+  "logos_end": 28.2,
+  "logos_fade_dur": 0.7
+}
