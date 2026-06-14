@@ -150,10 +150,11 @@ def grade(arr: np.ndarray, vignette: np.ndarray, contrast: float = 1.15) -> np.n
     return np.clip(f * vignette, 0, 255).astype(np.uint8)
 
 
-def make_cta_bg(w: int, h: int, brand_color: list) -> np.ndarray:
-    """Deep navy-blue vertical gradient for CTA slides — white text on blue."""
-    top    = np.array([8, 30, 100], dtype=np.float32)
-    bottom = np.array([3, 14,  58], dtype=np.float32)
+def make_cta_bg(w: int, h: int, brand_color: list,
+                bg_top: list = None, bg_bottom: list = None) -> np.ndarray:
+    """Vertical gradient for CTA/dark slides. Override colors via bg_top/bg_bottom."""
+    top    = np.array(bg_top    or [8, 30, 100], dtype=np.float32)
+    bottom = np.array(bg_bottom or [3, 14,  58], dtype=np.float32)
     t_grad = np.linspace(0, 1, h)[:, None, None]
     arr    = top * (1 - t_grad) + bottom * t_grad
     return np.tile(arr, (1, w, 1)).astype(np.uint8)
@@ -265,7 +266,9 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
 
     # Base image
     if is_cta:
-        arr = make_cta_bg(w, h, brand_color)
+        arr = make_cta_bg(w, h, brand_color,
+                          slide.get("bg_top"),
+                          slide.get("bg_bottom"))
     else:
         arr = ken_burns(
             imgs[slide["image"]], local_t, dur,
@@ -325,7 +328,20 @@ def render_slide(slide: dict, local_t: float, imgs: dict,
     base = Image.fromarray(arr).convert("RGBA")
     ov   = render_text_ov(w, h, main_r, sub_r, fonts["main"], fonts["sub"],
                            position, alpha, brand_rgb, y_shift, sc, accent)
-    return np.array(Image.alpha_composite(base, ov).convert("RGB"))
+    result = Image.alpha_composite(base, ov)
+
+    # Optional logo overlay on this slide
+    logo_img = slide.get("_logo")
+    if logo_img is not None:
+        lw, lh = logo_img.size
+        lx = (w - lw) // 2
+        ly = int(h * slide.get("logo_y_frac", 0.38)) - lh // 2
+        r2, g2, b2, a2 = logo_img.split()
+        a2 = a2.point(lambda x: int(x * alpha))
+        lframe = Image.merge("RGBA", (r2, g2, b2, a2))
+        result.paste(lframe, (lx, ly), lframe)
+
+    return np.array(result.convert("RGB"))
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -346,6 +362,16 @@ def run(briefing_path: str, output_path: str):
             fit = slide.get("fit_mode", default_fit)
             print(f"Loading {Path(path).name}  [{fit}]")
             imgs[path] = load_portrait(path, out_w, out_h, fit_mode=fit)
+
+    # Pre-load per-slide logos
+    for slide in slides_data:
+        lp = slide.get("logo")
+        if lp and Path(lp).exists():
+            limg = Image.open(lp).convert("RGBA")
+            tw = int(out_w * slide.get("logo_width_pct", 0.55))
+            th = max(1, int(limg.height * tw / limg.width))
+            slide["_logo"] = limg.resize((tw, th), Image.LANCZOS)
+            print(f"Logo: {Path(lp).name}  →  {tw}×{th}px")
 
     vignette = build_vignette(out_h, out_w, strength=cfg.get("vignette", 0.62))
     fonts = {

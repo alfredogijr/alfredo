@@ -1,0 +1,111 @@
+{
+  "brand_color": [20, 90, 210],
+  "output_size": [1080, 1920],
+  "fps": 30,
+  "transition_dur": 0.5,
+  "vignette": 0.0,
+  "font_main": 54,
+  "font_sub": 30,
+
+  "slides": [
+    {
+      "type": "cta",
+      "duration": 3.0,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "dissolve",
+      "main": ["O SILÊNCIO"],
+      "sub": [],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": false
+    },
+    {
+      "type": "cta",
+      "duration": 3.0,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "dissolve",
+      "main": ["ANTES DO SAQUE."],
+      "sub": [],
+      "position": "center",
+      "anim": "fade",
+      "accent": false
+    },
+    {
+      "type": "cta",
+      "duration": 3.5,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "cut",
+      "main": ["A QUADRA.", "O CALOR DA MULTIDÃO."],
+      "sub": [],
+      "position": "center",
+      "anim": "typewriter",
+      "accent": false
+    },
+    {
+      "type": "cta",
+      "duration": 3.5,
+      "bg_top":    [6, 6, 14],
+      "bg_bottom": [2, 2, 5],
+      "transition": "dissolve",
+      "main": ["WIMBLEDON."],
+      "sub": [],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    },
+    {
+      "type": "cta",
+      "duration": 3.0,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "cut",
+      "main": ["AO VIVO."],
+      "sub": [],
+      "position": "center",
+      "anim": "fade",
+      "accent": false
+    },
+    {
+      "type": "cta",
+      "duration": 4.0,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "dissolve",
+      "main": ["IMAGINA ESTAR LÁ."],
+      "sub": [],
+      "position": "center",
+      "anim": "scale_fade",
+      "accent": true
+    },
+    {
+      "type": "cta",
+      "duration": 3.5,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "cut",
+      "main": ["NOS MAIORES PALCOS", "DO ESPORTE MUNDIAL."],
+      "sub": [],
+      "position": "center",
+      "anim": "slide_up",
+      "accent": false
+    },
+    {
+      "type": "cta",
+      "duration": 5.0,
+      "bg_top":    [4, 4, 8],
+      "bg_bottom": [2, 2, 4],
+      "transition": "dissolve",
+      "main": [],
+      "sub": ["Seu lugar nos grandes momentos."],
+      "position": "center",
+      "anim": "fade",
+      "accent": false,
+      "logo": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+      "logo_width_pct": 0.60,
+      "logo_y_frac": 0.42
+    }
+  ]
+}
