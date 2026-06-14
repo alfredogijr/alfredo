@@ -1,18 +1,22 @@
 {
-  "inputs": ["/home/user/alfredo/wimbledon_bg.mp4"],
-  "clip_trim": [0],
+  "inputs": [
+    "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/eb00cd28-Rafael_Nadals_ICONIC_2008_Forehand_against_Roger_Federer.mp4",
+    "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/eb00cd28-Rafael_Nadals_ICONIC_2008_Forehand_against_Roger_Federer.mp4",
+    "/root/.claude/uploads/cfe6de6c-15a3-5643-91b8-6c82cc893ef7/eb00cd28-Rafael_Nadals_ICONIC_2008_Forehand_against_Roger_Federer.mp4"
+  ],
+  "clip_trim": [0, 0, 0],
   "duration": 28.5,
 
   "brand_color": [20, 90, 210],
   "progress_bar": false,
 
-  "ken_burns": 0.015,
+  "ken_burns": 0,
   "vignette": 0.72,
-  "contrast": 1.08,
+  "contrast": 1.12,
   "color_grade": "cinematic",
   "letterbox": 0,
 
-  "audio_fade": 1.0,
+  "audio_fade": 1.5,
   "audio_volume": 0.0,
 
   "font_size_main": 58,
