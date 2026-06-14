@@ -7,7 +7,7 @@
   "progress_bar": false,
 
   "ken_burns": 0,
-  "vignette": 0.70,
+  "vignette": 0.72,
   "contrast": 1.15,
   "color_grade": "cinematic",
   "letterbox": 0,
@@ -20,44 +20,67 @@
 
   "segments": [
     {
-      "start": 0.5, "end": 5.0,
+      "start": 0.3, "end": 3.5,
+      "anim": "slide_up",
+      "main": ["AS CIRCUNSTÂNCIAS"],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 3.6, "end": 7.8,
       "anim": "scale_fade",
-      "main": ["AS CIRCUNSTÂNCIAS MUDAM."],
+      "main": ["MUDAM."],
       "sub": [],
-      "position": "center",
-      "accent": false
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
     },
     {
-      "start": 9.2, "end": 14.5,
+      "start": 8.2, "end": 11.2,
       "anim": "fade",
-      "main": ["OS CAMPEÕES, NÃO."],
+      "main": ["OS CAMPEÕES,"],
       "sub": [],
-      "position": "center",
-      "accent": false
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
     },
     {
-      "start": 18.0, "end": 21.5,
+      "start": 11.4, "end": 16.8,
+      "anim": "scale_fade",
+      "main": ["NÃO."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 17.2, "end": 21.5,
       "anim": "scale_fade",
       "main": ["LEWIS HAMILTON."],
       "sub": [],
-      "position": "center",
-      "accent": true
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
     },
     {
       "start": 22.0, "end": 25.0,
       "anim": "scale_fade",
       "main": ["7 VEZES."],
       "sub": [],
-      "position": "center",
-      "accent": true
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
     },
     {
       "start": 25.2, "end": 29.8,
-      "anim": "fade",
+      "anim": "scale_fade",
       "main": ["DE VOLTA."],
       "sub": ["A sua operadora de turismo esportivo premium."],
-      "position": "center",
-      "accent": true
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
     }
   ],
 
@@ -66,7 +89,7 @@
       "path": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
       "width_pct": 0.55,
       "x_frac": 0.50,
-      "y_frac": 0.42
+      "y_frac": 0.65
     }
   ],
   "logos_start": 25.2,
