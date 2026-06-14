@@ -121,7 +121,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
   // Inclinação do parallelogram em px (22% da altura — estilo F1 timing board)
   const slant      = Math.round(rowHeight * 0.22);
   // Espessura da faixa de acento colorido (ouro/prata/bronze ou cor da pista)
-  const stripeW    = isP1 ? 10 : isPodium ? 7 : 4;
+  const stripeW    = isP1 ? 14 : isPodium ? 10 : 5;
 
   // Cores da faixa de posição e fundo da linha
   const accentColor = podium
@@ -152,12 +152,12 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
     : Math.round(rowHeight * 0.75);
   const timeFontSize   = format === 'tv'
     ? (isP1 ? 22 : isPodium ? 20 : 17)
-    : Math.round(rowHeight * 0.32);
+    : (isP1 ? Math.round(rowHeight * 0.26) : Math.round(rowHeight * 0.32));
 
   const rowStyle = {
     position:   'relative',
     height:     rowHeight,
-    marginBottom: isLast ? 0 : format === 'tv' ? 4 : 5,
+    marginBottom: isLast ? 0 : format === 'tv' ? 6 : 5,
     flexShrink: 0,
   };
 
@@ -232,7 +232,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
           lineHeight:  1,
           letterSpacing: '0.02em',
           textShadow: isP1
-            ? `0 0 ${Math.round(numFontSize * 0.4)}px ${cfg.primaryLight}66`
+            ? `0 0 ${Math.round(numFontSize * 0.4)}px ${cfg.primaryLight}88, 0 0 ${Math.round(numFontSize * 0.8)}px ${cfg.primaryLight}44`
             : 'none',
         }}>
           {entry.pos}
@@ -244,7 +244,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
         position:   'absolute',
         top:        0,
         left:       numBadgeW + slant + (format === 'tv' ? 18 : 14),
-        right:      slant + (format === 'tv' ? 28 : 18),
+        right:      slant + (format === 'tv' ? 28 : 24),
         height:     '100%',
         display:    'flex',
         alignItems: 'center',
@@ -262,7 +262,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
           textOverflow: 'ellipsis',
           flex:        '0 1 auto',
           maxWidth:    '65%',
-          letterSpacing: isP1 ? '0.04em' : '0.02em',
+          letterSpacing: isP1 ? '0.05em' : isPodium ? '0.03em' : '0.025em',
         }}>
           {entry.name}
         </span>
@@ -373,8 +373,8 @@ function HalftoneDots() {
       inset:         0,
       pointerEvents: 'none',
       // SVG inline como background para halftone sem canvas
-      backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)`,
-      backgroundSize: '14px 14px',
+      backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px)`,
+      backgroundSize: '20px 20px',
     }} />
   );
 }
@@ -402,13 +402,13 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
   // Alturas das linhas com hierarquia de pódio
   // P1: 1.42x  P2: 1.14x  P3: 1.06x  P4+: 1.0x
   // Área disponível: H - topBar(10) - header(~96) - sep(4) - footer(88) - gaps(9*5)
-  const topBarH    = 10;
-  const headerH    = 96;
+  const topBarH    = 14;
+  const headerH    = 110;
   const sepH       = 4;
   const footerH    = 88;
   const rowGap     = 5;
   const available  = H - topBarH - headerH - sepH - footerH - (9 * rowGap);
-  const baseRowH   = Math.max(70, Math.round((available) / (1.42 + 1.14 + 1.06 + 7.0)));
+  const baseRowH   = Math.max(80, Math.round((available) / (1.42 + 1.14 + 1.06 + 7.0)));
   const rowHeights = {
     1: Math.round(baseRowH * 1.42),
     2: Math.round(baseRowH * 1.14),
@@ -447,7 +447,7 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
       <HalftoneDots />
 
       {/* Speed lines de fundo */}
-      <SpeedLines primaryLight={cfg.primaryLight} count={14} />
+      <SpeedLines primaryLight={cfg.primaryLight} count={18} />
 
       {/* Barra superior de acento */}
       <div style={{
@@ -498,12 +498,13 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
       {/* Linhas de ranking */}
       <div style={{
         position:   'absolute',
-        top:        topBarH + headerH + sepH + 8,
+        top:        topBarH + headerH + sepH + 28,
         left:       hPad,
         right:      hPad,
         bottom:     footerH,
         display:    'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
       }}>
         {entries.map((entry, i) => (
           <React.Fragment key={entry.pos}>
@@ -556,6 +557,15 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
             {period}
           </span>
         )}
+        <span style={{
+          fontFamily:    "'Montserrat', sans-serif",
+          fontSize:      13,
+          fontWeight:    700,
+          color:         `${cfg.primaryLight}88`,
+          letterSpacing: '0.10em',
+        }}>
+          #METAKART
+        </span>
       </div>
 
       {/* Barra inferior de acento */}
@@ -564,7 +574,7 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
         bottom:     0,
         left:       0,
         right:      0,
-        height:     7,
+        height:     10,
         background: cfg.primary,
       }} />
     </div>
@@ -579,7 +589,7 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
   const sidebarW = 272;
 
   // Alturas das linhas para TV
-  const baseRowH = 80;
+  const baseRowH = 72;
   const getRowH  = (pos) => {
     if (pos === 1) return Math.round(baseRowH * 1.38);
     if (pos === 2) return Math.round(baseRowH * 1.12);
@@ -616,7 +626,7 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
       }} />
 
       <HalftoneDots />
-      <SpeedLines primaryLight={cfg.primaryLight} count={12} />
+      <SpeedLines primaryLight={cfg.primaryLight} count={16} />
 
       {/* Barra superior */}
       <div style={{
@@ -650,8 +660,7 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
         display:    'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingTop: 28,
+        justifyContent: 'center',
         zIndex:     3,
       }}>
         {/* Logo */}
@@ -696,12 +705,13 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
         {/* Período */}
         {period && (
           <div style={{
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize:   14,
-            color:      'rgba(220,220,240,0.85)',
-            textAlign:  'center',
-            lineHeight: 1.5,
-            padding:    '0 12px',
+            fontFamily:  "'Montserrat', sans-serif",
+            fontSize:    14,
+            color:       'rgba(220,220,240,0.85)',
+            textAlign:   'center',
+            lineHeight:  1.5,
+            padding:     '0 12px',
+            whiteSpace:  'pre-line',
           }}>
             {period.replace(' a ', '\n')}
           </div>
@@ -815,9 +825,9 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
 // ─── Badge de Categoria ────────────────────────────────────────────────────────
 
 function CategoryBadge({ label, cfg, size = 'instagram' }) {
-  const fontSize  = size === 'tv' ? 26 : 20;
+  const fontSize  = size === 'tv' ? 26 : 22;
   const padX      = size === 'tv' ? 20 : 18;
-  const padY      = size === 'tv' ? 8  : 8;
+  const padY      = size === 'tv' ? 8  : 10;
   // Clip chevron (estilo designação de classe motorsport)
   const h         = fontSize + padY * 2;
   const chevron   = Math.round(h * 0.35);
