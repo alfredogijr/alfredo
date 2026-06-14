@@ -1,0 +1,83 @@
+{
+  "inputs": ["/home/user/alfredo/falbo_copa_base.mp4"],
+  "clip_trim": [0],
+  "duration": 35.0,
+
+  "brand_color": [20, 90, 210],
+  "progress_bar": false,
+
+  "ken_burns": 0,
+  "vignette": 0.55,
+  "contrast": 1.10,
+  "color_grade": "cinematic",
+  "letterbox": 0,
+
+  "audio_fade": 1.5,
+  "audio_volume": 1.0,
+
+  "font_size_main": 52,
+  "font_size_sub": 28,
+
+  "segments": [
+    {
+      "start": 0.5, "end": 4.5,
+      "anim": "fade",
+      "main": ["ALEXANDRE FALBO"],
+      "sub": ["ex-Fluminense"],
+      "position": "bottom",
+      "accent": false
+    },
+    {
+      "start": 6.0, "end": 10.5,
+      "anim": "scale_fade",
+      "main": ["DE JOGADOR A TORCEDOR."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 11.5, "end": 16.5,
+      "anim": "fade",
+      "main": ["MAS A EMOÇÃO É A MESMA."],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 17.5, "end": 22.5,
+      "anim": "typewriter",
+      "main": ["BRASIL NA COPA DO MUNDO 2026."],
+      "sub": [],
+      "position": "center",
+      "accent": false
+    },
+    {
+      "start": 24.0, "end": 27.5,
+      "anim": "scale_fade",
+      "main": ["AO VIVO."],
+      "sub": [],
+      "position": "center",
+      "accent": true
+    },
+    {
+      "start": 30.0, "end": 34.5,
+      "anim": "fade",
+      "main": [],
+      "sub": ["A sua operadora de turismo esportivo premium."],
+      "position": "bottom",
+      "accent": false
+    }
+  ],
+
+  "logos": [
+    {
+      "path": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+      "width_pct": 0.55,
+      "x_frac": 0.50,
+      "y_frac": 0.42
+    }
+  ],
+  "logos_start": 30.0,
+  "logos_end": 34.5,
+  "logos_fade_dur": 0.7
+}
