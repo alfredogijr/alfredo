@@ -113,6 +113,9 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
   const isP1     = entry.pos === 1;
   const podium   = PODIUM[entry.pos];
 
+  // Zebra striping para P4-P10: posições pares ficam ligeiramente mais escuras
+  const isZebraAlt = !isPodium && entry.pos % 2 === 0;
+
   // Largura do badge de posição proporcional à altura
   const numBadgeW  = isP1 ? rowHeight * 0.88 : rowHeight * 0.80;
   // Inclinação do parallelogram em px (22% da altura — estilo F1 timing board)
@@ -126,14 +129,16 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
     : cfg.primaryLight;
 
   // Fundo da linha: gradiente horizontal suave
+  // Zebra: linhas pares (P4,P6,P8,P10) recebem um fundo ~12% mais escuro
+  const baseRowBg   = isZebraAlt ? lerpHex(cfg.rowBg, cfg.numBg, 0.25) : cfg.rowBg;
   const rowBgLeft  = isPodium
     ? isP1
       ? lerpHex(cfg.primaryLight, '#ffffff', 0.30)
       : lerpHex(cfg.primaryLight, cfg.primary, 0.15)
-    : cfg.rowBg;
+    : baseRowBg;
   const rowBgRight = isPodium
     ? lerpHex(cfg.primary, cfg.numBg, 0.20)
-    : lerpHex(cfg.rowBg, cfg.numBg, 0.40);
+    : lerpHex(baseRowBg, cfg.numBg, 0.40);
 
   // Cor do texto do tempo: dourado no P1 (destaque championship), primaryLight nos demais
   const timeColor  = isP1 ? PODIUM[1].accent : cfg.primaryLight;
@@ -329,7 +334,8 @@ function SpeedLines({ primaryLight, count = 14 }) {
     const seed = i * 137.508; // golden angle para distribuição uniforme
     const yPct = ((seed * 2.39) % 100);
     const height = 1 + (i % 3);
-    const opacity = 0.04 + (i % 4) * 0.015;
+    // Opacidade aumentada: mínimo 0.10, máximo 0.28 — visível no PNG exportado
+    const opacity = 0.10 + (i % 4) * 0.045;
     const xOffset = (i % 2 === 0) ? '-5%' : '-10%';
     return { yPct, height, opacity, xOffset };
   });
@@ -513,7 +519,7 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
         ))}
       </div>
 
-      {/* Footer: logo centralizada */}
+      {/* Footer: logo + período */}
       <div style={{
         position:   'absolute',
         bottom:     0,
@@ -521,8 +527,10 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
         right:      0,
         height:     footerH,
         display:    'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        gap:        4,
       }}>
         {logoUrl && (
           <img
@@ -530,12 +538,23 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
             alt="Meta Kart"
             crossOrigin="anonymous"
             style={{
-              maxWidth:  210,
-              maxHeight: 62,
+              maxWidth:  period ? 170 : 210,
+              maxHeight: period ? 46  : 62,
               objectFit: 'contain',
-              filter:    'brightness(0) invert(1)', // garante versão branca mesmo se PNG colorido
+              filter:    'brightness(0) invert(1)',
             }}
           />
+        )}
+        {period && (
+          <span style={{
+            fontFamily:    "'Montserrat', sans-serif",
+            fontSize:      18,
+            fontWeight:    600,
+            color:         'rgba(220,220,240,0.75)',
+            letterSpacing: '0.04em',
+          }}>
+            {period}
+          </span>
         )}
       </div>
 
@@ -830,70 +849,63 @@ function CategoryBadge({ label, cfg, size = 'instagram' }) {
 
 // ─── Painel de controles de export ────────────────────────────────────────────
 
-/**
- * Técnica de export em resolução completa:
- *
- * O card está renderizado com CSS transform:scale() para o preview.
- * Para exportar na resolução correta (1080×1350 ou 1920×1080), a abordagem
- * correta é:
- *   1. Criar um container offscreen (position:fixed, fora do viewport,
- *      sem transform, com as dimensões reais do card).
- *   2. Clonar o card nesse container com scale=1.
- *   3. Rodar html2canvas no container offscreen.
- *   4. Remover o container após captura.
- *
- * Isso garante que html2canvas veja um DOM com layout 1:1px=1px,
- * produzindo um PNG na resolução exata sem artefatos de scale.
- *
- * NOTA: o prop `exportDataRef` no componente de card deve ser um ref
- * apontando para os dados atuais (cfg, entries, etc.) para que o
- * container offscreen possa ser populado sem prop drilling complexo.
- * Na implementação abaixo, o export re-renderiza via React.renderRoot
- * em um div temporário — compatível com React 18.
- */
 function ExportPanel({ cardProps, format, track, category }) {
   const [exporting, setExporting] = React.useState(false);
 
   const handleExport = useCallback(async () => {
     setExporting(true);
-    try {
-      const html2canvas = (await import('html2canvas')).default;
-      const { width, height } = FORMATS[format];
 
-      // 1. Container offscreen — dimensões reais, sem transform, invisível
-      const offscreen = document.createElement('div');
-      offscreen.style.cssText = [
-        'position:fixed',
-        'top:-9999px',
-        'left:-9999px',
+    // Referências declaradas fora do try para o finally poder limpá-las
+    let offscreen = null;
+    let root      = null;
+
+    try {
+      const html2canvas               = (await import('html2canvas')).default;
+      const { createRoot }            = await import('react-dom/client');
+      const { width, height }         = FORMATS[format];
+      const CardComponent             = format === 'tv' ? RankingCardTV : RankingCardInstagram;
+
+      // ── 1. Wrapper invisível no topo do document (não usa posição negativa).
+      //       visibility:hidden mantém o layout intacto sem mostrar ao usuário.
+      //       O wrapper tem as dimensões exatas do card — html2canvas captura
+      //       o elemento passado diretamente, sem depender de coordenadas absolutas.
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = [
+        'position:absolute',
+        'top:0',
+        'left:0',
         `width:${width}px`,
         `height:${height}px`,
         'overflow:hidden',
-        'z-index:-1',
+        'visibility:hidden',
         'pointer-events:none',
+        'z-index:-9999',
       ].join(';');
-      document.body.appendChild(offscreen);
+      document.body.appendChild(wrapper);
+      offscreen = wrapper;
 
-      // 2. Renderizar o card em resolução completa (scale=1) no container
-      const { createRoot } = await import('react-dom/client');
-      const CardComponent  = format === 'tv' ? RankingCardTV : RankingCardInstagram;
-      const root = createRoot(offscreen);
-
+      // ── 2. Renderiza o card em escala 1:1 (sem nenhum CSS transform).
+      root = createRoot(offscreen);
       await new Promise((resolve) => {
         root.render(
           React.createElement(CardComponent, {
             ...cardProps,
-            scale: 1, // escala real — sem transform
+            scale: 1,
           })
         );
-        // 300ms conservador para React flush + concurrent mode
-        setTimeout(resolve, 300);
+        // 400ms: React concurrent mode flush + imagens inline (logo dataURL)
+        setTimeout(resolve, 400);
       });
 
-      // Aguarda fontes carregarem no documento clonado
+      // Aguarda fontes do documento (Bebas Neue + Montserrat)
       if (document.fonts?.ready) await document.fonts.ready;
 
-      // 3. Captura com html2canvas
+      // ── 3. Captura com html2canvas.
+      //       • Não passamos x/y/scrollX/scrollY — deixa o html2canvas localizar
+      //         o elemento pelo bounding rect real dele no DOM.
+      //       • windowWidth/windowHeight = dimensões do card, não da tela,
+      //         para que vh/vw resolvam corretamente dentro do card.
+      //       • scale:1 → canvas pixels = DOM pixels (sem HiDPI artificioso).
       const canvas = await html2canvas(offscreen, {
         width,
         height,
@@ -904,23 +916,28 @@ function ExportPanel({ cardProps, format, track, category }) {
         backgroundColor: null,
         windowWidth:     width,
         windowHeight:    height,
-        x:               0,
-        y:               0,
-        scrollX:         0,
-        scrollY:         0,
-        onclone: (clonedDoc) => {
-          // Garante que as fontes estejam injetadas no documento clonado
-          const alreadyHas = clonedDoc.querySelector('link[href*="googleapis"]');
-          if (!alreadyHas) {
+        onclone: (clonedDoc, clonedEl) => {
+          // Remove visibility:hidden do clone para o html2canvas enxergar o conteúdo
+          clonedEl.style.visibility = 'visible';
+
+          // Injeta as fontes no documento clonado caso ainda não existam
+          if (!clonedDoc.querySelector('link[href*="googleapis"]')) {
             const link = clonedDoc.createElement('link');
-            link.rel  = 'stylesheet';
-            link.href = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap';
+            link.rel   = 'stylesheet';
+            link.href  = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap';
             clonedDoc.head.appendChild(link);
           }
         },
       });
 
-      // 4. Download (cleanup vai no finally)
+      // Valida dimensões — falha rápida se o canvas saiu menor que o esperado
+      if (canvas.width !== width || canvas.height !== height) {
+        console.warn(
+          `[MetaKart export] Canvas ${canvas.width}×${canvas.height} difere do esperado ${width}×${height}. Verifique o DPR do browser.`
+        );
+      }
+
+      // ── 4. Download
       const trackSlug = track.replace(/_/g, '-');
       const catSlug   = category
         .toLowerCase()
@@ -929,27 +946,27 @@ function ExportPanel({ cardProps, format, track, category }) {
         .replace(/[éê]/g, 'e');
       const filename = `metakart_${trackSlug}_${catSlug}_${format}.png`;
 
-      canvas.toBlob((blob) => {
-        if (!blob) { alert('Falha ao gerar PNG. Verifique as permissões CORS do logo.'); return; }
-        const url = URL.createObjectURL(blob);
-        const a   = document.createElement('a');
-        a.href    = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 'image/png', 1.0);
+      await new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) { reject(new Error('toBlob retornou null — verifique CORS do logo.')); return; }
+          const url = URL.createObjectURL(blob);
+          const a   = document.createElement('a');
+          a.href     = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => { URL.revokeObjectURL(url); resolve(); }, 100);
+        }, 'image/png', 1.0);
+      });
 
     } catch (err) {
       console.error('[MetaKart export]', err);
       alert(`Erro ao exportar: ${err.message}`);
     } finally {
-      // Cleanup garantido mesmo se html2canvas lançar exceção
-      if (typeof root !== 'undefined' && root) {
-        try { root.unmount(); } catch (_) {}
-      }
-      if (typeof offscreen !== 'undefined' && offscreen && document.body.contains(offscreen)) {
+      // Cleanup garantido — root e offscreen declarados no escopo da função
+      try { root?.unmount(); } catch (_) {}
+      if (offscreen && document.body.contains(offscreen)) {
         document.body.removeChild(offscreen);
       }
       setExporting(false);
