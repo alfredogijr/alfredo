@@ -38,11 +38,15 @@ Referência: guia @FlyEnri (YouTube Shorts safe area)
 
 | Zona | % da altura | Uso |
 |------|-------------|-----|
-| `top` (engine) | 8% | Texto principal — livre de UI |
-| `center` (engine) | ~45–55% | Texto principal — livre de UI |
+| ~~borda superior~~ | 0–15% | ❌ Borda visual — olho passa por cima, mata engajamento |
+| `top` (engine) | **25%** | ✅ **Zona prime** — onde o olho para em vertical video |
+| `center` (engine) | ~45–55% | Clímax / frase de impacto |
 | `bottom` (engine) | 76% | Tagline/CTA — limite seguro antes da UI do Instagram |
 | **PROIBIDO** | > 80% | Coberto pela barra de navegação |
 | **CUIDADO** | > 55% na borda direita | Coberto pelos botões de reação |
+
+**Regra geral:** usar `"position": "top"` como padrão para todo texto principal.
+Só mover para `"center"` ou outro ajuste manual quando houver legenda queimada no clip original.
 
 ### Sobre os botões de reação (lado direito)
 

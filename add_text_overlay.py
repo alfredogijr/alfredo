@@ -135,7 +135,8 @@ def typewriter_slice(main_lines: list, sub_lines: list,
 
 def get_box_y(position: str, h: int, box_h: int) -> int:
     if position == "top":
-        return int(h * 0.08)
+        # Prime engagement zone: ~25% from top (not 8% — borda visual mata engajamento)
+        return int(h * 0.25)
     if position == "center":
         return (h - box_h) // 2
     # bottom: safe zone above Instagram Reels UI (~top 76% of height)
