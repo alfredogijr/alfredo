@@ -37,12 +37,15 @@ clips = [
     to_916(va.subclipped(7,  8)),    # 13-14s Rua com bandeiras do Brasil
 ]
 
-video = concatenate_videoclips(clips)
-audio = video.audio.with_effects([AudioFadeIn(0.3), AudioFadeOut(1.5)])
-video = video.with_audio(audio)
+# Áudio contínuo: pega 18s do VC (torcida cantando, energia alta)
+audio_src = VideoFileClip(VCp)
+continuous_audio = audio_src.audio.subclipped(0, 18.0).with_effects([
+    AudioFadeIn(0.3), AudioFadeOut(1.5)
+])
 
+video = concatenate_videoclips(clips).without_audio()
 cta = ColorClip(size=(W, H), color=(0, 0, 0), duration=4).with_fps(FPS)
-base = concatenate_videoclips([video, cta])
+base = concatenate_videoclips([video, cta]).with_audio(continuous_audio)
 print(f"Total: {base.duration:.1f}s")
 base.write_videofile(OUT, fps=FPS, codec='libx264',
                      preset='fast', ffmpeg_params=['-crf', '18'],
