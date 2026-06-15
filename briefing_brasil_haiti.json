@@ -1,0 +1,107 @@
+{
+  "inputs": ["/home/user/alfredo/brasil_haiti_base.mp4"],
+  "clip_trim": [0],
+  "duration": 18.0,
+
+  "brand_color": [20, 90, 210],
+  "progress_bar": false,
+
+  "ken_burns": 0,
+  "vignette": 0.72,
+  "contrast": 1.15,
+  "color_grade": "cinematic",
+  "letterbox": 0,
+
+  "audio_fade": 1.5,
+  "audio_volume": 1.0,
+
+  "font_size_main": 56,
+  "font_size_sub": 28,
+
+  "segments": [
+    {
+      "start": 0.2, "end": 1.8,
+      "anim": "scale_fade",
+      "main": ["EM ALGUMAS HORAS,", "O BRASIL PARA DE NOVO."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 2.2, "end": 3.8,
+      "anim": "fade",
+      "main": ["SEGUNDA RODADA.", "21H30. FILADÉLFIA."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 4.2, "end": 5.8,
+      "anim": "scale_fade",
+      "main": ["JOGO DE COPA NÃO TEM JOGO FÁCIL."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 6.2, "end": 7.8,
+      "anim": "fade",
+      "main": ["E A SELEÇÃO SABE DISSO MELHOR DO QUE NINGUÉM."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 8.2, "end": 10.8,
+      "anim": "typewriter",
+      "main": ["MAS TEM UMA COISA", "QUE NÃO MUDA."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 11.2, "end": 13.8,
+      "anim": "scale_fade",
+      "main": ["QUANDO A BOLA ROLA,", "O BRASIL PARA."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 14.0, "end": 15.5,
+      "anim": "scale_fade",
+      "main": ["E A GENTE VAI ESTAR AQUI."],
+      "sub": [],
+      "position": "center",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 15.5, "end": 17.8,
+      "anim": "fade",
+      "main": [],
+      "sub": ["A sua operadora de turismo esportivo premium."],
+      "position": "bottom",
+      "accent": false,
+      "drop_shadow": true
+    }
+  ],
+
+  "logos": [
+    {
+      "path": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+      "width_pct": 0.55,
+      "x_frac": 0.50,
+      "y_frac": 0.60
+    }
+  ],
+  "logos_start": 15.5,
+  "logos_end": 17.8,
+  "logos_fade_dur": 0.7
+}
