@@ -139,6 +139,27 @@ def _make_background() -> Image.Image:
 # Renderizador principal
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Âncoras absolutas de diagramação (zonas fixas para consistência entre stories)
+# ---------------------------------------------------------------------------
+LOGO_MARGIN_TOP = 120   # zona segura superior
+TITLE_TOP_Y     = 560   # topo do título sempre fixo, independente do kicker
+BODY_TOP_Y      = 1050  # início do corpo sempre fixo
+FOOTER_TOP_Y    = 1760  # topo do rodapé sempre fixo
+BODY_LINE_H     = 56    # espaçamento de linha do corpo
+GAP_AFTER_DIV   = 48    # gap após divisor antes do corpo2
+
+
+def _title_font_size(title_lines: list[str]) -> int:
+    """Font size adaptativo conforme comprimento da linha mais longa."""
+    longest = max((len(line) for line in title_lines), default=0)
+    if longest > 16:
+        return 40
+    if longest > 12:
+        return 48
+    return 58
+
+
 def render_story(data: StoryData, index: int) -> Path:
     """Gera um PNG de story e retorna o caminho do arquivo."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -147,56 +168,83 @@ def render_story(data: StoryData, index: int) -> Path:
     draw = ImageDraw.Draw(img)
 
     # --- Fontes ---
-    font_title  = _load_font(FONT_TITLE,  58)   # Special Gothic — maiores que 58 estouram em 3 palavras longas
     font_kicker = _load_font(FONT_KICKER, 32)
     font_body   = _load_font(FONT_BODY,   38)
     font_small  = _load_font(FONT_BODY,   28)
+    font_edition = _load_font(FONT_BODY,  22)
 
     MARGIN     = 80
     MAX_W_TEXT = W - 2 * MARGIN
 
-    # --- Logo ---
+    # --- Logo (zona segura: 120px de margin-top) ---
     logo = Image.open(LOGO_PATH).convert("RGBA")
     lw = 280
     lh = int(lw * logo.height / logo.width)
     logo = logo.resize((lw, lh), Image.LANCZOS)
-    img.paste(logo, ((W - lw) // 2, 100), logo)
+    img.paste(logo, ((W - lw) // 2, LOGO_MARGIN_TOP), logo)
 
-    y = 100 + lh + 60  # âncora após logo
-
-    # --- Kicker ---
+    # --- Kicker (centrado verticalmente na zona entre logo e título) ---
     kicker_text = data["kicker"].upper()
-    kw = draw.textlength(kicker_text, font=font_kicker) + 3 * (len(kicker_text) - 1)
-    bar_x0 = (W - kw) // 2 - 28
-    draw.rectangle([(bar_x0, y + 4), (bar_x0 + 12, y + 34)], fill=TEAL)
-    _draw_centered_ls(draw, y, kicker_text, font_kicker, OFF, letter_spacing=3)
-    bbox_k = font_kicker.getbbox("A")
-    y += (bbox_k[3] - bbox_k[1]) + 32
+    bbox_k = font_kicker.getbbox("Ay")
+    kicker_h = bbox_k[3] - bbox_k[1]
+    # posiciona o kicker com respiro: a meio caminho da zona livre
+    logo_bottom = LOGO_MARGIN_TOP + lh
+    y_kicker = logo_bottom + (TITLE_TOP_Y - logo_bottom - kicker_h) // 2
 
-    # --- Título ---
+    # linha decorativa acima do kicker (2px alt, 60px larg, 20px acima)
+    deco_w, deco_h = 60, 2
+    deco_y = y_kicker - 20 - deco_h
+    draw.rectangle(
+        [(W - deco_w) // 2, deco_y, (W + deco_w) // 2, deco_y + deco_h],
+        fill=TEAL,
+    )
+
+    # barra teal lateral com 16px de gap entre barra e texto
+    kw = draw.textlength(kicker_text, font=font_kicker) + 3 * (len(kicker_text) - 1)
+    bar_w = 12
+    bar_gap = 16
+    bar_x1 = (W - kw) // 2 - bar_gap
+    bar_x0 = bar_x1 - bar_w
+    draw.rectangle([(bar_x0, y_kicker + 4), (bar_x1, y_kicker + 34)], fill=TEAL)
+    _draw_centered_ls(draw, y_kicker, kicker_text, font_kicker, OFF, letter_spacing=3)
+
+    # --- Título (topo fixo em TITLE_TOP_Y) ---
+    # Mede com a maior fonte; reduz adaptativamente e re-quebra.
+    font_title = _load_font(FONT_TITLE, 58)
     title_lines = _wrap_title(draw, data["titulo"].upper(), font_title, MAX_W_TEXT)
-    # Colorir a última linha em TEAL para destaque visual
+    size = _title_font_size(title_lines)
+    if size != 58:
+        font_title = _load_font(FONT_TITLE, size)
+        title_lines = _wrap_title(draw, data["titulo"].upper(), font_title, MAX_W_TEXT)
+
+    # Regra de cor: colorir a última linha em TEAL apenas se houver 2+ linhas
+    # E a última linha tiver <= 2 palavras (linha de impacto curta).
+    n = len(title_lines)
+    last_words = len(title_lines[-1].split()) if title_lines else 0
+    highlight_last = n >= 2 and last_words <= 2
+
+    y = TITLE_TOP_Y
     for i, line in enumerate(title_lines):
-        fill = TEAL if i == len(title_lines) - 1 else OFF
+        is_last = i == n - 1
+        fill = TEAL if (highlight_last and is_last) else OFF
         x = _center_x(draw, line, font_title)
         draw.text((x, y), line, font=font_title, fill=fill)
         bbox_t = font_title.getbbox(line)
         y += (bbox_t[3] - bbox_t[1]) + 12
-    y += 24  # espaço extra pós-título
 
-    # --- Corpo principal ---
+    # --- Corpo principal (início fixo em BODY_TOP_Y) ---
+    y = BODY_TOP_Y
     body_lines = _wrap_body(draw, data["corpo"], font_body, MAX_W_TEXT)
     for line in body_lines:
         _draw_centered(draw, y, line, font_body, OFF)
-        bbox_b = font_body.getbbox("A")
-        y += (bbox_b[3] - bbox_b[1]) + 14
+        y += BODY_LINE_H
     y += 20
 
-    # --- Divisor teal ---
-    div_w = 100
-    div_h = 4
+    # --- Divisor teal (mais presente: 6px alt, 140px larg) ---
+    div_w = 140
+    div_h = 6
     draw.rectangle([(W - div_w) // 2, y, (W + div_w) // 2, y + div_h], fill=TEAL)
-    y += div_h + 30
+    y += div_h + GAP_AFTER_DIV
 
     # --- Corpo 2 (opcional) ---
     corpo2 = data.get("corpo2", "").strip()
@@ -204,20 +252,22 @@ def render_story(data: StoryData, index: int) -> Path:
         body2_lines = _wrap_body(draw, corpo2, font_body, MAX_W_TEXT)
         for line in body2_lines:
             _draw_centered(draw, y, line, font_body, OFF)
-            bbox_b2 = font_body.getbbox("A")
-            y += (bbox_b2[3] - bbox_b2[1]) + 14
-        y += 20
+            y += BODY_LINE_H
 
-    # --- Rodapé institucional ---
+    # --- Rodapé institucional (topo fixo em FOOTER_TOP_Y) ---
     footer_lines = [
         "Viva os grandes eventos do esporte",
         "com quem cuida de tudo.",
     ]
-    yf = H - 180
+    yf = FOOTER_TOP_Y
     for line in footer_lines:
         _draw_centered(draw, yf, line, font_small, OFF)
         bbox_s = font_small.getbbox("A")
         yf += (bbox_s[3] - bbox_s[1]) + 10
+
+    # --- Número de edição (canto inferior direito) ---
+    edition = f"{index:02d}/{5:02d}"
+    draw.text((970, 1840), edition, font=font_edition, fill=TEAL)
 
     # --- Salvar ---
     out_path = OUTPUT_DIR / f"story_{index:02d}.png"
