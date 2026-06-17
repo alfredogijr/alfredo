@@ -1,0 +1,50 @@
+name: Daily Stories — Turista FC
+
+on:
+  # Dispara às 10h UTC = 7h Brasília (UTC-3)
+  schedule:
+    - cron: "0 10 * * *"
+  # Permite disparo manual pelo botão "Run workflow" no GitHub
+  workflow_dispatch:
+
+jobs:
+  generate-and-schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: clientes/turista-fc/pipeline
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: clientes/turista-fc/pipeline/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Setup fonts
+        run: bash setup_fonts.sh
+
+      - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY:            ${{ secrets.ANTHROPIC_API_KEY }}
+          METRICOOL_TOKEN:              ${{ secrets.METRICOOL_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT_JSON:  ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
+          GOOGLE_DRIVE_FOLDER_ID:       ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+        run: python pipeline.py
+
+      - name: Upload stories como artefato (debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stories-${{ github.run_id }}
+          path: clientes/turista-fc/pipeline/output/
+          retention-days: 3

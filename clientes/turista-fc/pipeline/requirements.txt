@@ -1,0 +1,9 @@
+anthropic>=0.109.0
+feedparser>=6.0.11
+fonttools>=4.63.0
+google-api-python-client>=2.100.0
+google-auth>=2.23.0
+httpx>=0.27.0
+numpy>=1.26.0
+Pillow>=10.3.0
+scipy>=1.13.0

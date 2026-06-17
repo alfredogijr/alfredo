@@ -1,0 +1,6 @@
+output/
+fonts/Montserrat*.ttf
+*.pyc
+__pycache__/
+.env
+service-account.json
