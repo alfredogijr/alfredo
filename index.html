@@ -828,6 +828,176 @@
       footer { padding: 36px 24px; flex-direction: column; text-align: center; }
       .footer-links { flex-wrap: wrap; justify-content: center; gap: 20px; }
     }
+
+    /* ===== LEAD FORM ===== */
+    .form-wrap { padding: 80px 64px; }
+
+    .form-box {
+      border-radius: 32px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 580px;
+      box-shadow: 0 32px 80px rgba(26,36,16,0.12);
+    }
+
+    /* Left panel — dark */
+    .form-left {
+      background: var(--dark);
+      padding: 72px 56px;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .fl-blob {
+      position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none;
+    }
+    .fl-blob-1 { width: 500px; height: 500px; background: var(--primary); opacity: 0.22; top: -180px; left: -120px; }
+    .fl-blob-2 { width: 320px; height: 320px; background: var(--accent); opacity: 0.11; bottom: -100px; right: -60px; }
+
+    .fl-inner { position: relative; z-index: 1; }
+
+    .fl-eyebrow {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 3.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 24px;
+    }
+
+    .fl-title {
+      font-family: var(--serif);
+      font-size: clamp(30px, 3vw, 44px);
+      font-weight: 700; line-height: 1.1; letter-spacing: -1.2px;
+      color: white; margin-bottom: 20px;
+    }
+    .fl-title em { font-style: italic; color: var(--accent); }
+
+    .fl-sub {
+      font-size: 15px; line-height: 1.65;
+      color: rgba(247,244,238,0.5);
+      margin-bottom: 44px;
+    }
+
+    .fl-benefits { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+    .fl-benefits li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14.5px; font-weight: 500;
+      color: rgba(247,244,238,0.82);
+    }
+
+    .fl-check {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+
+    /* Right panel — light */
+    .form-right {
+      background: var(--cream);
+      padding: 60px 52px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .fform { display: flex; flex-direction: column; gap: 18px; }
+
+    .f-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .f-label {
+      font-size: 12px; font-weight: 600;
+      color: var(--dark); letter-spacing: 0.4px;
+    }
+    .f-label span { color: var(--muted); font-weight: 400; }
+
+    .f-input, .f-select, .f-textarea {
+      width: 100%; padding: 12px 15px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--sans); font-size: 14px;
+      color: var(--dark); background: white;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    .f-input::placeholder, .f-textarea::placeholder { color: rgba(26,36,16,0.28); }
+    .f-input:focus, .f-select:focus, .f-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59,110,34,0.1);
+    }
+    .f-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%236E7F61' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+      padding-right: 38px; cursor: pointer;
+    }
+    .f-textarea { resize: vertical; min-height: 84px; }
+
+    .f-submit {
+      width: 100%; padding: 14px 24px;
+      background: var(--dark); color: white;
+      border: none; border-radius: 10px;
+      font-family: var(--sans); font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.25s, transform 0.2s;
+      margin-top: 4px;
+      position: relative; overflow: hidden;
+    }
+    .f-submit::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--primary);
+      transform: translateX(-101%);
+      transition: transform 0.3s ease;
+    }
+    .f-submit:hover::after { transform: translateX(0); }
+    .f-submit > * { position: relative; z-index: 1; }
+    .f-submit:hover { transform: translateY(-1px); }
+    .f-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .f-privacy {
+      font-size: 11.5px; color: var(--muted);
+      text-align: center; line-height: 1.5;
+    }
+
+    /* Success state */
+    .f-success {
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; gap: 16px; min-height: 300px;
+    }
+    .f-success.show { display: flex; }
+
+    .f-success-icon {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; color: white; margin-bottom: 8px;
+    }
+
+    .f-success h3 {
+      font-family: var(--serif);
+      font-size: 26px; font-weight: 700; color: var(--dark);
+    }
+
+    .f-success p {
+      font-size: 15px; line-height: 1.6; color: var(--muted);
+      max-width: 280px;
+    }
+
+    /* Form responsive */
+    @media (max-width: 960px) {
+      .form-box { grid-template-columns: 1fr; }
+      .form-right { padding: 48px 40px; }
+      .f-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .form-wrap { padding: 0; }
+      .form-box { border-radius: 0; box-shadow: none; }
+      .form-left { padding: 52px 24px; }
+      .form-right { padding: 40px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -1078,29 +1248,87 @@
     </div>
   </section>
 
-  <!-- ─── CTA ─── -->
-  <div class="cta-wrap" id="contato">
-    <div class="cta-box">
-      <div class="cta-bblob cbb1"></div>
-      <div class="cta-bblob cbb2"></div>
-      <div class="cta-inner">
-        <p class="cta-eyebrow">Próximo passo</p>
-        <h2 class="cta-title sr">
-          Quer ver como isso<br><em>funciona</em> no seu negócio?
-        </h2>
-        <p class="cta-sub sr">
-          Chama a gente. Sem enrolação. Entendemos o seu caso e mostramos,
-          com clareza, o que faz sentido — e o que não faz.
-        </p>
-        <div class="cta-acts sr">
-          <a href="https://wa.me/5521980911444" class="btn btn-white" target="_blank" rel="noopener">
-            💬 Falar no WhatsApp
-          </a>
-          <a href="mailto:alfredo@agenciagraodemostarda.com.br" class="btn btn-outline-white">
-            Enviar e-mail →
-          </a>
+  <!-- ─── LEAD FORM ─── -->
+  <div class="form-wrap" id="contato">
+    <div class="form-box">
+
+      <!-- Esquerda: contexto -->
+      <div class="form-left">
+        <div class="fl-blob fl-blob-1"></div>
+        <div class="fl-blob fl-blob-2"></div>
+        <div class="fl-inner">
+          <p class="fl-eyebrow">Próximo passo</p>
+          <h2 class="fl-title sr">Quer ver como<br>isso <em>funciona</em><br>no seu negócio?</h2>
+          <p class="fl-sub sr">Deixa seus dados. A gente entra em contato em até 24h — sem enrolação, sem pitch de vendas.</p>
+          <ul class="fl-benefits sr">
+            <li><span class="fl-check">✓</span> Diagnóstico gratuito</li>
+            <li><span class="fl-check">✓</span> Sem compromisso</li>
+            <li><span class="fl-check">✓</span> Retorno em até 24h</li>
+          </ul>
         </div>
       </div>
+
+      <!-- Direita: formulário -->
+      <div class="form-right">
+        <form class="fform" id="leadForm">
+          <!-- Campo oculto: timestamp preenchido por JS no envio -->
+          <input type="hidden" name="data_hora" id="tsField">
+          <!-- Honeypot antispam -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+          <div class="f-group">
+            <label class="f-label">Nome completo</label>
+            <input class="f-input" type="text" name="nome" placeholder="Seu nome" required>
+          </div>
+
+          <div class="f-row">
+            <div class="f-group">
+              <label class="f-label">WhatsApp</label>
+              <input class="f-input" type="tel" name="whatsapp" placeholder="(21) 99999-9999" required>
+            </div>
+            <div class="f-group">
+              <label class="f-label">E-mail <span>(opcional)</span></label>
+              <input class="f-input" type="email" name="email" placeholder="seu@email.com">
+            </div>
+          </div>
+
+          <div class="f-group">
+            <label class="f-label">Seu segmento</label>
+            <select class="f-select" name="segmento" required>
+              <option value="">Selecione o segmento</option>
+              <option>Educação</option>
+              <option>Turismo Esportivo</option>
+              <option>Eventos</option>
+              <option>Esportes</option>
+              <option>Saúde</option>
+              <option>Construção Civil</option>
+              <option>Serviços</option>
+              <option>Varejo</option>
+              <option>Outro</option>
+            </select>
+          </div>
+
+          <div class="f-group">
+            <label class="f-label">Como posso te ajudar? <span>(opcional)</span></label>
+            <textarea class="f-textarea" name="mensagem" rows="3" placeholder="Me conta o seu principal desafio..."></textarea>
+          </div>
+
+          <button type="submit" class="f-submit" id="submitBtn">
+            <span>Quero meu diagnóstico gratuito</span>
+            <span>→</span>
+          </button>
+
+          <p class="f-privacy">Seus dados são usados só para entrarmos em contato. Zero spam.</p>
+        </form>
+
+        <!-- Estado de sucesso -->
+        <div class="f-success" id="formSuccess">
+          <div class="f-success-icon">✓</div>
+          <h3>Recebemos seu contato!</h3>
+          <p>Alfredo vai entrar em contato em breve pelo WhatsApp ou e-mail.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1137,10 +1365,63 @@
       requestAnimationFrame(raf);
     })();
 
-    document.querySelectorAll('a,button,.svc-card,.diff-card,.tag,.step').forEach(el => {
+    document.querySelectorAll('a,button,.svc-card,.diff-card,.tag,.step,.f-input,.f-select,.f-textarea').forEach(el => {
       el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
       el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
     });
+
+    // ── Lead Form ──
+    const leadForm  = document.getElementById('leadForm');
+    const tsField   = document.getElementById('tsField');
+    const submitBtn = document.getElementById('submitBtn');
+    const formSuccess = document.getElementById('formSuccess');
+
+    function nowBR() {
+      return new Date().toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    if (leadForm) {
+      leadForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Bloqueia honeypot
+        if (this._honey && this._honey.value) return;
+
+        // Timestamp exato do envio (horário de Brasília)
+        if (tsField) tsField.value = nowBR();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Enviando...</span>';
+
+        const data = new FormData(this);
+
+        try {
+          const res = await fetch(
+            'https://formsubmit.co/ajax/alfredo@agenciagraodemostarda.com.br',
+            {
+              method: 'POST',
+              headers: { 'Accept': 'application/json' },
+              body: data
+            }
+          );
+
+          if (res.ok) {
+            leadForm.style.display = 'none';
+            formSuccess.classList.add('show');
+          } else {
+            throw new Error('falha');
+          }
+        } catch {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Tentar novamente</span><span>→</span>';
+          alert('Ops! Tente pelo WhatsApp: (21) 98091-1444');
+        }
+      });
+    }
 
     // ── Navbar ──
     const nav = document.getElementById('nav');
@@ -1181,7 +1462,7 @@
       });
 
       // Eyebrows
-      gsap.utils.toArray('.eyebrow,.manifesto-label,.cta-eyebrow').forEach(el => {
+      gsap.utils.toArray('.eyebrow,.manifesto-label,.fl-eyebrow').forEach(el => {
         gsap.fromTo(el, { opacity: 0, y: 16 }, {
           opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 92%' }
