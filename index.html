@@ -6,6 +6,9 @@
   <title>Grão de Mostarda — Consultoria de Marketing</title>
   <meta name="description" content="Transforme seu marketing de dentro para fora. Autonomia, inteligência e estratégia para negócios em crescimento real."/>
 
+  <!-- Favicon inline SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 112'%3E%3Crect x='29' y='90' width='42' height='11' rx='4' fill='%23FAB800'/%3E%3Crect x='46' y='55' width='8' height='40' rx='4' fill='%23FAB800'/%3E%3Cpath fill-rule='evenodd' fill='%23FAB800' d='M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74ZM30 54C23 52 15 44 18 37C21 30 31 28 36 35C40 39 38 47 33 51C30 53 30 53 30 54Z'/%3E%3Cpath fill-rule='evenodd' fill='%23FAB800' d='M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57ZM71 62C62 65 54 57 55 49C56 41 65 39 71 44C75 48 74 56 70 60C71 61 71 62 71 62Z'/%3E%3C/svg%3E"/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -29,9 +32,9 @@
     --bg:      #020603;
     --glass:   rgba(3,9,2,0.78);
     --glass2:  rgba(2,6,1,0.92);
-    --gold:    #C49030;
-    --gold-l:  #E4B84A;
-    --gold-d:  #8A6420;
+    --gold:    #FAB800;
+    --gold-l:  #FFC940;
+    --gold-d:  #C48A00;
     --green:   #2E5A1A;
     --green-l: #4E8E2A;
     --cream:   #F2EFE6;
@@ -158,18 +161,36 @@
     border-bottom: 1px solid var(--border);
   }
   .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 36px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(250,184,0,0.4));
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .logo-name {
     font-family: var(--serif);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--gold-l);
     letter-spacing: 0.02em;
-    text-decoration: none;
   }
-  .logo span {
-    font-weight: 300;
-    font-style: italic;
-    color: rgba(228,184,74,0.7);
-    font-size: 0.9em;
+  .logo-sub {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,201,64,0.55);
   }
   nav { display: flex; gap: 2.5rem; align-items: center; }
   nav a {
@@ -192,6 +213,20 @@
 
   /* ── SECTIONS ── */
   section { position: relative; z-index: 10; }
+
+  /* ── HERO MARK ── */
+  .hero-mark {
+    width: 72px;
+    height: 80px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    filter: drop-shadow(0 0 20px rgba(250,184,0,0.45)) drop-shadow(0 0 60px rgba(250,184,0,0.2));
+    animation: markPulse 4s ease-in-out infinite;
+  }
+  @keyframes markPulse {
+    0%, 100% { filter: drop-shadow(0 0 18px rgba(250,184,0,0.4)) drop-shadow(0 0 50px rgba(250,184,0,0.18)); }
+    50%       { filter: drop-shadow(0 0 28px rgba(250,184,0,0.65)) drop-shadow(0 0 80px rgba(250,184,0,0.3)); }
+  }
 
   /* ── HERO ── */
   #hero {
@@ -704,7 +739,32 @@
 
 <!-- HEADER -->
 <header>
-  <a href="#" class="logo">Grão de Mostarda <span>consultoria</span></a>
+  <a href="#" class="logo" aria-label="Grão de Mostarda">
+    <svg class="logo-icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Base -->
+      <rect x="29" y="90" width="42" height="11" rx="4" fill="#FAB800"/>
+      <!-- Stem -->
+      <rect x="46" y="55" width="8" height="40" rx="4" fill="#FAB800"/>
+      <!-- Left leaf with hole -->
+      <path fill-rule="evenodd" fill="#FAB800" d="
+        M50 78 C49 68 42 57 30 55 C16 53 6 42 11 31 C16 20 31 18 42 29
+        C48 36 50 55 50 74 Z
+        M30 54 C23 52 15 44 18 37 C21 30 31 28 36 35
+        C40 39 38 47 33 51 C30 53 30 53 30 54 Z
+      "/>
+      <!-- Right leaf with hole -->
+      <path fill-rule="evenodd" fill="#FAB800" d="
+        M50 57 C52 47 59 35 72 27 C85 19 96 23 96 35 C96 47 83 60 71 63
+        C59 66 51 63 50 57 Z
+        M71 62 C62 65 54 57 55 49 C56 41 65 39 71 44
+        C75 48 74 56 70 60 C71 61 71 62 71 62 Z
+      "/>
+    </svg>
+    <span class="logo-text">
+      <span class="logo-name">Grão de Mostarda</span>
+      <span class="logo-sub">Consultoria de Marketing</span>
+    </span>
+  </a>
   <nav>
     <a href="#evolucao">Nossa história</a>
     <a href="#como">Método</a>
@@ -715,6 +775,13 @@
 
 <!-- HERO -->
 <section id="hero">
+  <!-- Logo mark in hero -->
+  <svg class="hero-mark" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="29" y="90" width="42" height="11" rx="4" fill="#FAB800"/>
+    <rect x="46" y="55" width="8" height="40" rx="4" fill="#FAB800"/>
+    <path fill-rule="evenodd" fill="#FAB800" d="M50 78 C49 68 42 57 30 55 C16 53 6 42 11 31 C16 20 31 18 42 29 C48 36 50 55 50 74 Z M30 54 C23 52 15 44 18 37 C21 30 31 28 36 35 C40 39 38 47 33 51 C30 53 30 53 30 54 Z"/>
+    <path fill-rule="evenodd" fill="#FAB800" d="M50 57 C52 47 59 35 72 27 C85 19 96 23 96 35 C96 47 83 60 71 63 C59 66 51 63 50 57 Z M71 62 C62 65 54 57 55 49 C56 41 65 39 71 44 C75 48 74 56 70 60 C71 61 71 62 71 62 Z"/>
+  </svg>
   <div class="hero-tag">Consultoria de Marketing</div>
   <h1 class="hero-title">
     Transforme seu marketing
@@ -1059,8 +1126,8 @@ const coreMat = new THREE.ShaderMaterial({
     }`,
   fragmentShader: `varying vec3 vN; varying vec3 vPos; uniform float time;
     void main() {
-      vec3 gold = vec3(1.0, 0.72, 0.24);
-      vec3 bright = vec3(1.0, 0.95, 0.7);
+      vec3 gold = vec3(0.98, 0.72, 0.0);
+      vec3 bright = vec3(1.0, 0.9, 0.4);
       float rim = 1.0 - dot(vN, vec3(0.0, 0.0, 1.0));
       vec3 col = mix(gold, bright, pow(rim, 1.8));
       float pulse = 0.85 + 0.15 * sin(time * 1.4);
@@ -1157,8 +1224,8 @@ const bPos  = new Float32Array(branchCount * 6);
 const bCol  = new Float32Array(branchCount * 6);
 const bAlpha = new Float32Array(branchCount * 2);
 
-const GOLD  = new THREE.Color(0xC49030);
-const GLOW  = new THREE.Color(0xF0C060);
+const GOLD  = new THREE.Color(0xFAB800);
+const GLOW  = new THREE.Color(0xFFC940);
 const GREEN = new THREE.Color(0x3E7020);
 const LIME  = new THREE.Color(0x70C040);
 
@@ -1464,8 +1531,9 @@ animate();
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-const tl = gsap.timeline({ delay: 0.4 });
-tl.to('.hero-tag',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' })
+const tl = gsap.timeline({ delay: 0.2 });
+tl.to('.hero-mark',  { opacity: 1, duration: 1.0, ease: 'power2.out' })
+  .to('.hero-tag',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.5')
   .to('.hero-title', { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' }, '-=0.4')
   .to('.hero-rule',  { opacity: 1, duration: 0.6 }, '-=0.5')
   .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
