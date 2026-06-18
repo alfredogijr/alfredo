@@ -1,15 +1,16 @@
 """
 Stage 4 — Hospedador
 Sobe os PNGs no Google Drive e retorna URLs públicas de download direto.
-Requer: GOOGLE_SERVICE_ACCOUNT_JSON (caminho para arquivo .json de service account)
-        ou GOOGLE_DRIVE_FOLDER_ID (ID da pasta destino no Drive).
+Requer variáveis de ambiente:
+  GOOGLE_SERVICE_ACCOUNT_JSON — conteúdo completo do arquivo .json (não o caminho)
+  GOOGLE_DRIVE_FOLDER_ID      — ID da pasta destino no Drive
 """
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
-# google-api-python-client instalado via requirements.txt
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.service_account import Credentials
@@ -19,10 +20,11 @@ SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 
 def _get_service():
-    sa_path = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
-    if not sa_path:
+    sa_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+    if not sa_json:
         raise EnvironmentError("GOOGLE_SERVICE_ACCOUNT_JSON não definida.")
-    creds = Credentials.from_service_account_file(sa_path, scopes=SCOPES)
+    info = json.loads(sa_json)
+    creds = Credentials.from_service_account_info(info, scopes=SCOPES)
     return build("drive", "v3", credentials=creds, cache_discovery=False)
 
 
