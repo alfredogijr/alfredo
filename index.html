@@ -7,11 +7,11 @@
   <meta name="description" content="Transforme seu marketing de dentro para fora. Autonomia, inteligência e estratégia para negócios em crescimento real."/>
 
   <!-- Favicon inline SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 112'%3E%3Crect x='29' y='90' width='42' height='11' rx='4' fill='%23FAB800'/%3E%3Crect x='46' y='55' width='8' height='40' rx='4' fill='%23FAB800'/%3E%3Cpath fill-rule='evenodd' fill='%23FAB800' d='M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74ZM30 54C23 52 15 44 18 37C21 30 31 28 36 35C40 39 38 47 33 51C30 53 30 53 30 54Z'/%3E%3Cpath fill-rule='evenodd' fill='%23FAB800' d='M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57ZM71 62C62 65 54 57 55 49C56 41 65 39 71 44C75 48 74 56 70 60C71 61 71 62 71 62Z'/%3E%3C/svg%3E"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 112'%3E%3Crect x='29' y='90' width='42' height='11' rx='4' fill='%23F5A702'/%3E%3Crect x='46' y='55' width='8' height='40' rx='4' fill='%23F5A702'/%3E%3Cpath fill='%23F5A702' d='M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74Z'/%3E%3Cpath fill='%23F5A702' d='M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57Z'/%3E%3C/svg%3E"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <script type="importmap">
   {
@@ -32,18 +32,18 @@
     --bg:      #020603;
     --glass:   rgba(3,9,2,0.78);
     --glass2:  rgba(2,6,1,0.92);
-    --gold:    #FAB800;
-    --gold-l:  #FFC940;
-    --gold-d:  #C48A00;
-    --green:   #2E5A1A;
+    --gold:    #F5A702;
+    --gold-l:  #FFCA3C;
+    --gold-d:  #C48500;
+    --green:   #6FA86E;
     --green-l: #4E8E2A;
     --cream:   #F2EFE6;
     --muted:   rgba(242,239,230,0.48);
-    --border:  rgba(196,144,48,0.16);
+    --border:  rgba(245,167,2,0.16);
     --border2: rgba(255,255,255,0.06);
     --radius:  14px;
     --ease:    cubic-bezier(0.16,1,0.3,1);
-    --serif:   'Playfair Display', Georgia, serif;
+    --serif:   'Raleway', system-ui, sans-serif;
     --sans:    'Inter', system-ui, sans-serif;
   }
 
@@ -86,9 +86,9 @@
     animation: blobFloat var(--dur, 18s) ease-in-out infinite alternate;
     will-change: transform;
   }
-  .blob-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(196,144,48,0.07) 0%, transparent 70%); top: -100px; left: -120px; --dur: 22s; }
-  .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(46,90,26,0.08) 0%, transparent 70%);  bottom: 10%; right: -80px;  --dur: 28s; animation-direction: alternate-reverse; }
-  .blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(196,144,48,0.05) 0%, transparent 70%); top: 40%;  left: 40%;   --dur: 20s; }
+  .blob-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,167,2,0.07) 0%, transparent 70%); top: -100px; left: -120px; --dur: 22s; }
+  .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(111,168,110,0.07) 0%, transparent 70%);  bottom: 10%; right: -80px;  --dur: 28s; animation-direction: alternate-reverse; }
+  .blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(245,167,2,0.05) 0%, transparent 70%); top: 40%;  left: 40%;   --dur: 20s; }
   @keyframes blobFloat {
     0%   { transform: translate(0,0) scale(1); }
     33%  { transform: translate(30px,-40px) scale(1.08); }
@@ -131,7 +131,7 @@
   #progress-track {
     width: 1px;
     height: 90px;
-    background: rgba(196,144,48,0.18);
+    background: rgba(245,167,2,0.18);
   }
   #progress-fill {
     width: 100%;
@@ -167,30 +167,38 @@
     text-decoration: none;
   }
   .logo-icon {
-    width: 32px;
-    height: 36px;
+    width: 30px;
+    height: 34px;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 6px rgba(250,184,0,0.4));
+    filter: drop-shadow(0 0 7px rgba(245,167,2,0.45));
   }
   .logo-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.15;
+    line-height: 1.1;
   }
   .logo-name {
     font-family: var(--serif);
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255,202,60,0.82);
+    letter-spacing: 0.01em;
+  }
+  .logo-name strong {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 800;
     color: var(--gold-l);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
   }
   .logo-sub {
     font-family: var(--sans);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-weight: 400;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(255,201,64,0.55);
+    color: rgba(255,202,60,0.42);
+    margin-top: 0.1rem;
   }
   nav { display: flex; gap: 2.5rem; align-items: center; }
   nav a {
@@ -204,7 +212,7 @@
   nav a:hover { color: var(--gold); }
   .btn-nav {
     padding: 0.5rem 1.4rem;
-    border: 1px solid rgba(196,144,48,0.5);
+    border: 1px solid rgba(245,167,2,0.5);
     border-radius: 6px;
     color: var(--gold) !important;
     transition: background 0.22s var(--ease), color 0.22s var(--ease) !important;
@@ -220,12 +228,12 @@
     height: 80px;
     margin-bottom: 2rem;
     opacity: 0;
-    filter: drop-shadow(0 0 20px rgba(250,184,0,0.45)) drop-shadow(0 0 60px rgba(250,184,0,0.2));
+    filter: drop-shadow(0 0 20px rgba(245,167,2,0.5)) drop-shadow(0 0 60px rgba(245,167,2,0.22));
     animation: markPulse 4s ease-in-out infinite;
   }
   @keyframes markPulse {
-    0%, 100% { filter: drop-shadow(0 0 18px rgba(250,184,0,0.4)) drop-shadow(0 0 50px rgba(250,184,0,0.18)); }
-    50%       { filter: drop-shadow(0 0 28px rgba(250,184,0,0.65)) drop-shadow(0 0 80px rgba(250,184,0,0.3)); }
+    0%, 100% { filter: drop-shadow(0 0 18px rgba(245,167,2,0.42)) drop-shadow(0 0 52px rgba(245,167,2,0.2)); }
+    50%       { filter: drop-shadow(0 0 30px rgba(245,167,2,0.7)) drop-shadow(0 0 85px rgba(245,167,2,0.32)); }
   }
 
   /* ── HERO ── */
@@ -264,7 +272,7 @@
   .hero-title {
     font-family: var(--serif);
     font-size: clamp(3rem, 7.5vw, 7.5rem);
-    font-weight: 900;
+    font-weight: 800;
     line-height: 1.02;
     color: var(--cream);
     max-width: 1000px;
@@ -313,11 +321,11 @@
     transition: background 0.22s var(--ease), transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
     display: inline-block;
   }
-  .btn-primary:hover { background: var(--gold-l); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(196,144,48,0.3); }
+  .btn-primary:hover { background: var(--gold-l); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(245,167,2,0.32); }
   .btn-primary:active { transform: translateY(-1px) scale(0.98); }
   .btn-ghost {
     padding: 0.9rem 2.6rem;
-    border: 1px solid rgba(196,144,48,0.3);
+    border: 1px solid rgba(245,167,2,0.3);
     color: var(--cream);
     font-size: 0.78rem;
     letter-spacing: 0.14em;
@@ -327,7 +335,7 @@
     transition: border-color 0.22s var(--ease), color 0.22s var(--ease), background 0.22s var(--ease);
     display: inline-block;
   }
-  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,144,48,0.06); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: rgba(245,167,2,0.06); }
 
   /* ── SCROLL HINT ── */
   .scroll-hint {
@@ -497,18 +505,18 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(196,144,48,0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(245,167,2,0.4), transparent);
     opacity: 0;
     transition: opacity 0.3s var(--ease);
   }
   .pilar:last-child { border-right: none; }
-  .pilar:hover { background: rgba(196,144,48,0.04); }
+  .pilar:hover { background: rgba(245,167,2,0.04); }
   .pilar:hover::before { opacity: 1; }
   .pilar-num {
     font-family: var(--serif);
     font-size: 3rem;
     font-weight: 900;
-    color: rgba(196,144,48,0.2);
+    color: rgba(245,167,2,0.2);
     line-height: 1;
     margin-bottom: 1.5rem;
   }
@@ -570,7 +578,7 @@
     background: rgba(255,255,255,0.02);
     transition: border-color 0.22s var(--ease), background 0.22s var(--ease), transform 0.22s var(--ease);
   }
-  .fil-tag:hover { border-color: rgba(196,144,48,0.35); background: rgba(196,144,48,0.04); transform: translateX(4px); }
+  .fil-tag:hover { border-color: rgba(245,167,2,0.35); background: rgba(245,167,2,0.04); transform: translateX(4px); }
   .fil-tag-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -601,7 +609,7 @@
     color: var(--muted);
     transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
   }
-  .seg-tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,144,48,0.06); transform: scale(1.04); }
+  .seg-tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(245,167,2,0.06); transform: scale(1.04); }
 
   /* ── CONTATO ── */
   #contato {
@@ -657,8 +665,8 @@
   }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     border-color: var(--gold);
-    background: rgba(196,144,48,0.04);
-    box-shadow: 0 0 0 3px rgba(196,144,48,0.12);
+    background: rgba(245,167,2,0.04);
+    box-shadow: 0 0 0 3px rgba(245,167,2,0.12);
   }
   .form-group select option { background: #0a130a; color: var(--cream); }
   .form-group textarea { resize: vertical; min-height: 88px; }
@@ -669,7 +677,7 @@
     cursor: pointer; touch-action: manipulation; margin-top: 0.4rem;
     transition: background 0.22s var(--ease), transform 0.18s var(--ease), box-shadow 0.22s var(--ease);
   }
-  .btn-form:hover { background: var(--gold-l); box-shadow: 0 6px 20px rgba(196,144,48,0.28); transform: translateY(-1px); }
+  .btn-form:hover { background: var(--gold-l); box-shadow: 0 6px 20px rgba(245,167,2,0.28); transform: translateY(-1px); }
   .btn-form:active { transform: scale(0.98); }
   .form-feedback {
     display: none; margin-top: 1rem; padding: 0.75rem 1rem;
@@ -741,27 +749,13 @@
 <header>
   <a href="#" class="logo" aria-label="Grão de Mostarda">
     <svg class="logo-icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Base -->
-      <rect x="29" y="90" width="42" height="11" rx="4" fill="#FAB800"/>
-      <!-- Stem -->
-      <rect x="46" y="55" width="8" height="40" rx="4" fill="#FAB800"/>
-      <!-- Left leaf with hole -->
-      <path fill-rule="evenodd" fill="#FAB800" d="
-        M50 78 C49 68 42 57 30 55 C16 53 6 42 11 31 C16 20 31 18 42 29
-        C48 36 50 55 50 74 Z
-        M30 54 C23 52 15 44 18 37 C21 30 31 28 36 35
-        C40 39 38 47 33 51 C30 53 30 53 30 54 Z
-      "/>
-      <!-- Right leaf with hole -->
-      <path fill-rule="evenodd" fill="#FAB800" d="
-        M50 57 C52 47 59 35 72 27 C85 19 96 23 96 35 C96 47 83 60 71 63
-        C59 66 51 63 50 57 Z
-        M71 62 C62 65 54 57 55 49 C56 41 65 39 71 44
-        C75 48 74 56 70 60 C71 61 71 62 71 62 Z
-      "/>
+      <rect x="29" y="90" width="42" height="11" rx="4" fill="#F5A702"/>
+      <rect x="46" y="55" width="8" height="40" rx="4" fill="#F5A702"/>
+      <path fill="#F5A702" d="M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74Z"/>
+      <path fill="#F5A702" d="M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57Z"/>
     </svg>
     <span class="logo-text">
-      <span class="logo-name">Grão de Mostarda</span>
+      <span class="logo-name">Grão de<strong>Mostarda</strong></span>
       <span class="logo-sub">Consultoria de Marketing</span>
     </span>
   </a>
@@ -777,20 +771,20 @@
 <section id="hero">
   <!-- Logo mark in hero -->
   <svg class="hero-mark" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="29" y="90" width="42" height="11" rx="4" fill="#FAB800"/>
-    <rect x="46" y="55" width="8" height="40" rx="4" fill="#FAB800"/>
-    <path fill-rule="evenodd" fill="#FAB800" d="M50 78 C49 68 42 57 30 55 C16 53 6 42 11 31 C16 20 31 18 42 29 C48 36 50 55 50 74 Z M30 54 C23 52 15 44 18 37 C21 30 31 28 36 35 C40 39 38 47 33 51 C30 53 30 53 30 54 Z"/>
-    <path fill-rule="evenodd" fill="#FAB800" d="M50 57 C52 47 59 35 72 27 C85 19 96 23 96 35 C96 47 83 60 71 63 C59 66 51 63 50 57 Z M71 62 C62 65 54 57 55 49 C56 41 65 39 71 44 C75 48 74 56 70 60 C71 61 71 62 71 62 Z"/>
+    <rect x="29" y="90" width="42" height="11" rx="4" fill="#F5A702"/>
+    <rect x="46" y="55" width="8" height="40" rx="4" fill="#F5A702"/>
+    <path fill="#F5A702" d="M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74Z"/>
+    <path fill="#F5A702" d="M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57Z"/>
   </svg>
   <div class="hero-tag">Consultoria de Marketing</div>
   <h1 class="hero-title">
-    Transforme seu marketing
-    <span class="line2">de dentro para fora</span>
+    Transformamos propósito
+    <span class="line2">em crescimento.</span>
   </h1>
   <div class="hero-rule"></div>
   <p class="hero-sub">
-    Autonomia, inteligência e estratégia.<br/>
-    Colocamos o marketing onde ele realmente deve estar: nas mãos da sua equipe.
+    Conectamos estratégia, tecnologia e propósito<br/>
+    para gerar crescimento real e duradouro — para pessoas e negócios.
   </p>
   <div class="hero-cta">
     <a href="#contato" class="btn-primary">Quero essa transformação</a>
@@ -837,9 +831,9 @@
   <div class="container" style="text-align:center;">
     <span class="quote-marks reveal">"</span>
     <blockquote class="big-quote reveal">
-      Não somos consultores de PowerPoint. Atuamos onde as coisas acontecem: <strong>na fábrica, na operação, na tomada de decisão.</strong> Saímos deixando um time mais preparado — capaz de tirar o máximo de qualquer parceiro, agência ou tecnologia que contratar.
+      Pequenas conexões bem cuidadas geram <strong>grandes transformações.</strong>
     </blockquote>
-    <p class="quote-author reveal" style="margin-top:2rem;">Alfredo — Grão de Mostarda</p>
+    <p class="quote-author reveal" style="margin-top:2rem;">— Grão de Mostarda</p>
   </div>
 </section>
 
@@ -852,24 +846,34 @@
         <h2 class="section-title">O marketing <em>no seu controle</em></h2>
       </div>
       <div>
-        <p class="section-body">Ajudamos sua empresa a dominar o próprio marketing: processos, ferramentas, cultura e estratégia. Nosso modelo é baseado em capacitação real — com apoio de inteligência artificial.</p>
+        <p class="section-body">Ser instrumento de transformação, gerando valor, clareza e resultado através de soluções inteligentes e humanas.</p>
       </div>
     </div>
-    <div class="pilares">
+    <div class="pilares" style="grid-template-columns: repeat(5,1fr);">
       <div class="pilar reveal">
         <div class="pilar-num">01</div>
-        <div class="pilar-title">Diagnóstico Profundo</div>
-        <p class="pilar-desc">Entramos na sua operação para entender de verdade: processos, lacunas, oportunidades. Sem suposições, sem templates genéricos.</p>
+        <div class="pilar-title">Conectamos</div>
+        <p class="pilar-desc">Pessoas, ideias e oportunidades que geram crescimento real.</p>
       </div>
       <div class="pilar reveal">
         <div class="pilar-num">02</div>
-        <div class="pilar-title">Capacitação & Sistemas</div>
-        <p class="pilar-desc">Estruturamos ferramentas, treinamos sua equipe e implementamos IA no dia a dia — de forma prática, com presença real no campo.</p>
+        <div class="pilar-title">Estruturamos</div>
+        <p class="pilar-desc">Estratégias claras e processos inteligentes para o dia a dia.</p>
       </div>
       <div class="pilar reveal">
         <div class="pilar-num">03</div>
-        <div class="pilar-title">Autonomia Sustentável</div>
-        <p class="pilar-desc">Saímos quando você está no controle. Não criamos dependência — construímos bases internas para o marketing crescer sozinho.</p>
+        <div class="pilar-title">Transformamos</div>
+        <p class="pilar-desc">Ideias em sistemas que geram resultado de verdade.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="pilar-num">04</div>
+        <div class="pilar-title">Aceleramos</div>
+        <p class="pilar-desc">Negócios com visão, tecnologia e propósito alinhados.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="pilar-num">05</div>
+        <div class="pilar-title">Cuidamos</div>
+        <p class="pilar-desc">De cada detalhe como se fosse a nossa própria semente.</p>
       </div>
     </div>
   </div>
@@ -929,16 +933,16 @@
     <h2 class="section-title reveal">Atendemos quem <em>quer crescer de verdade</em></h2>
     <p class="section-body reveal">PMEs, indústrias, profissionais liberais e empreendedores que precisam de estratégia real aplicada na operação — não de slides bonitos.</p>
     <div class="seg-tags">
-      <span class="seg-tag reveal">Indústrias & Manufatura</span>
-      <span class="seg-tag reveal">Clínicas & Saúde</span>
-      <span class="seg-tag reveal">E-commerce</span>
+      <span class="seg-tag reveal">Educação</span>
+      <span class="seg-tag reveal">Turismo Esportivo</span>
+      <span class="seg-tag reveal">Eventos</span>
+      <span class="seg-tag reveal">Esportes & Fitness</span>
+      <span class="seg-tag reveal">Saúde & Bem-estar</span>
+      <span class="seg-tag reveal">Construção Civil</span>
+      <span class="seg-tag reveal">Serviços</span>
+      <span class="seg-tag reveal">Varejo</span>
+      <span class="seg-tag reveal">Indústria & Manufatura</span>
       <span class="seg-tag reveal">Imobiliárias</span>
-      <span class="seg-tag reveal">Advocacia</span>
-      <span class="seg-tag reveal">Restaurantes & Food</span>
-      <span class="seg-tag reveal">Educação & Cursos</span>
-      <span class="seg-tag reveal">Serviços B2B</span>
-      <span class="seg-tag reveal">Varejo Local</span>
-      <span class="seg-tag reveal">Tech & SaaS</span>
     </div>
   </div>
 </section>
@@ -988,16 +992,16 @@
             <label for="segmento">Segmento da empresa</label>
             <select id="segmento" name="segmento">
               <option value="">Selecione o segmento</option>
+              <option>Educação</option>
+              <option>Turismo Esportivo</option>
+              <option>Eventos</option>
+              <option>Esportes & Fitness</option>
+              <option>Saúde & Bem-estar</option>
+              <option>Construção Civil</option>
+              <option>Serviços</option>
+              <option>Varejo</option>
               <option>Indústria & Manufatura</option>
-              <option>Clínicas & Saúde</option>
-              <option>E-commerce</option>
               <option>Imobiliárias</option>
-              <option>Advocacia</option>
-              <option>Restaurantes & Food</option>
-              <option>Educação & Cursos</option>
-              <option>Serviços B2B</option>
-              <option>Varejo Local</option>
-              <option>Tech & SaaS</option>
               <option>Outro</option>
             </select>
           </div>
@@ -1017,7 +1021,7 @@
 <footer>
   <div class="footer-brand">
     <div class="footer-logo">Grão de Mostarda</div>
-    <div class="footer-tagline">Consultoria de Marketing · Rio de Janeiro, RJ</div>
+    <div class="footer-tagline">Transformamos propósito em crescimento. · Rio de Janeiro, RJ</div>
   </div>
   <p class="footer-copy">© 2025 Grão de Mostarda. Todos os direitos reservados.</p>
 </footer>
@@ -1126,7 +1130,7 @@ const coreMat = new THREE.ShaderMaterial({
     }`,
   fragmentShader: `varying vec3 vN; varying vec3 vPos; uniform float time;
     void main() {
-      vec3 gold = vec3(0.98, 0.72, 0.0);
+      vec3 gold = vec3(0.96, 0.65, 0.01);
       vec3 bright = vec3(1.0, 0.9, 0.4);
       float rim = 1.0 - dot(vN, vec3(0.0, 0.0, 1.0));
       vec3 col = mix(gold, bright, pow(rim, 1.8));
@@ -1142,7 +1146,7 @@ scene.add(core);
 // Glow layers
 for (const [scale, opacity] of [[3.8, 0.18], [7.0, 0.1], [12.0, 0.055]]) {
   const spr = new THREE.Sprite(new THREE.SpriteMaterial({
-    color: 0xD4A020,
+    color: 0xF5A702,
     transparent: true,
     opacity,
     blending: THREE.AdditiveBlending
@@ -1224,8 +1228,8 @@ const bPos  = new Float32Array(branchCount * 6);
 const bCol  = new Float32Array(branchCount * 6);
 const bAlpha = new Float32Array(branchCount * 2);
 
-const GOLD  = new THREE.Color(0xFAB800);
-const GLOW  = new THREE.Color(0xFFC940);
+const GOLD  = new THREE.Color(0xF5A702);
+const GLOW  = new THREE.Color(0xFFCA3C);
 const GREEN = new THREE.Color(0x3E7020);
 const LIME  = new THREE.Color(0x70C040);
 
