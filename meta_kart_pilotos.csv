@@ -1,102 +1,102 @@
 name,category,image_url,speed,overtaking,reflexes,consistency,strategy,ranking,is_super_trunfo
-Miguel Villas,Storm,,93,96,90,94,95,94,false
-Marcio Bactuli,Storm,,98,95,90,91,89,93,false
-Math de Araújo,Storm,,91,92,87,92,96,92,false
-Rael Bonfim,Storm,,90,93,91,89,97,92,false
-Bruno Branco,Storm,,87,90,95,92,89,91,false
-Arthur Pagliaminuto,Storm,,86,91,91,94,87,90,false
-Matheus Ferraz,Storm,,87,90,95,88,87,89,false
-Danilo Velarde,Storm,,89,83,92,90,86,88,false
-Kauã Vetromille,Storm,,85,91,83,85,91,87,false
-Joaquim Pedro,Storm,,86,89,87,81,86,86,false
-Nícolas Giovanelli,Storm,,83,82,89,87,88,86,false
-Gabriel Odam,Storm,,87,81,83,86,86,85,false
-Matheus Oliveira,Storm,,87,84,86,80,84,84,false
-Lucas Rasori,Storm,,87,81,86,82,80,83,false
-Lucas Magalhães,Storm,,87,80,80,84,79,82,false
-Vítor Bueno,Storm,,86,78,81,87,77,82,false
-Arthur Fuly,Storm,,82,80,80,83,82,81,false
-Pedro Henrique,Storm,,80,75,83,83,81,80,false
-Pedro Netuno,Storm,,80,78,77,78,81,79,false
-João Marques,Storm,,80,76,81,72,81,78,false
-Bernardo Joaquim,Storm,,77,77,79,74,79,77,false
-Ícaro Miguel,Storm,,78,76,75,72,78,76,false
-Alexandre Guedes,Storm,,74,73,79,77,79,76,false
-Davi Diuana,Storm,,81,74,74,72,76,75,false
-Jonathan Moreira,Storm,,79,76,71,73,72,74,false
-Matheus Estevão,Storm,,77,73,73,71,72,73,false
-Maykon Rodrigues,Storm,,70,74,76,72,68,72,false
-Luís Vieira,Storm,,71,78,69,71,70,72,false
-Ryan Agostinho,Storm,,70,70,66,74,73,71,false
-Breno Alves,Storm,,69,67,70,70,74,70,false
-Gustavo Branco,Storm,,67,71,63,72,70,69,false
-Logan Garcia,Storm,,61,71,66,71,69,68,false
-Lucas Ammon,Storm,,64,66,65,68,73,67,false
-Luiz Penido,Storm,,66,69,67,69,60,66,false
-André Vaz,Storm,,65,65,70,65,64,66,false
-Aruã Rodrigues,Storm,,66,58,67,65,67,65,false
-João Pedro Félix,Storm,,70,62,66,63,61,64,false
-Miguel Poly,Força Livre,,93,96,95,92,93,94,false
-Manuel Leal,Força Livre,,91,93,87,94,93,92,false
-João Kraischer,Força Livre,,85,88,95,93,85,89,false
-Pedro Fraga,Força Livre,,91,85,85,85,91,87,false
-João Victor Fraga,Força Livre,,86,80,88,85,87,85,false
-Gabriel Vieira,Força Livre,,85,84,77,78,85,82,false
-Gustavo Corrêa,Força Livre,,83,79,79,77,82,80,false
-Diogo Viana,Força Livre,,77,78,77,80,76,78,false
-Lucas Costanza,Força Livre,,74,78,76,74,77,76,false
-Pedro Camargo,Força Livre,,70,74,72,75,75,73,false
-Lucca Ferreira,Força Livre,,72,68,74,72,68,71,false
-Vinícius Nascimento,Força Livre,,70,64,70,70,69,69,false
-Caio César,Força Livre,,67,61,67,65,68,66,false
-Vinícius Reis,Força Livre,,67,67,60,63,63,64,false
-Rafael Ceotto,Médio,,98,96,90,97,91,94,false
-Flavinho Costa,Médio,,89,96,95,93,88,92,false
-Felipe Silva,Médio,,93,90,92,87,90,90,false
-Davi Sales,Médio,,86,89,93,90,83,88,false
-Carlos Cersósimo,Médio,,80,90,90,80,85,85,false
-Matheus Dutra,Médio,,79,80,85,86,86,83,false
-Joaquim Henrique,Médio,,79,81,82,85,79,81,false
-Enzo Bernardino,Médio,,77,79,78,80,81,79,false
-Jaime Boueri,Médio,,81,75,78,71,79,77,false
-Yuri Orlandini,Médio,,76,72,71,78,80,75,false
-Alfred Sena,Médio,,77,72,72,73,71,73,false
-Fabrício Rocha,Médio,,66,66,73,75,71,70,false
-Yuri Barbosa,Médio,,63,70,70,72,67,68,false
-Bruno Mann,Médio,,65,69,67,60,67,66,false
-Valério Lopes,Médio,,67,69,62,62,60,64,false
-Xico Borati,Pesado,,92,93,96,91,98,94,false
-Roberto Lopes,Pesado,,94,87,91,93,96,92,false
-Gabriel Nahid,Pesado,,91,92,87,92,90,90,false
-João Henrique,Pesado,,91,84,86,84,94,88,false
-Bernardo Aguiar,Pesado,,89,82,88,86,85,86,false
-José Ricardo,Pesado,,85,85,86,84,87,85,false
-Alexandre Herd,Pesado,,80,81,81,84,90,83,false
-Marco Odam,Pesado,,78,81,81,82,83,81,false
-Gustavo Labanca,Pesado,,82,78,80,80,73,79,false
-Luís Reis,Pesado,,74,79,77,81,76,77,false
-Rodrigo Angelo,Pesado,,75,75,77,76,74,75,false
-Chrystopher Hashimoto,Pesado,,74,73,77,73,68,73,false
-Ryan Santos,Pesado,,71,69,72,76,74,72,false
-Fábio Mattos,Pesado,,73,67,72,70,68,70,false
-João Dias,Pesado,,64,72,67,63,72,68,false
-Paulo Lantelme,Pesado,,68,63,65,69,65,66,false
-Rogério Gama,Pesado,,64,66,61,62,65,64,false
-Gabriel Carvalho,New Generation,,94,94,96,94,91,94,false
-Max Bretanha,New Generation,,90,94,88,90,98,92,false
-Miguel Antunes,New Generation,,92,87,87,96,87,90,false
-Ricardo Junior,New Generation,,86,88,92,87,88,88,false
-Joaquim Neto,New Generation,,84,89,84,83,85,85,false
-Vladmyr Pietro,New Generation,,80,87,84,86,80,83,false
-Guilherme Barbosa,New Generation,,82,79,87,79,80,81,false
-Matheus Menezes,New Generation,,79,79,76,82,81,79,false
-Super Arthur,New Generation,,74,77,79,76,80,77,false
-João Seixas,New Generation,,73,74,77,79,74,75,false
-Victor Sigal,New Generation,,68,74,72,77,72,73,false
-Leonardo Brito,New Generation,,72,65,70,74,70,70,false
-Arthur Apolinário,New Generation,,68,69,66,67,72,68,false
-Miguel Rosado,New Generation,,64,62,70,67,65,66,false
-Vicente Dias,New Generation,,63,68,63,62,62,64,false
+Miguel Villas,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,93,96,90,94,95,94,false
+Marcio Bactuli,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,98,95,90,91,89,93,false
+Math de Araújo,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,91,92,87,92,96,92,false
+Rael Bonfim,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,90,93,91,89,97,92,false
+Bruno Branco,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,87,90,95,92,89,91,false
+Arthur Pagliaminuto,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,86,91,91,94,87,90,false
+Matheus Ferraz,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,87,90,95,88,87,89,false
+Danilo Velarde,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,89,83,92,90,86,88,false
+Kauã Vetromille,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,85,91,83,85,91,87,false
+Joaquim Pedro,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,86,89,87,81,86,86,false
+Nícolas Giovanelli,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,83,82,89,87,88,86,false
+Gabriel Odam,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,87,81,83,86,86,85,false
+Matheus Oliveira,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,87,84,86,80,84,84,false
+Lucas Rasori,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,87,81,86,82,80,83,false
+Lucas Magalhães,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,87,80,80,84,79,82,false
+Vítor Bueno,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,86,78,81,87,77,82,false
+Arthur Fuly,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,82,80,80,83,82,81,false
+Pedro Henrique,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,80,75,83,83,81,80,false
+Pedro Netuno,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,80,78,77,78,81,79,false
+João Marques,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,80,76,81,72,81,78,false
+Bernardo Joaquim,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,77,77,79,74,79,77,false
+Ícaro Miguel,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,78,76,75,72,78,76,false
+Alexandre Guedes,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,74,73,79,77,79,76,false
+Davi Diuana,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,81,74,74,72,76,75,false
+Jonathan Moreira,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,79,76,71,73,72,74,false
+Matheus Estevão,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,77,73,73,71,72,73,false
+Maykon Rodrigues,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,70,74,76,72,68,72,false
+Luís Vieira,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,71,78,69,71,70,72,false
+Ryan Agostinho,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,70,70,66,74,73,71,false
+Breno Alves,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,69,67,70,70,74,70,false
+Gustavo Branco,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,67,71,63,72,70,69,false
+Logan Garcia,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,61,71,66,71,69,68,false
+Lucas Ammon,Storm,https://lh3.googleusercontent.com/d/1rRhTTgOOEd8q_49qCCnissXjtCjHN7ju=w800,64,66,65,68,73,67,false
+Luiz Penido,Storm,https://lh3.googleusercontent.com/d/1n7xNY9pcWYwDdJ2EsspWvDNHEKtKMiAA=w800,66,69,67,69,60,66,false
+André Vaz,Storm,https://lh3.googleusercontent.com/d/1E-TdF09wfia1YFer4h5lsvH9TYlv-D_v=w800,65,65,70,65,64,66,false
+Aruã Rodrigues,Storm,https://lh3.googleusercontent.com/d/1uXZ6CcG8ZbMNJ6o_sdoCYJVWXHjWDDiz=w800,66,58,67,65,67,65,false
+João Pedro Félix,Storm,https://lh3.googleusercontent.com/d/1Bol9CITudy9P90lSFeJ5fvyXozA2DCXN=w800,70,62,66,63,61,64,false
+Miguel Poly,Força Livre,https://lh3.googleusercontent.com/d/180KDgtrzFIjSTQa1j592k1PnksJCLSsr=w800,93,96,95,92,93,94,false
+Manuel Leal,Força Livre,https://lh3.googleusercontent.com/d/1UJOKc7_1v9RAGbvtWLttxDJZYCU9Vo32=w800,91,93,87,94,93,92,false
+João Kraischer,Força Livre,https://lh3.googleusercontent.com/d/1rPMhQ1swUMtiwfQ5QnoH2C9ZPzQLATnc=w800,85,88,95,93,85,89,false
+Pedro Fraga,Força Livre,https://lh3.googleusercontent.com/d/11J-PCJZhCKxUlX3bymSSrwQhJTIwzcYq=w800,91,85,85,85,91,87,false
+João Victor Fraga,Força Livre,https://lh3.googleusercontent.com/d/1ngeakqEB-ghCEj-YXvefswqLQB7ALaWW=w800,86,80,88,85,87,85,false
+Gabriel Vieira,Força Livre,https://lh3.googleusercontent.com/d/180KDgtrzFIjSTQa1j592k1PnksJCLSsr=w800,85,84,77,78,85,82,false
+Gustavo Corrêa,Força Livre,https://lh3.googleusercontent.com/d/1UJOKc7_1v9RAGbvtWLttxDJZYCU9Vo32=w800,83,79,79,77,82,80,false
+Diogo Viana,Força Livre,https://lh3.googleusercontent.com/d/1rPMhQ1swUMtiwfQ5QnoH2C9ZPzQLATnc=w800,77,78,77,80,76,78,false
+Lucas Costanza,Força Livre,https://lh3.googleusercontent.com/d/11J-PCJZhCKxUlX3bymSSrwQhJTIwzcYq=w800,74,78,76,74,77,76,false
+Pedro Camargo,Força Livre,https://lh3.googleusercontent.com/d/1ngeakqEB-ghCEj-YXvefswqLQB7ALaWW=w800,70,74,72,75,75,73,false
+Lucca Ferreira,Força Livre,https://lh3.googleusercontent.com/d/180KDgtrzFIjSTQa1j592k1PnksJCLSsr=w800,72,68,74,72,68,71,false
+Vinícius Nascimento,Força Livre,https://lh3.googleusercontent.com/d/1UJOKc7_1v9RAGbvtWLttxDJZYCU9Vo32=w800,70,64,70,70,69,69,false
+Caio César,Força Livre,https://lh3.googleusercontent.com/d/1rPMhQ1swUMtiwfQ5QnoH2C9ZPzQLATnc=w800,67,61,67,65,68,66,false
+Vinícius Reis,Força Livre,https://lh3.googleusercontent.com/d/11J-PCJZhCKxUlX3bymSSrwQhJTIwzcYq=w800,67,67,60,63,63,64,false
+Rafael Ceotto,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,98,96,90,97,91,94,false
+Flavinho Costa,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,89,96,95,93,88,92,false
+Felipe Silva,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,93,90,92,87,90,90,false
+Davi Sales,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,86,89,93,90,83,88,false
+Carlos Cersósimo,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,80,90,90,80,85,85,false
+Matheus Dutra,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,79,80,85,86,86,83,false
+Joaquim Henrique,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,79,81,82,85,79,81,false
+Enzo Bernardino,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,77,79,78,80,81,79,false
+Jaime Boueri,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,81,75,78,71,79,77,false
+Yuri Orlandini,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,76,72,71,78,80,75,false
+Alfred Sena,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,77,72,72,73,71,73,false
+Fabrício Rocha,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,66,66,73,75,71,70,false
+Yuri Barbosa,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,63,70,70,72,67,68,false
+Bruno Mann,Médio,https://lh3.googleusercontent.com/d/1rCZC7G5oBHFknWkfbQ_qJt-04EUMb5T1=w800,65,69,67,60,67,66,false
+Valério Lopes,Médio,https://lh3.googleusercontent.com/d/1qJNerkxitpExDe8t0GoobN-0McxHd81Y=w800,67,69,62,62,60,64,false
+Xico Borati,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,92,93,96,91,98,94,false
+Roberto Lopes,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,94,87,91,93,96,92,false
+Gabriel Nahid,Pesado,https://lh3.googleusercontent.com/d/1YBTzy1afkqbDx05Bd7fQInQ88hUEOpvG=w800,91,92,87,92,90,90,false
+João Henrique,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,91,84,86,84,94,88,false
+Bernardo Aguiar,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,89,82,88,86,85,86,false
+José Ricardo,Pesado,https://lh3.googleusercontent.com/d/1YBTzy1afkqbDx05Bd7fQInQ88hUEOpvG=w800,85,85,86,84,87,85,false
+Alexandre Herd,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,80,81,81,84,90,83,false
+Marco Odam,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,78,81,81,82,83,81,false
+Gustavo Labanca,Pesado,https://lh3.googleusercontent.com/d/1YBTzy1afkqbDx05Bd7fQInQ88hUEOpvG=w800,82,78,80,80,73,79,false
+Luís Reis,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,74,79,77,81,76,77,false
+Rodrigo Angelo,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,75,75,77,76,74,75,false
+Chrystopher Hashimoto,Pesado,https://lh3.googleusercontent.com/d/1YBTzy1afkqbDx05Bd7fQInQ88hUEOpvG=w800,74,73,77,73,68,73,false
+Ryan Santos,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,71,69,72,76,74,72,false
+Fábio Mattos,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,73,67,72,70,68,70,false
+João Dias,Pesado,https://lh3.googleusercontent.com/d/1YBTzy1afkqbDx05Bd7fQInQ88hUEOpvG=w800,64,72,67,63,72,68,false
+Paulo Lantelme,Pesado,https://lh3.googleusercontent.com/d/1I04qyHK5IdWTZZKyYYMv30iR7FrQMKHC=w800,68,63,65,69,65,66,false
+Rogério Gama,Pesado,https://lh3.googleusercontent.com/d/1cJIuSS5ddb_NC9cqwHqBZ2ijp4kTI7xM=w800,64,66,61,62,65,64,false
+Gabriel Carvalho,New Generation,https://lh3.googleusercontent.com/d/1p-M8BWwJele6DgHC0AT9uA9T9znRWjCP=w800,94,94,96,94,91,94,false
+Max Bretanha,New Generation,https://lh3.googleusercontent.com/d/1QQ3zwJfuLwhmbDVp9tw_e2kk_FfQzY0u=w800,90,94,88,90,98,92,false
+Miguel Antunes,New Generation,https://lh3.googleusercontent.com/d/1mYH4r72DBDDBd6WavORbCd6bA0_FDdKg=w800,92,87,87,96,87,90,false
+Ricardo Junior,New Generation,https://lh3.googleusercontent.com/d/1R3AJX7vfvj0g29-JgvrAkZjXHtNvtCPt=w800,86,88,92,87,88,88,false
+Joaquim Neto,New Generation,https://lh3.googleusercontent.com/d/11hyvdYtdDKmRLD-CtjnG2ItzbE0B5LgF=w800,84,89,84,83,85,85,false
+Vladmyr Pietro,New Generation,https://lh3.googleusercontent.com/d/1p-M8BWwJele6DgHC0AT9uA9T9znRWjCP=w800,80,87,84,86,80,83,false
+Guilherme Barbosa,New Generation,https://lh3.googleusercontent.com/d/1QQ3zwJfuLwhmbDVp9tw_e2kk_FfQzY0u=w800,82,79,87,79,80,81,false
+Matheus Menezes,New Generation,https://lh3.googleusercontent.com/d/1mYH4r72DBDDBd6WavORbCd6bA0_FDdKg=w800,79,79,76,82,81,79,false
+Super Arthur,New Generation,https://lh3.googleusercontent.com/d/1R3AJX7vfvj0g29-JgvrAkZjXHtNvtCPt=w800,74,77,79,76,80,77,false
+João Seixas,New Generation,https://lh3.googleusercontent.com/d/11hyvdYtdDKmRLD-CtjnG2ItzbE0B5LgF=w800,73,74,77,79,74,75,false
+Victor Sigal,New Generation,https://lh3.googleusercontent.com/d/1p-M8BWwJele6DgHC0AT9uA9T9znRWjCP=w800,68,74,72,77,72,73,false
+Leonardo Brito,New Generation,https://lh3.googleusercontent.com/d/1QQ3zwJfuLwhmbDVp9tw_e2kk_FfQzY0u=w800,72,65,70,74,70,70,false
+Arthur Apolinário,New Generation,https://lh3.googleusercontent.com/d/1mYH4r72DBDDBd6WavORbCd6bA0_FDdKg=w800,68,69,66,67,72,68,false
+Miguel Rosado,New Generation,https://lh3.googleusercontent.com/d/1R3AJX7vfvj0g29-JgvrAkZjXHtNvtCPt=w800,64,62,70,67,65,66,false
+Vicente Dias,New Generation,https://lh3.googleusercontent.com/d/11hyvdYtdDKmRLD-CtjnG2ItzbE0B5LgF=w800,63,68,63,62,62,64,false
 Iança Simplício,Speed Girls,,94,95,93,90,96,94,false
 Nathália Trocado,Speed Girls,,95,85,92,94,95,92,false
 Dani Fontenelle,Speed Girls,,89,88,91,88,87,89,false
