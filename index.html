@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grão de Mostarda — Marketing, Tecnologia e IA</title>
-  <meta name="description" content="Consultoria em marketing digital, automação com IA e vendas para PMEs. Estratégia + execução + tecnologia juntos."/>
+  <title>Grão de Mostarda — Consultoria de Marketing</title>
+  <meta name="description" content="Transforme seu marketing de dentro para fora. Autonomia, inteligência e estratégia para negócios em crescimento real."/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -26,18 +26,19 @@
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
   :root {
-    --bg:     #030804;
-    --glass:  rgba(4,10,3,0.82);
-    --glass2: rgba(3,8,2,0.92);
-    --gold:   #C49030;
-    --gold-l: #E4B84A;
-    --green:  #3B6E22;
-    --green-l:#5CA832;
-    --cream:  #F0EDE4;
-    --muted:  rgba(240,237,228,0.5);
-    --border: rgba(196,144,48,0.18);
-    --serif:  'Playfair Display', Georgia, serif;
-    --sans:   'Inter', system-ui, sans-serif;
+    --bg:      #020603;
+    --glass:   rgba(3,9,2,0.78);
+    --glass2:  rgba(2,6,1,0.92);
+    --gold:    #C49030;
+    --gold-l:  #E4B84A;
+    --gold-d:  #8A6420;
+    --green:   #2E5A1A;
+    --green-l: #4E8E2A;
+    --cream:   #F2EFE6;
+    --muted:   rgba(242,239,230,0.48);
+    --border:  rgba(196,144,48,0.16);
+    --serif:   'Playfair Display', Georgia, serif;
+    --sans:    'Inter', system-ui, sans-serif;
   }
 
   html { scroll-behavior: smooth; }
@@ -58,7 +59,17 @@
     z-index: 0;
   }
 
-  /* ── SCROLL UI (Horizon-style) ── */
+  /* ── VIGNETTE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, rgba(2,6,1,0.65) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── SCROLL UI ── */
   #scroll-ui {
     position: fixed;
     right: 2rem;
@@ -67,65 +78,68 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     z-index: 100;
     opacity: 0;
-    transition: opacity 0.6s;
+    transition: opacity 0.8s;
   }
   #scroll-ui.visible { opacity: 1; }
   #scroll-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
     color: var(--gold);
     writing-mode: vertical-rl;
-    text-orientation: mixed;
   }
   #progress-track {
-    width: 2px;
-    height: 80px;
-    background: rgba(196,144,48,0.2);
-    border-radius: 2px;
-    overflow: hidden;
+    width: 1px;
+    height: 90px;
+    background: rgba(196,144,48,0.18);
   }
   #progress-fill {
     width: 100%;
     height: 0%;
     background: var(--gold);
-    border-radius: 2px;
-    transition: height 0.1s linear;
+    transition: height 0.08s linear;
   }
   #sec-counter {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     letter-spacing: 0.15em;
     color: var(--muted);
     writing-mode: vertical-rl;
   }
 
-  /* ── HEADER / NAV ── */
+  /* ── HEADER ── */
   header {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 200;
-    padding: 1.5rem 4rem;
+    padding: 1.4rem 4rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(3,8,4,0.5);
-    backdrop-filter: blur(12px);
+    background: rgba(2,6,1,0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
   }
   .logo {
     font-family: var(--serif);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--gold-l);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     text-decoration: none;
+  }
+  .logo span {
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(228,184,74,0.7);
+    font-size: 0.9em;
   }
   nav { display: flex; gap: 2.5rem; align-items: center; }
   nav a {
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
@@ -133,23 +147,16 @@
   }
   nav a:hover { color: var(--gold); }
   .btn-nav {
-    padding: 0.55rem 1.4rem;
+    padding: 0.5rem 1.4rem;
     border: 1px solid var(--gold);
-    border-radius: 2px;
+    border-radius: 1px;
     color: var(--gold) !important;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
     transition: background 0.3s, color 0.3s !important;
   }
   .btn-nav:hover { background: var(--gold); color: var(--bg) !important; }
 
-  /* ── SECTIONS BASE ── */
-  section {
-    position: relative;
-    z-index: 10;
-  }
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 10; }
 
   /* ── HERO ── */
   #hero {
@@ -160,75 +167,96 @@
     align-items: center;
     text-align: center;
     padding: 2rem;
+    gap: 0;
   }
-  .hero-eyebrow {
-    font-size: 0.7rem;
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.65rem;
     letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    padding: 0.4rem 1.1rem;
+    border-radius: 100px;
+    margin-bottom: 2.5rem;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
+    backdrop-filter: blur(8px);
+  }
+  .hero-tag::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
   }
   .hero-title {
     font-family: var(--serif);
-    font-size: clamp(3rem, 7vw, 7rem);
+    font-size: clamp(3rem, 7.5vw, 7.5rem);
     font-weight: 900;
-    line-height: 1.05;
+    line-height: 1.02;
     color: var(--cream);
-    max-width: 900px;
+    max-width: 1000px;
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(28px);
   }
-  .hero-title em {
-    font-style: italic;
+  .hero-title .line2 {
+    display: block;
     color: var(--gold-l);
+    font-style: italic;
+  }
+  .hero-rule {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    margin: 2.5rem auto;
+    opacity: 0;
   }
   .hero-sub {
-    margin-top: 2rem;
     font-size: 1.05rem;
     color: var(--muted);
-    max-width: 560px;
-    line-height: 1.7;
+    max-width: 520px;
+    line-height: 1.75;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   .hero-cta {
     margin-top: 3rem;
     display: flex;
-    gap: 1.2rem;
+    gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   .btn-primary {
-    padding: 0.9rem 2.4rem;
+    padding: 0.9rem 2.6rem;
     background: var(--gold);
-    color: #020401;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    color: #010301;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    border-radius: 2px;
+    border-radius: 1px;
     transition: background 0.3s, transform 0.2s;
     display: inline-block;
   }
   .btn-primary:hover { background: var(--gold-l); transform: translateY(-2px); }
-  .btn-secondary {
-    padding: 0.9rem 2.4rem;
-    border: 1px solid rgba(196,144,48,0.4);
+  .btn-ghost {
+    padding: 0.9rem 2.6rem;
+    border: 1px solid rgba(196,144,48,0.35);
     color: var(--cream);
-    font-size: 0.82rem;
-    letter-spacing: 0.12em;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    border-radius: 2px;
+    border-radius: 1px;
     transition: border-color 0.3s, color 0.3s;
     display: inline-block;
   }
-  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
   /* ── SCROLL HINT ── */
   .scroll-hint {
@@ -239,179 +267,87 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--muted);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
+    gap: 0.4rem;
+    color: rgba(242,239,230,0.3);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    animation: bounce 2s ease-in-out infinite;
   }
-  .scroll-hint::after {
-    content: '';
+  .scroll-hint .arrow {
     width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
+    height: 44px;
+    background: linear-gradient(to bottom, var(--gold-d), transparent);
+    animation: pulse-down 2s ease-in-out infinite;
   }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
+  @keyframes pulse-down {
+    0%, 100% { transform: scaleY(1); opacity: 0.6; }
+    50% { transform: scaleY(1.15); opacity: 1; }
   }
 
-  /* ── GLASS CARD ── */
+  /* ── CONTAINERS ── */
+  .container { max-width: 1160px; margin: 0 auto; }
   .glass-section {
     background: var(--glass);
-    backdrop-filter: blur(24px);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 7rem 4rem;
-  }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 8rem 4rem;
   }
   .section-label {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--gold);
   }
   .section-title {
     font-family: var(--serif);
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(2rem, 4vw, 3.4rem);
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.12;
     color: var(--cream);
     margin-bottom: 1.5rem;
   }
   .section-title em { font-style: italic; color: var(--gold-l); }
   .section-body {
     font-size: 1rem;
-    line-height: 1.8;
+    line-height: 1.85;
     color: var(--muted);
-    max-width: 640px;
+    max-width: 600px;
   }
 
-  /* ── SERVICES GRID ── */
-  .services-grid {
+  /* ── EVOLUCAO ── */
+  #evolucao { padding: 8rem 4rem; }
+  .evolucao-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 3.5rem;
-  }
-  .service-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2rem;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .service-card:hover {
-    border-color: rgba(196,144,48,0.45);
-    transform: translateY(-4px);
-  }
-  .service-icon {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  .service-name {
-    font-family: var(--serif);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--cream);
-    margin-bottom: 0.6rem;
-  }
-  .service-desc {
-    font-size: 0.88rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-
-  /* ── MANIFESTO ── */
-  #manifesto {
-    padding: 9rem 4rem;
-    text-align: center;
-  }
-  .manifesto-quote {
-    font-family: var(--serif);
-    font-size: clamp(1.5rem, 3.5vw, 2.8rem);
-    font-style: italic;
-    line-height: 1.4;
-    color: var(--cream);
-    max-width: 860px;
-    margin: 0 auto 2rem;
-  }
-  .manifesto-quote strong { color: var(--gold-l); font-style: normal; }
-  .manifesto-attr {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* ── PROCESS ── */
-  .process-steps {
-    margin-top: 3.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .process-step {
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 2rem;
-    padding: 2rem 0;
-    border-bottom: 1px solid var(--border);
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
     align-items: start;
   }
-  .process-step:last-child { border-bottom: none; }
-  .step-num {
-    font-family: var(--serif);
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: rgba(196,144,48,0.25);
-    line-height: 1;
-  }
-  .step-content {}
-  .step-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 0.4rem;
-    letter-spacing: 0.04em;
-  }
-  .step-desc {
-    font-size: 0.88rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-
-  /* ── SEGMENTS ── */
-  .segments-grid {
+  .evolucao-text { }
+  .evolucao-stats {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 2.5rem;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding-top: 1rem;
   }
-  .segment-tag {
-    padding: 0.5rem 1.1rem;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    font-size: 0.8rem;
-    color: var(--muted);
-    transition: border-color 0.3s, color 0.3s;
+  .stat-item {
+    border-left: 2px solid var(--border);
+    padding-left: 1.5rem;
+    transition: border-color 0.4s;
   }
-  .segment-tag:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* ── DIFFERENTIALS ── */
-  .diff-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-  .diff-item {}
-  .diff-num {
+  .stat-item:hover { border-color: var(--gold); }
+  .stat-num {
     font-family: var(--serif);
     font-size: 3rem;
     font-weight: 900;
@@ -419,113 +355,242 @@
     line-height: 1;
     margin-bottom: 0.3rem;
   }
-  .diff-label {
+  .stat-label {
     font-size: 0.82rem;
     color: var(--muted);
     line-height: 1.5;
   }
 
-  /* ── CONTACT / FORM ── */
+  /* ── QUOTE HERO ── */
+  #quote-section {
+    padding: 9rem 4rem;
+    text-align: center;
+  }
+  .big-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 3.5vw, 3rem);
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--cream);
+    max-width: 900px;
+    margin: 0 auto 2rem;
+  }
+  .big-quote strong {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold-l), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .quote-author {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .quote-marks {
+    font-family: var(--serif);
+    font-size: 6rem;
+    color: var(--gold-d);
+    line-height: 0.6;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+  }
+
+  /* ── COMO ── */
+  #como { padding: 8rem 4rem; }
+  .como-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-bottom: 5rem;
+    align-items: end;
+  }
+  .pilares {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .pilar {
+    background: rgba(255,255,255,0.025);
+    padding: 2.5rem 2rem;
+    transition: background 0.4s;
+    border-right: 1px solid var(--border);
+  }
+  .pilar:last-child { border-right: none; }
+  .pilar:hover { background: rgba(196,144,48,0.05); }
+  .pilar-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(196,144,48,0.2);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+  .pilar-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.02em;
+  }
+  .pilar-desc {
+    font-size: 0.83rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── FILOSOFIA ── */
+  #filosofia {
+    padding: 8rem 4rem;
+    background: var(--glass);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .fil-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .fil-body {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--muted);
+  }
+  .fil-body p { margin-bottom: 1.2rem; }
+  .fil-body p:last-child { margin-bottom: 0; }
+  .fil-highlight {
+    font-size: 1.15rem;
+    color: var(--cream);
+    font-weight: 500;
+    margin-bottom: 1.5rem !important;
+  }
+  .fil-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding-top: 0.5rem;
+  }
+  .fil-tag {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .fil-tag:hover { border-color: rgba(196,144,48,0.4); }
+  .fil-tag-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0.35rem;
+  }
+  .fil-tag-text {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .fil-tag-text strong { color: var(--cream); display: block; font-size: 0.82rem; margin-bottom: 0.2rem; letter-spacing: 0.04em; }
+
+  /* ── SEGMENTOS ── */
+  #segmentos { padding: 8rem 4rem; }
+  .seg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 2.5rem;
+  }
+  .seg-tag {
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+    cursor: default;
+  }
+  .seg-tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,144,48,0.05); }
+
+  /* ── CONTATO ── */
   #contato {
-    padding: 7rem 4rem;
+    padding: 8rem 4rem;
+    background: var(--glass);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-top: 1px solid var(--border);
   }
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    gap: 6rem;
     align-items: start;
   }
-  @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 3rem; } }
-  .contact-info {}
-  .contact-detail {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .contact-links { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
   .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
+    display: flex; align-items: center; gap: 0.85rem;
+    color: var(--muted); text-decoration: none; font-size: 0.9rem;
     transition: color 0.3s;
   }
   .contact-link:hover { color: var(--gold); }
-  .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .contact-link svg { width: 17px; height: 17px; flex-shrink: 0; }
 
   /* Form */
   .form-card {
     background: var(--glass2);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 2.5rem;
+    border-radius: 2px;
+    padding: 2.8rem;
   }
   .form-title {
     font-family: var(--serif);
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     color: var(--cream);
-    margin-bottom: 1.8rem;
+    margin-bottom: 2rem;
   }
-  .form-group { margin-bottom: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.1rem; }
   .form-group label {
-    display: block;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.45rem;
+    display: block; font-size: 0.68rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;
   }
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.75rem 1rem;
-    color: var(--cream);
-    font-family: var(--sans);
-    font-size: 0.9rem;
-    outline: none;
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; background: rgba(255,255,255,0.035);
+    border: 1px solid var(--border); border-radius: 1px;
+    padding: 0.75rem 0.9rem; color: var(--cream);
+    font-family: var(--sans); font-size: 0.88rem; outline: none;
     transition: border-color 0.3s;
   }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus { border-color: var(--gold); }
-  .form-group select option { background: #0d1a0a; color: var(--cream); }
-  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: #0a130a; color: var(--cream); }
+  .form-group textarea { resize: vertical; min-height: 88px; }
   .btn-form {
-    width: 100%;
-    padding: 0.9rem;
-    background: var(--gold);
-    color: #020401;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 0.5rem;
+    width: 100%; padding: 0.9rem; background: var(--gold); color: #010301;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; border: none; border-radius: 1px;
+    cursor: pointer; transition: background 0.3s; margin-top: 0.4rem;
   }
   .btn-form:hover { background: var(--gold-l); }
   .form-feedback {
-    display: none;
-    margin-top: 1rem;
-    padding: 0.8rem 1rem;
-    border-radius: 3px;
-    font-size: 0.85rem;
-    text-align: center;
+    display: none; margin-top: 1rem; padding: 0.75rem 1rem;
+    border-radius: 1px; font-size: 0.83rem; text-align: center;
   }
-  .form-feedback.ok { background: rgba(92,168,50,0.15); border: 1px solid rgba(92,168,50,0.3); color: #8ed464; display: block; }
-  .form-feedback.err { background: rgba(220,50,50,0.12); border: 1px solid rgba(220,50,50,0.3); color: #f08080; display: block; }
+  .form-feedback.ok { background: rgba(78,142,42,0.12); border: 1px solid rgba(78,142,42,0.3); color: #7abf4e; display: block; }
+  .form-feedback.err { background: rgba(220,50,50,0.1); border: 1px solid rgba(220,50,50,0.25); color: #e08080; display: block; }
 
   /* ── FOOTER ── */
   footer {
-    background: #020402;
+    position: relative; z-index: 10;
+    background: #010301;
     border-top: 1px solid var(--border);
     padding: 3rem 4rem;
     display: flex;
@@ -533,230 +598,232 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-    position: relative;
-    z-index: 10;
   }
-  .footer-logo {
-    font-family: var(--serif);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--gold);
-  }
-  .footer-copy {
-    font-size: 0.75rem;
-    color: rgba(240,237,228,0.3);
-  }
+  .footer-brand { }
+  .footer-logo { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+  .footer-tagline { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.06em; }
+  .footer-copy { font-size: 0.72rem; color: rgba(242,239,230,0.25); text-align: right; }
 
-  /* ── REVEAL ANIMATION ── */
+  /* ── REVEAL ── */
   .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
   }
-  .reveal.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    header { padding: 1.2rem 2rem; }
-    nav { display: none; }
-    .glass-section, #contato, #manifesto { padding-left: 2rem; padding-right: 2rem; }
-    footer { padding: 2rem; }
+  @media (max-width: 960px) {
+    header { padding: 1.2rem 1.8rem; }
+    nav a:not(.btn-nav) { display: none; }
+    .glass-section, #evolucao, #como, #filosofia, #segmentos, #contato, #quote-section {
+      padding-left: 1.8rem; padding-right: 1.8rem;
+    }
+    .evolucao-grid, .como-intro, .fil-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .pilares { grid-template-columns: 1fr; }
+    .pilar { border-right: none; border-bottom: 1px solid var(--border); }
+    .pilar:last-child { border-bottom: none; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1.8rem; }
+    footer .footer-copy { text-align: left; }
     #scroll-ui { display: none; }
   }
   </style>
 </head>
 <body>
 
-<!-- THREE.JS CANVAS -->
+<!-- CANVAS 3D -->
 <canvas id="bgCanvas"></canvas>
 
 <!-- SCROLL UI -->
 <div id="scroll-ui">
   <span id="scroll-label">SCROLL</span>
   <div id="progress-track"><div id="progress-fill"></div></div>
-  <span id="sec-counter">01 / 05</span>
+  <span id="sec-counter">01 / 06</span>
 </div>
 
 <!-- HEADER -->
 <header>
-  <a href="#" class="logo">Grão de Mostarda</a>
+  <a href="#" class="logo">Grão de Mostarda <span>consultoria</span></a>
   <nav>
-    <a href="#servicos">Serviços</a>
-    <a href="#processo">Processo</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#contato" class="btn-nav">Falar conosco</a>
+    <a href="#evolucao">Nossa história</a>
+    <a href="#como">Método</a>
+    <a href="#filosofia">Filosofia</a>
+    <a href="#contato" class="btn-nav">Conversar</a>
   </nav>
 </header>
 
 <!-- HERO -->
 <section id="hero">
-  <p class="hero-eyebrow">Marketing · Tecnologia · IA</p>
+  <div class="hero-tag">Consultoria de Marketing</div>
   <h1 class="hero-title">
-    Da pequena semente<br/>ao <em>crescimento</em> real
+    Transforme seu marketing
+    <span class="line2">de dentro para fora</span>
   </h1>
+  <div class="hero-rule"></div>
   <p class="hero-sub">
-    Estratégia, execução e inteligência artificial integradas para transformar PMEs em referências no mercado.
+    Autonomia, inteligência e estratégia.<br/>
+    Colocamos o marketing onde ele realmente deve estar: nas mãos da sua equipe.
   </p>
   <div class="hero-cta">
-    <a href="#contato" class="btn-primary">Quero crescer agora</a>
-    <a href="#servicos" class="btn-secondary">Ver serviços</a>
+    <a href="#contato" class="btn-primary">Quero essa transformação</a>
+    <a href="#evolucao" class="btn-ghost">Conheça o método</a>
   </div>
-  <div class="scroll-hint">Rolar</div>
+  <div class="scroll-hint">
+    <span>Role</span>
+    <div class="arrow"></div>
+  </div>
 </section>
 
-<!-- SERVICES -->
-<section id="servicos" class="glass-section">
+<!-- EVOLUCAO -->
+<section id="evolucao" class="glass-section">
   <div class="container">
-    <p class="section-label reveal">O que fazemos</p>
-    <h2 class="section-title reveal">Serviços que <em>geram resultado</em></h2>
-    <p class="section-body reveal">
-      Unimos estratégia de marketing, tecnologia prática e inteligência artificial para entregar crescimento mensurável — sem promessas vazias.
-    </p>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-icon">🌱</div>
-        <div class="service-name">Estratégia Digital</div>
-        <div class="service-desc">Diagnóstico completo do seu negócio, posicionamento de marca e plano de crescimento com metas reais e mensuráveis.</div>
+    <div class="evolucao-grid">
+      <div class="evolucao-text">
+        <p class="section-label reveal">Nossa evolução</p>
+        <h2 class="section-title reveal">De agência de performance<br/><em>a consultoria estratégica</em></h2>
+        <div class="section-body reveal">
+          <p style="margin-bottom:1.2rem;">Evoluímos de uma agência de performance para uma consultoria estratégica que coloca o marketing onde ele realmente deve estar: dentro da sua empresa, nas mãos da sua equipe.</p>
+          <p>Cada projeto é uma parceria real. Cada resultado, uma conquista construída junto — não entregue de fora.</p>
+        </div>
       </div>
-      <div class="service-card reveal">
-        <div class="service-icon">🤖</div>
-        <div class="service-name">Automação com IA</div>
-        <div class="service-desc">Implementamos agentes de IA, chatbots e fluxos automáticos que trabalham 24h para captar, nutrir e converter leads.</div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">📈</div>
-        <div class="service-name">Tráfego Pago</div>
-        <div class="service-desc">Gestão profissional de Meta Ads e Google Ads com otimização contínua focada em ROI — não em cliques vazios.</div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">✍️</div>
-        <div class="service-name">Conteúdo & Orgânico</div>
-        <div class="service-desc">Produção de conteúdo estratégico, SEO e presença orgânica que constróem autoridade e atraem clientes naturalmente.</div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">⚙️</div>
-        <div class="service-name">CRM & Funil de Vendas</div>
-        <div class="service-desc">Estruturação de funis de vendas, CRM e processos comerciais integrados para converter mais com o mesmo investimento.</div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">📊</div>
-        <div class="service-name">Analytics & Dados</div>
-        <div class="service-desc">Dashboards em tempo real, rastreamento de conversão e relatórios que te mostram exatamente onde seu dinheiro está rendendo.</div>
+      <div class="evolucao-stats">
+        <div class="stat-item reveal">
+          <div class="stat-num">+12</div>
+          <div class="stat-label">anos estruturando marketing em empresas reais — da fábrica à tomada de decisão</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">foco em capacitação interna — saímos deixando um time mais autônomo</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">IA</div>
+          <div class="stat-label">integrada em todos os projetos como ferramenta prática, não como buzzword</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MANIFESTO -->
-<section id="manifesto">
+<!-- QUOTE -->
+<section id="quote-section">
   <div class="container" style="text-align:center;">
-    <blockquote class="manifesto-quote reveal">
-      "A menor de todas as sementes — mas quando cresce, torna-se <strong>maior do que as outras plantas.</strong>"
+    <span class="quote-marks reveal">"</span>
+    <blockquote class="big-quote reveal">
+      Não somos consultores de PowerPoint. Atuamos onde as coisas acontecem: <strong>na fábrica, na operação, na tomada de decisão.</strong> Entramos para estruturar, treinar e sair — deixando um time mais preparado, mais estratégico e mais autônomo.
     </blockquote>
-    <p class="manifesto-attr reveal">Mateus 13:32 &nbsp;·&nbsp; A filosofia por trás do nome</p>
-    <p class="section-body reveal" style="margin: 2rem auto 0; text-align:center;">
-      Grão de Mostarda nasceu da crença de que todo grande negócio começa com uma semente. Nossa missão é plantar as estratégias certas, regar com tecnologia e colher crescimento duradouro.
-    </p>
+    <p class="quote-author reveal" style="margin-top:2rem;">Alfredo — Grão de Mostarda</p>
   </div>
 </section>
 
-<!-- PROCESS -->
-<section id="processo" class="glass-section">
+<!-- COMO TRABALHAMOS -->
+<section id="como">
+  <div class="container" style="padding: 8rem 0;">
+    <div class="como-intro reveal">
+      <div>
+        <p class="section-label">Como trabalhamos</p>
+        <h2 class="section-title">O marketing <em>no seu controle</em></h2>
+      </div>
+      <div>
+        <p class="section-body">Ajudamos sua empresa a dominar o próprio marketing: processos, ferramentas, cultura e estratégia. Nosso modelo é baseado em capacitação real — com apoio de inteligência artificial.</p>
+      </div>
+    </div>
+    <div class="pilares">
+      <div class="pilar reveal">
+        <div class="pilar-num">01</div>
+        <div class="pilar-title">Diagnóstico Profundo</div>
+        <p class="pilar-desc">Entramos na sua operação para entender de verdade: processos, lacunas, oportunidades. Sem suposições, sem templates genéricos.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="pilar-num">02</div>
+        <div class="pilar-title">Capacitação & Sistemas</div>
+        <p class="pilar-desc">Estruturamos ferramentas, treinamos sua equipe e implementamos IA no dia a dia — de forma prática, com presença real no campo.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="pilar-num">03</div>
+        <div class="pilar-title">Autonomia Sustentável</div>
+        <p class="pilar-desc">Saímos quando você está no controle. Não criamos dependência — construímos bases internas para o marketing crescer sozinho.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILOSOFIA -->
+<section id="filosofia">
   <div class="container">
-    <p class="section-label reveal">Como trabalhamos</p>
-    <h2 class="section-title reveal">Método <em>orgânico e humano</em></h2>
-    <div class="process-steps">
-      <div class="process-step reveal">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <div class="step-name">Diagnóstico Profundo</div>
-          <div class="step-desc">Entendemos seu negócio, mercado, concorrentes e objetivos antes de propor qualquer ação. Sem atalhos.</div>
+    <div class="fil-grid">
+      <div>
+        <p class="section-label reveal">Nossa filosofia</p>
+        <h2 class="section-title reveal">A transformação digital<br/><em>começa por dentro</em></h2>
+        <div class="fil-body reveal">
+          <p class="fil-highlight">Acreditamos que a transformação digital só é real quando acontece de dentro para fora.</p>
+          <p>Não substituímos agências — preparamos empresas para usá-las da melhor forma. Nosso papel é construir as bases internas para que o marketing deixe de ser um gargalo e se torne um motor de crescimento.</p>
+          <p>Nossa missão é tornar o marketing e a tecnologia ferramentas práticas, acessíveis e inteligentes para negócios em transformação.</p>
         </div>
       </div>
-      <div class="process-step reveal">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <div class="step-name">Estratégia Personalizada</div>
-          <div class="step-desc">Montamos um plano sob medida — com canais, investimentos e metas realistas para o seu momento.</div>
+      <div class="fil-tags">
+        <div class="fil-tag reveal">
+          <div class="fil-tag-dot"></div>
+          <div class="fil-tag-text">
+            <strong>Consultoria sob medida</strong>
+            Nos adaptamos à sua realidade, com entregas que vão desde diagnóstico até implementação de sistemas e treinamentos presenciais.
+          </div>
         </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <div class="step-name">Execução com Tecnologia</div>
-          <div class="step-desc">Implementamos ferramentas de IA, automações e criação de conteúdo de alto nível — tudo integrado.</div>
+        <div class="fil-tag reveal">
+          <div class="fil-tag-dot"></div>
+          <div class="fil-tag-text">
+            <strong>Presença real na operação</strong>
+            Atuamos na fábrica, no campo, na reunião comercial — não apenas em calls e relatórios.
+          </div>
         </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <div class="step-name">Otimização Contínua</div>
-          <div class="step-desc">Medimos tudo, ajustamos semanalmente e evoluímos conforme os dados — não suposições.</div>
+        <div class="fil-tag reveal">
+          <div class="fil-tag-dot"></div>
+          <div class="fil-tag-text">
+            <strong>IA como aliada, não substituta</strong>
+            Usamos inteligência artificial para potencializar pessoas — não para desumanizar processos.
+          </div>
         </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">05</div>
-        <div class="step-content">
-          <div class="step-name">Crescimento Sustentável</div>
-          <div class="step-desc">O objetivo não é um pico de resultado, mas uma estrutura que continua crescendo mês após mês.</div>
+        <div class="fil-tag reveal">
+          <div class="fil-tag-dot"></div>
+          <div class="fil-tag-text">
+            <strong>A semente mais forte</strong>
+            O nome vem de Mateus 13:32. A menor semente — que cresce e se torna maior que todas as outras plantas. É o que fazemos com o marketing das empresas.
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SEGMENTS -->
-<section id="sobre" style="padding: 7rem 4rem;">
+<!-- SEGMENTOS -->
+<section id="segmentos" style="padding: 8rem 4rem; position: relative; z-index: 10;">
   <div class="container">
     <p class="section-label reveal">Para quem é</p>
     <h2 class="section-title reveal">Atendemos quem <em>quer crescer de verdade</em></h2>
-    <p class="section-body reveal">PMEs, profissionais liberais e empreendedores que precisam de estratégia real — não de slides bonitos.</p>
-    <div class="segments-grid reveal">
-      <span class="segment-tag">Clínicas & Saúde</span>
-      <span class="segment-tag">E-commerce</span>
-      <span class="segment-tag">Imobiliárias</span>
-      <span class="segment-tag">Advocacia</span>
-      <span class="segment-tag">Restaurantes & Food</span>
-      <span class="segment-tag">Educação & Cursos</span>
-      <span class="segment-tag">Serviços B2B</span>
-      <span class="segment-tag">Varejo Local</span>
-      <span class="segment-tag">Profissionais Liberais</span>
-      <span class="segment-tag">Tech & SaaS</span>
-    </div>
-
-    <div class="diff-grid" style="margin-top: 4rem;">
-      <div class="diff-item reveal">
-        <div class="diff-num">+12</div>
-        <div class="diff-label">anos de experiência em marketing e tecnologia</div>
-      </div>
-      <div class="diff-item reveal">
-        <div class="diff-num">100%</div>
-        <div class="diff-label">foco em resultado mensurável e ROI positivo</div>
-      </div>
-      <div class="diff-item reveal">
-        <div class="diff-num">IA</div>
-        <div class="diff-label">integrada em todos os projetos — não como buzzword, mas como ferramenta real</div>
-      </div>
-      <div class="diff-item reveal">
-        <div class="diff-num">1:1</div>
-        <div class="diff-label">atendimento direto, sem conta de terceiros ou intermediários</div>
-      </div>
+    <p class="section-body reveal">PMEs, indústrias, profissionais liberais e empreendedores que precisam de estratégia real aplicada na operação — não de slides bonitos.</p>
+    <div class="seg-tags">
+      <span class="seg-tag reveal">Indústrias & Manufatura</span>
+      <span class="seg-tag reveal">Clínicas & Saúde</span>
+      <span class="seg-tag reveal">E-commerce</span>
+      <span class="seg-tag reveal">Imobiliárias</span>
+      <span class="seg-tag reveal">Advocacia</span>
+      <span class="seg-tag reveal">Restaurantes & Food</span>
+      <span class="seg-tag reveal">Educação & Cursos</span>
+      <span class="seg-tag reveal">Serviços B2B</span>
+      <span class="seg-tag reveal">Varejo Local</span>
+      <span class="seg-tag reveal">Tech & SaaS</span>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contato" class="glass-section">
+<!-- CONTATO -->
+<section id="contato">
   <div class="container">
     <div class="contact-grid">
-      <div class="contact-info">
+      <div>
         <p class="section-label reveal">Vamos conversar</p>
-        <h2 class="section-title reveal">Sua semente<br/><em>começa aqui</em></h2>
-        <p class="section-body reveal">Preencha o formulário e entro em contato em até 24 horas. Ou, se preferir, me chama direto no WhatsApp.</p>
-        <div class="contact-detail reveal">
+        <h2 class="section-title reveal">Sua transformação<br/><em>começa aqui</em></h2>
+        <p class="section-body reveal">Preencha o formulário e entro em contato em até 24 horas. Ou me chame direto no WhatsApp — sem enrolação.</p>
+        <div class="contact-links reveal">
           <a href="https://wa.me/5521980911444" target="_blank" rel="noopener" class="contact-link">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             (21) 98091-1444
@@ -768,31 +835,32 @@
         </div>
       </div>
 
-      <!-- LEAD FORM -->
       <div class="reveal">
         <form id="leadForm" class="form-card" novalidate>
-          <h3 class="form-title">Quero crescer com vocês</h3>
-
+          <h3 class="form-title">Quero transformar meu marketing</h3>
           <input type="hidden" name="_subject" value="Novo lead — Grão de Mostarda"/>
           <input type="hidden" name="_captcha" value="false"/>
           <input type="hidden" id="fieldTimestamp" name="timestamp" value=""/>
 
-          <div class="form-group">
-            <label for="nome">Nome completo *</label>
-            <input type="text" id="nome" name="nome" required placeholder="Seu nome"/>
-          </div>
-          <div class="form-group">
-            <label for="whatsapp">WhatsApp *</label>
-            <input type="tel" id="whatsapp" name="whatsapp" required placeholder="(00) 00000-0000"/>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome *</label>
+              <input type="text" id="nome" name="nome" required placeholder="Seu nome"/>
+            </div>
+            <div class="form-group">
+              <label for="whatsapp">WhatsApp *</label>
+              <input type="tel" id="whatsapp" name="whatsapp" required placeholder="(00) 00000-0000"/>
+            </div>
           </div>
           <div class="form-group">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="seu@email.com"/>
           </div>
           <div class="form-group">
-            <label for="segmento">Segmento</label>
+            <label for="segmento">Segmento da empresa</label>
             <select id="segmento" name="segmento">
-              <option value="">Selecione seu segmento</option>
+              <option value="">Selecione o segmento</option>
+              <option>Indústria & Manufatura</option>
               <option>Clínicas & Saúde</option>
               <option>E-commerce</option>
               <option>Imobiliárias</option>
@@ -801,16 +869,14 @@
               <option>Educação & Cursos</option>
               <option>Serviços B2B</option>
               <option>Varejo Local</option>
-              <option>Profissionais Liberais</option>
               <option>Tech & SaaS</option>
               <option>Outro</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="mensagem">O que você precisa?</label>
-            <textarea id="mensagem" name="mensagem" placeholder="Conte brevemente seu desafio atual..."></textarea>
+            <label for="mensagem">Qual é o seu maior desafio hoje?</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Conta brevemente o que você precisa resolver..."></textarea>
           </div>
-
           <button type="submit" class="btn-form" id="btnSubmit">Enviar mensagem</button>
           <div class="form-feedback" id="formFeedback"></div>
         </form>
@@ -821,132 +887,439 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Grão de Mostarda</div>
-  <p class="footer-copy">© 2025 Grão de Mostarda — Marketing, Tecnologia e IA. Rio de Janeiro, RJ.</p>
+  <div class="footer-brand">
+    <div class="footer-logo">Grão de Mostarda</div>
+    <div class="footer-tagline">Consultoria de Marketing · Rio de Janeiro, RJ</div>
+  </div>
+  <p class="footer-copy">© 2025 Grão de Mostarda. Todos os direitos reservados.</p>
 </footer>
 
-<!-- THREE.JS SCENE -->
+<!-- THREE.JS — ÁRVORE DE ENERGIA -->
 <script type="module">
 import * as THREE from 'three';
 import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-// ── SCENE SETUP ──
+// ── SCENE ──
 const canvas   = document.getElementById('bgCanvas');
 const scene    = new THREE.Scene();
-scene.fog      = new THREE.FogExp2(0x020604, 0.0065);
+scene.fog      = new THREE.FogExp2(0x010402, 0.006);
 
-const camera   = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.1, 2000);
-camera.position.set(0, 6, 70);
+const camera   = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 2000);
+camera.position.set(0, 4, 72);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.4;
+renderer.toneMappingExposure = 1.6;
 
-// ── BLOOM POST-PROCESSING ──
+// ── POST-PROCESSING ──
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
-  new THREE.Vector2(innerWidth, innerHeight), 1.6, 0.5, 0.28
+  new THREE.Vector2(innerWidth, innerHeight),
+  1.8,  // strength
+  0.6,  // radius
+  0.22  // threshold
 );
 composer.addPass(bloom);
 
-// ── NEBULA BACKGROUND ──
+// ══════════════════════════════════════════
+//  NEBULA BACKGROUND
+// ══════════════════════════════════════════
 const nebMat = new THREE.ShaderMaterial({
   uniforms: {
     time:   { value: 0 },
-    color1: { value: new THREE.Color(0x0d2206) },
-    color2: { value: new THREE.Color(0x3a2000) }
+    col1:   { value: new THREE.Color(0x081c03) },
+    col2:   { value: new THREE.Color(0x2d1600) },
+    col3:   { value: new THREE.Color(0x030d02) }
   },
   vertexShader: `
     varying vec2 vUv;
-    uniform float time;
-    void main() {
-      vUv = uv;
-      vec3 p = position;
-      p.z += sin(p.x * 0.003 + time * 0.15) * cos(p.y * 0.004 + time * 0.1) * 18.0;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-    }
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
   `,
   fragmentShader: `
     varying vec2 vUv;
-    uniform vec3 color1, color2;
     uniform float time;
+    uniform vec3 col1, col2, col3;
+
+    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    float noise(vec2 p) {
+      vec2 i = floor(p); vec2 f = fract(p); f = f*f*(3.0-2.0*f);
+      return mix(mix(hash(i), hash(i+vec2(1,0)), f.x),
+                 mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+    }
+    float fbm(vec2 p) {
+      float v = 0.0; float a = 0.5;
+      for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.1; a *= 0.5; }
+      return v;
+    }
+
     void main() {
-      float m = sin(vUv.x * 8.0 + time * 0.3) * cos(vUv.y * 6.0 + time * 0.2) * 0.5 + 0.5;
-      vec3 col = mix(color1, color2, m);
-      float a = 0.18 * (1.0 - length(vUv - 0.5) * 1.8);
-      gl_FragColor = vec4(col, max(0.0, a));
+      vec2 uv = vUv;
+      float n1 = fbm(uv * 3.0 + time * 0.04);
+      float n2 = fbm(uv * 5.0 - time * 0.03 + n1);
+      float cloud = fbm(uv * 2.5 + n2 * 0.8 + time * 0.02);
+
+      vec3 col = mix(col3, col1, smoothstep(0.2, 0.7, cloud));
+      col = mix(col, col2, smoothstep(0.5, 0.9, n2));
+
+      float vignette = 1.0 - length(uv - 0.5) * 1.6;
+      float alpha = clamp(cloud * 0.35 * vignette, 0.0, 0.3);
+      gl_FragColor = vec4(col, alpha);
     }
   `,
   transparent: true,
   blending: THREE.AdditiveBlending,
-  side: THREE.DoubleSide,
-  depthWrite: false
+  depthWrite: false,
+  side: THREE.DoubleSide
 });
-const nebPlane = new THREE.Mesh(
-  new THREE.PlaneGeometry(900, 600, 80, 60),
-  nebMat
-);
-nebPlane.position.z = -200;
+const nebPlane = new THREE.Mesh(new THREE.PlaneGeometry(1200, 800), nebMat);
+nebPlane.position.z = -250;
 scene.add(nebPlane);
 
-// ── PARTICLE SYSTEM ──
-function makeParticles(count, colorHex, size, spread, speed, depthRange) {
-  const geo  = new THREE.BufferGeometry();
-  const pos  = new Float32Array(count * 3);
-  const col  = new Float32Array(count * 3);
-  const sz   = new Float32Array(count);
-  const ph   = new Float32Array(count);
-  const base = new THREE.Color(colorHex);
+// ══════════════════════════════════════════
+//  CENTRAL ORB (SEMENTE)
+// ══════════════════════════════════════════
+const ORB = new THREE.Vector3(0, 0, -28);
 
+// Core sphere
+const coreGeo = new THREE.SphereGeometry(1.8, 32, 32);
+const coreMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `varying vec3 vN; varying vec3 vPos; uniform float time;
+    void main() {
+      vN = normalize(normalMatrix * normal);
+      vPos = position;
+      float disp = sin(position.x * 4.0 + time * 2.0) * sin(position.y * 4.0 + time * 1.5) * 0.06;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal * disp, 1.0);
+    }`,
+  fragmentShader: `varying vec3 vN; varying vec3 vPos; uniform float time;
+    void main() {
+      vec3 gold = vec3(1.0, 0.72, 0.24);
+      vec3 bright = vec3(1.0, 0.95, 0.7);
+      float rim = 1.0 - dot(vN, vec3(0.0, 0.0, 1.0));
+      vec3 col = mix(gold, bright, pow(rim, 1.8));
+      float pulse = 0.85 + 0.15 * sin(time * 1.4);
+      gl_FragColor = vec4(col * pulse, 1.0);
+    }`,
+  transparent: false
+});
+const core = new THREE.Mesh(coreGeo, coreMat);
+core.position.copy(ORB);
+scene.add(core);
+
+// Glow layers
+for (const [scale, opacity] of [[3.8, 0.18], [7.0, 0.1], [12.0, 0.055]]) {
+  const spr = new THREE.Sprite(new THREE.SpriteMaterial({
+    color: 0xD4A020,
+    transparent: true,
+    opacity,
+    blending: THREE.AdditiveBlending
+  }));
+  spr.scale.setScalar(scale);
+  spr.position.copy(ORB);
+  scene.add(spr);
+}
+
+// Corona ring
+const coronaMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `varying vec2 vUv; uniform float time;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `varying vec2 vUv; uniform float time;
+    void main() {
+      float r = length(vUv - 0.5) * 2.0;
+      float ring = 1.0 - abs(r - 0.85) * 8.0;
+      ring = max(ring, 0.0);
+      float wave = 0.7 + 0.3 * sin(vUv.x * 20.0 + time * 3.0);
+      vec3 col = mix(vec3(0.6, 0.35, 0.08), vec3(1.0, 0.8, 0.3), wave);
+      gl_FragColor = vec4(col, ring * 0.5);
+    }`,
+  transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+});
+const corona = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), coronaMat);
+corona.position.copy(ORB);
+scene.add(corona);
+
+// ══════════════════════════════════════════
+//  BRANCHING ENERGY TREE
+// ══════════════════════════════════════════
+const branches = [];
+
+function perturbDir(dx, dy, dz, spread) {
+  const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+  dx /= len; dy /= len; dz /= len;
+  // Random perpendicular nudge
+  const rx = (Math.random() - 0.5) * spread;
+  const ry = (Math.random() - 0.5) * spread * 0.7;
+  const rz = (Math.random() - 0.5) * spread;
+  const nx = dx + rx, ny = dy + ry + 0.04, nz = dz + rz;
+  const nl = Math.sqrt(nx*nx + ny*ny + nz*nz);
+  return [nx/nl, ny/nl, nz/nl];
+}
+
+function growBranch(px, py, pz, dx, dy, dz, length, depth) {
+  if (depth === 0 || length < 0.7) return;
+  const dn = Math.sqrt(dx*dx + dy*dy + dz*dz);
+  dx /= dn; dy /= dn; dz /= dn;
+  const ex = px + dx * length;
+  const ey = py + dy * length;
+  const ez = pz + dz * length;
+  branches.push({ sx: px, sy: py, sz: pz, ex, ey, ez, depth });
+  const spread = 0.45 + (5 - depth) * 0.08;
+  const children = depth >= 5 ? 3 : 2;
+  for (let c = 0; c < children; c++) {
+    const [ndx, ndy, ndz] = perturbDir(dx, dy, dz, spread);
+    growBranch(ex, ey, ez, ndx, ndy, ndz, length * (0.58 + Math.random() * 0.13), depth - 1);
+  }
+}
+
+// Grow 7 root branches from orb in varied directions
+for (let i = 0; i < 7; i++) {
+  const phi = (i / 7) * Math.PI * 2 + 0.5;
+  const theta = 0.6 + Math.random() * 0.9;
+  growBranch(
+    ORB.x, ORB.y, ORB.z,
+    Math.sin(theta) * Math.cos(phi),
+    Math.cos(theta) * 0.4 + 0.25,
+    Math.sin(theta) * Math.sin(phi),
+    13, 5
+  );
+}
+
+// Build LineSegments from branches
+const branchCount = branches.length;
+const bPos  = new Float32Array(branchCount * 6);
+const bCol  = new Float32Array(branchCount * 6);
+const bAlpha = new Float32Array(branchCount * 2);
+
+const GOLD  = new THREE.Color(0xC49030);
+const GLOW  = new THREE.Color(0xF0C060);
+const GREEN = new THREE.Color(0x3E7020);
+const LIME  = new THREE.Color(0x70C040);
+
+branches.forEach((b, i) => {
+  bPos[i*6+0] = b.sx; bPos[i*6+1] = b.sy; bPos[i*6+2] = b.sz;
+  bPos[i*6+3] = b.ex; bPos[i*6+4] = b.ey; bPos[i*6+5] = b.ez;
+
+  const t = b.depth / 5;
+  const c = t > 0.6 ? GLOW.clone().lerp(GOLD, (t - 0.6) / 0.4) :
+            t > 0.3 ? GOLD.clone().lerp(GREEN, (t - 0.3) / 0.3) :
+                      GREEN.clone().lerp(LIME, t / 0.3);
+
+  const bright = 0.2 + t * 0.6;
+  for (let v = 0; v < 2; v++) {
+    bCol[(i*2+v)*3+0] = c.r * bright;
+    bCol[(i*2+v)*3+1] = c.g * bright;
+    bCol[(i*2+v)*3+2] = c.b * bright;
+    bAlpha[i*2+v] = 0.15 + t * 0.7;
+  }
+});
+
+const branchGeo = new THREE.BufferGeometry();
+branchGeo.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
+branchGeo.setAttribute('color',    new THREE.BufferAttribute(bCol, 3));
+branchGeo.setAttribute('alpha',    new THREE.BufferAttribute(bAlpha, 1));
+
+const branchMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `
+    attribute vec3 color;
+    attribute float alpha;
+    varying vec3 vColor;
+    varying float vAlpha;
+    uniform float time;
+    void main() {
+      vColor = color;
+      vAlpha = alpha;
+      vec3 p = position;
+      float sway = sin(p.x * 0.25 + p.y * 0.18 + time * 0.35) * 0.18;
+      p.x += sway;
+      p.y += sway * 0.4;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vColor;
+    varying float vAlpha;
+    void main() {
+      gl_FragColor = vec4(vColor, vAlpha);
+    }
+  `,
+  vertexColors: true,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+
+scene.add(new THREE.LineSegments(branchGeo, branchMat));
+
+// ── NODE SPARKS at branch endpoints ──
+const nodePositions = new Float32Array(branchCount * 3);
+const nodeColors    = new Float32Array(branchCount * 3);
+const nodeSizes     = new Float32Array(branchCount);
+const nodePhases    = new Float32Array(branchCount);
+branches.forEach((b, i) => {
+  nodePositions[i*3]   = b.ex;
+  nodePositions[i*3+1] = b.ey;
+  nodePositions[i*3+2] = b.ez;
+  const t = b.depth / 5;
+  nodeColors[i*3]   = GOLD.r * (0.4 + t * 0.5);
+  nodeColors[i*3+1] = GOLD.g * (0.4 + t * 0.5);
+  nodeColors[i*3+2] = GOLD.b * (0.2 + t * 0.3);
+  nodeSizes[i]  = (0.5 + t * 2.0) * (b.depth >= 4 ? 2.5 : 1.0);
+  nodePhases[i] = Math.random() * Math.PI * 2;
+});
+const nodeGeo = new THREE.BufferGeometry();
+nodeGeo.setAttribute('position', new THREE.BufferAttribute(nodePositions, 3));
+nodeGeo.setAttribute('color',    new THREE.BufferAttribute(nodeColors, 3));
+nodeGeo.setAttribute('size',     new THREE.BufferAttribute(nodeSizes, 1));
+nodeGeo.setAttribute('phase',    new THREE.BufferAttribute(nodePhases, 1));
+
+const nodeMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `
+    attribute float size; attribute vec3 color; attribute float phase;
+    varying vec3 vCol; varying float vAl;
+    uniform float time;
+    void main() {
+      vCol = color;
+      float pulse = 0.6 + 0.4 * sin(time * 1.2 + phase);
+      vAl = pulse;
+      vec3 p = position;
+      p.x += sin(p.y * 0.25 + time * 0.35 + phase) * 0.18;
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_PointSize = size * (200.0 / -mv.z) * pulse;
+      gl_Position = projectionMatrix * mv;
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vCol; varying float vAl;
+    void main() {
+      float d = length(gl_PointCoord - 0.5);
+      if (d > 0.5) discard;
+      float a = (1.0 - smoothstep(0.0, 0.5, d)) * vAl;
+      gl_FragColor = vec4(vCol, a);
+    }
+  `,
+  transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, vertexColors: true
+});
+scene.add(new THREE.Points(nodeGeo, nodeMat));
+
+// ── FLOWING PARTICLES along branches ──
+const FLOW_PER_BRANCH = 4;
+const flowCount = branchCount * FLOW_PER_BRANCH;
+const fPos    = new Float32Array(flowCount * 3);
+const fStart  = new Float32Array(flowCount * 3);
+const fEnd    = new Float32Array(flowCount * 3);
+const fPhase  = new Float32Array(flowCount);
+const fSpeed  = new Float32Array(flowCount);
+const fDepth  = new Float32Array(flowCount);
+
+branches.forEach((b, bi) => {
+  for (let p = 0; p < FLOW_PER_BRANCH; p++) {
+    const idx = bi * FLOW_PER_BRANCH + p;
+    fStart[idx*3]   = b.sx; fStart[idx*3+1] = b.sy; fStart[idx*3+2] = b.sz;
+    fEnd[idx*3]     = b.ex; fEnd[idx*3+1]   = b.ey; fEnd[idx*3+2]   = b.ez;
+    fPhase[idx]     = Math.random();
+    fSpeed[idx]     = 0.15 + Math.random() * 0.2;
+    fDepth[idx]     = b.depth / 5;
+  }
+});
+
+const flowGeo = new THREE.BufferGeometry();
+flowGeo.setAttribute('position', new THREE.BufferAttribute(fPos,   3));
+flowGeo.setAttribute('startPos', new THREE.BufferAttribute(fStart, 3));
+flowGeo.setAttribute('endPos',   new THREE.BufferAttribute(fEnd,   3));
+flowGeo.setAttribute('phase',    new THREE.BufferAttribute(fPhase, 1));
+flowGeo.setAttribute('speed',    new THREE.BufferAttribute(fSpeed, 1));
+flowGeo.setAttribute('bDepth',   new THREE.BufferAttribute(fDepth, 1));
+
+const flowMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `
+    attribute vec3 startPos, endPos;
+    attribute float phase, speed, bDepth;
+    varying float vAlpha;
+    varying vec3 vColor;
+    uniform float time;
+    void main() {
+      float t = fract(time * speed + phase);
+      vec3 pos = mix(startPos, endPos, t);
+
+      // Edge-fade: bright at mid, fade at ends
+      float edge = smoothstep(0.0, 0.15, t) * (1.0 - smoothstep(0.85, 1.0, t));
+      vAlpha = edge * (0.5 + bDepth * 0.5);
+
+      // Gold at root → green at tips
+      vec3 gold  = vec3(1.0, 0.72, 0.2);
+      vec3 green = vec3(0.3, 0.75, 0.15);
+      vColor = mix(green, gold, bDepth);
+
+      vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+      gl_PointSize = (1.5 + bDepth * 2.0) * (180.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
+    }
+  `,
+  fragmentShader: `
+    varying float vAlpha;
+    varying vec3 vColor;
+    void main() {
+      float d = length(gl_PointCoord - 0.5);
+      if (d > 0.5) discard;
+      float a = (1.0 - smoothstep(0.0, 0.5, d)) * vAlpha;
+      gl_FragColor = vec4(vColor, a);
+    }
+  `,
+  transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+});
+scene.add(new THREE.Points(flowGeo, flowMat));
+
+// ── AMBIENT PARTICLE FIELD ──
+function makeAmbient(count, colorHex, size, spread, speed) {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+  const sz  = new Float32Array(count);
+  const ph  = new Float32Array(count);
+  const base = new THREE.Color(colorHex);
   for (let i = 0; i < count; i++) {
-    pos[i*3]   = (Math.random() - 0.5) * spread;
-    pos[i*3+1] = (Math.random() - 0.5) * spread * 0.45;
-    pos[i*3+2] = (Math.random() - 0.5) * depthRange;
-    const brightness = 0.7 + Math.random() * 0.6;
-    col[i*3]   = base.r * brightness;
-    col[i*3+1] = base.g * brightness;
-    col[i*3+2] = base.b * brightness;
-    sz[i] = size * (0.5 + Math.random());
+    pos[i*3]   = (Math.random()-0.5)*spread;
+    pos[i*3+1] = (Math.random()-0.5)*spread*0.4;
+    pos[i*3+2] = (Math.random()-0.5)*280;
+    const b = 0.3 + Math.random() * 0.5;
+    col[i*3]   = base.r * b;
+    col[i*3+1] = base.g * b;
+    col[i*3+2] = base.b * b;
+    sz[i] = size * (0.4 + Math.random() * 0.8);
     ph[i] = Math.random() * Math.PI * 2;
   }
-
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
   geo.setAttribute('size',     new THREE.BufferAttribute(sz,  1));
   geo.setAttribute('phase',    new THREE.BufferAttribute(ph,  1));
-
   const mat = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 0 },
-      spd:  { value: speed }
-    },
+    uniforms: { time: { value: 0 }, spd: { value: speed } },
     vertexShader: `
-      attribute float size;
-      attribute vec3  color;
-      attribute float phase;
-      varying vec3  vCol;
-      varying float vAl;
-      uniform float time;
-      uniform float spd;
+      attribute float size; attribute vec3 color; attribute float phase;
+      varying vec3 vCol; varying float vAl;
+      uniform float time, spd;
       void main() {
         vCol = color;
         vec3 p = position;
-        p.y += sin(p.x * 0.12 + time * spd + phase) * 1.2;
-        p.x += cos(p.z * 0.08 + time * spd * 0.7 + phase) * 0.8;
-        vAl = 0.55 + 0.45 * sin(time * spd * 1.5 + phase);
+        p.y += sin(p.x*0.1 + time*spd + phase) * 1.5;
+        p.x += cos(p.z*0.07 + time*spd*0.7 + phase) * 0.9;
+        vAl = 0.4 + 0.4*sin(time*spd*1.5 + phase);
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
-        gl_PointSize = size * (220.0 / -mv.z);
-        gl_Position  = projectionMatrix * mv;
+        gl_PointSize = size * (200.0 / -mv.z);
+        gl_Position = projectionMatrix * mv;
       }
     `,
     fragmentShader: `
-      varying vec3  vCol;
-      varying float vAl;
+      varying vec3 vCol; varying float vAl;
       void main() {
         float d = length(gl_PointCoord - 0.5);
         if (d > 0.5) discard;
@@ -954,87 +1327,35 @@ function makeParticles(count, colorHex, size, spread, speed, depthRange) {
         gl_FragColor = vec4(vCol, a);
       }
     `,
-    transparent: true,
-    blending:    THREE.AdditiveBlending,
-    depthWrite:  false,
-    vertexColors: true
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, vertexColors: true
   });
-
   return new THREE.Points(geo, mat);
 }
 
-const pGold   = makeParticles(2800, 0xC49030, 1.8, 110, 0.28, 300);
-const pGreen  = makeParticles(1800, 0x3B6E22, 1.2, 140, 0.18, 300);
-const pBright = makeParticles(400,  0xF0D080, 3.0,  70, 0.40, 200);
-scene.add(pGold, pGreen, pBright);
-
-// ── SEED ORB ──
-const orbGeo = new THREE.SphereGeometry(2.5, 32, 32);
-const orbMat = new THREE.MeshBasicMaterial({ color: 0xD4A840 });
-const orbMesh = new THREE.Mesh(orbGeo, orbMat);
-orbMesh.position.set(0, 0, -30);
-scene.add(orbMesh);
-
-const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
-  color: 0xD4A840,
-  transparent: true,
-  opacity: 0.22,
-  blending: THREE.AdditiveBlending
-}));
-glowSprite.scale.set(42, 42, 1);
-glowSprite.position.copy(orbMesh.position);
-scene.add(glowSprite);
-
-// Ring around orb
-const ringGeo = new THREE.TorusGeometry(5.5, 0.08, 8, 80);
-const ringMat = new THREE.MeshBasicMaterial({ color: 0xC49030, transparent: true, opacity: 0.35 });
-const ring = new THREE.Mesh(ringGeo, ringMat);
-ring.rotation.x = Math.PI / 2;
-ring.position.copy(orbMesh.position);
-scene.add(ring);
-
-// ── STEM / ROOT LINES ──
-function makeLine(points, colorHex, opacity) {
-  const geo = new THREE.BufferGeometry().setFromPoints(points);
-  const mat = new THREE.LineBasicMaterial({ color: colorHex, transparent: true, opacity });
-  return new THREE.Line(geo, mat);
-}
-const stemPts = [];
-for (let i = 0; i <= 40; i++) {
-  const t = i / 40;
-  stemPts.push(new THREE.Vector3(
-    Math.sin(t * Math.PI * 3) * t * 5,
-    -18 + t * 36,
-    -30 + Math.cos(t * Math.PI * 2) * t * 3
-  ));
-}
-scene.add(makeLine(stemPts, 0x5CA832, 0.4));
-scene.add(makeLine(stemPts.map(p => new THREE.Vector3(p.x * -1.3, p.y * 0.95 - 2, p.z)), 0xC49030, 0.25));
+const ambGold  = makeAmbient(1800, 0xB88020, 1.2, 130, 0.22);
+const ambGreen = makeAmbient(1200, 0x2E5A1A, 0.9, 160, 0.15);
+const ambDust  = makeAmbient(300,  0xF0D080, 2.5,  80, 0.38);
+scene.add(ambGold, ambGreen, ambDust);
 
 // ── SCROLL CAMERA ──
 let scrollProg = 0;
-let targetZ = 70, targetY = 6, targetX = 0;
-let smoothZ = 70, smoothY = 6, smoothX = 0;
+let tZ = 72, tY = 4, tX = 0;
+let sZ = 72, sY = 4, sX = 0;
 
-const sections = ['01','02','03','04','05'];
-const secCounter = document.getElementById('sec-counter');
-const progressFill = document.getElementById('progress-fill');
-const scrollUI = document.getElementById('scroll-ui');
+const $fill    = document.getElementById('progress-fill');
+const $sec     = document.getElementById('sec-counter');
+const $scrollUI = document.getElementById('scroll-ui');
 
 window.addEventListener('scroll', () => {
   const max = document.documentElement.scrollHeight - innerHeight;
   scrollProg = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
-
-  targetZ = 70  - scrollProg * 130;
-  targetY =  6  - scrollProg * 12;
-  targetX = Math.sin(scrollProg * Math.PI) * 8;
-
-  progressFill.style.height = (scrollProg * 100) + '%';
-  const idx = Math.min(Math.floor(scrollProg * sections.length), sections.length - 1);
-  secCounter.textContent = `0${idx + 1} / 0${sections.length}`;
-
-  if (window.scrollY > 80) scrollUI.classList.add('visible');
-  else scrollUI.classList.remove('visible');
+  tZ = 72 - scrollProg * 120;
+  tY =  4 - scrollProg * 10;
+  tX = Math.sin(scrollProg * Math.PI) * 9;
+  $fill.style.height = (scrollProg * 100) + '%';
+  const idx = Math.min(Math.floor(scrollProg * 6), 5);
+  $sec.textContent = `0${idx + 1} / 06`;
+  $scrollUI.classList.toggle('visible', window.scrollY > 80);
 }, { passive: true });
 
 // ── RESIZE ──
@@ -1045,34 +1366,32 @@ window.addEventListener('resize', () => {
   composer.setSize(innerWidth, innerHeight);
 });
 
-// ── ANIMATION LOOP ──
-let time = 0;
+// ── ANIMATE ──
+const allMats = [
+  branchMat, nodeMat, flowMat, nebMat, coreMat, coronaMat,
+  ambGold.material, ambGreen.material, ambDust.material
+];
+let t = 0;
+
 function animate() {
   requestAnimationFrame(animate);
-  time += 0.008;
+  t += 0.007;
 
-  // Update particle uniforms
-  for (const pts of [pGold, pGreen, pBright]) {
-    pts.material.uniforms.time.value = time;
-  }
-  nebMat.uniforms.time.value = time;
+  allMats.forEach(m => { if (m.uniforms?.time) m.uniforms.time.value = t; });
 
-  // Orb pulse
-  const pulse = 1 + Math.sin(time * 1.2) * 0.06;
-  orbMesh.scale.setScalar(pulse);
-  glowSprite.scale.set(42 * (1 + Math.sin(time * 0.8) * 0.12), 42 * (1 + Math.sin(time * 0.8) * 0.12), 1);
-  ring.rotation.z = time * 0.3;
-  ring.material.opacity = 0.25 + Math.sin(time * 1.8) * 0.1;
+  // Orb rotate + pulse
+  core.rotation.y = t * 0.4;
+  core.rotation.x = t * 0.15;
+  corona.rotation.z = t * 0.25;
+  corona.lookAt(camera.position);
 
   // Smooth camera
-  smoothZ += (targetZ - smoothZ) * 0.055;
-  smoothY += (targetY - smoothY) * 0.055;
-  smoothX += (targetX - smoothX) * 0.055;
-
-  // Floating motion
-  camera.position.x = smoothX + Math.sin(time * 0.22) * 1.2;
-  camera.position.y = smoothY + Math.sin(time * 0.17) * 0.6;
-  camera.position.z = smoothZ;
+  sZ += (tZ - sZ) * 0.05;
+  sY += (tY - sY) * 0.05;
+  sX += (tX - sX) * 0.05;
+  camera.position.x = sX + Math.sin(t * 0.2) * 1.0;
+  camera.position.y = sY + Math.sin(t * 0.14) * 0.5;
+  camera.position.z = sZ;
   camera.lookAt(0, 0, -800);
 
   composer.render();
@@ -1080,80 +1399,64 @@ function animate() {
 animate();
 </script>
 
-<!-- GSAP ANIMATIONS -->
+<!-- GSAP -->
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-// Hero entrance
-const tl = gsap.timeline({ delay: 0.3 });
-tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
-  .to('.hero-title',   { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, '-=0.5')
-  .to('.hero-sub',     { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5')
-  .to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+const tl = gsap.timeline({ delay: 0.4 });
+tl.to('.hero-tag',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' })
+  .to('.hero-title', { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' }, '-=0.4')
+  .to('.hero-rule',  { opacity: 1, duration: 0.6 }, '-=0.5')
+  .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+  .to('.hero-cta',   { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4');
 
-// Scroll reveals
-const reveals = document.querySelectorAll('.reveal');
-reveals.forEach(el => {
+document.querySelectorAll('.reveal').forEach(el => {
   ScrollTrigger.create({
-    trigger: el,
-    start: 'top 88%',
+    trigger: el, start: 'top 87%',
     onEnter: () => el.classList.add('in-view')
   });
 });
 </script>
 
-<!-- LEAD FORM -->
+<!-- FORM -->
 <script>
-(function() {
-  const form    = document.getElementById('leadForm');
-  const btn     = document.getElementById('btnSubmit');
-  const fb      = document.getElementById('formFeedback');
-  const tsField = document.getElementById('fieldTimestamp');
+(function () {
+  const form = document.getElementById('leadForm');
+  const btn  = document.getElementById('btnSubmit');
+  const fb   = document.getElementById('formFeedback');
+  const ts   = document.getElementById('fieldTimestamp');
 
-  form.addEventListener('focusin', function stamp() {
-    tsField.value = new Date().toLocaleString('pt-BR', {
-      timeZone: 'America/Sao_Paulo',
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
-    });
-    form.removeEventListener('focusin', stamp);
+  const stamp = () => new Date().toLocaleString('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
   });
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('focusin', function s() {
+    ts.value = stamp();
+    form.removeEventListener('focusin', s);
+  });
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    if (!tsField.value) {
-      tsField.value = new Date().toLocaleString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Enviando…';
+    if (!ts.value) ts.value = stamp();
+    btn.disabled = true; btn.textContent = 'Enviando…';
     fb.className = 'form-feedback';
-
-    const data = new FormData(form);
     try {
       const res = await fetch('https://formsubmit.co/ajax/alfredo@agenciagraodemostarda.com.br', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: data
+        method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form)
       });
       const json = await res.json();
       if (json.success === 'true' || json.success === true) {
         fb.textContent = '✓ Mensagem enviada! Entrarei em contato em breve.';
         fb.className = 'form-feedback ok';
         form.reset();
-      } else {
-        throw new Error('fail');
-      }
+      } else throw new Error();
     } catch {
-      fb.textContent = '✗ Erro ao enviar. Tente via WhatsApp: (21) 98091-1444';
+      fb.textContent = '✗ Erro ao enviar. Chame no WhatsApp: (21) 98091-1444';
       fb.className = 'form-feedback err';
     } finally {
-      btn.disabled = false;
-      btn.textContent = 'Enviar mensagem';
+      btn.disabled = false; btn.textContent = 'Enviar mensagem';
     }
   });
 })();
