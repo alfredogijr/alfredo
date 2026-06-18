@@ -10,6 +10,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
@@ -17,13 +26,16 @@
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
   :root {
-    --bg:     #F5F1E8;
-    --cream:  #FAF7F0;
-    --dark:   #1A2410;
-    --green:  #3B6E22;
+    --bg:     #030804;
+    --glass:  rgba(4,10,3,0.82);
+    --glass2: rgba(3,8,2,0.92);
     --gold:   #C49030;
-    --muted:  #6E7F61;
-    --border: rgba(26,36,16,0.1);
+    --gold-l: #E4B84A;
+    --green:  #3B6E22;
+    --green-l:#5CA832;
+    --cream:  #F0EDE4;
+    --muted:  rgba(240,237,228,0.5);
+    --border: rgba(196,144,48,0.18);
     --serif:  'Playfair Display', Georgia, serif;
     --sans:   'Inter', system-ui, sans-serif;
   }
@@ -33,12 +45,11 @@
   body {
     font-family: var(--sans);
     background: var(--bg);
-    color: var(--dark);
+    color: var(--cream);
     overflow-x: hidden;
-    cursor: none;
   }
 
-  /* ── CANVAS BACKGROUND ── */
+  /* ── THREE.JS CANVAS ── */
   #bgCanvas {
     position: fixed;
     inset: 0;
@@ -47,1049 +58,1106 @@
     z-index: 0;
   }
 
-  /* ── GRAIN ── */
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 9990;
-  }
-
-  /* ── CURSOR ── */
-  #cursor {
+  /* ── SCROLL UI (Horizon-style) ── */
+  #scroll-ui {
     position: fixed;
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: multiply;
-    transition: transform 0.15s;
-  }
-  #cursor-ring {
-    position: fixed;
-    width: 38px; height: 38px;
-    border: 1.5px solid var(--green);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.55;
-    transition: width .25s, height .25s, opacity .25s, border-color .25s;
-  }
-  body.hovering #cursor { transform: scale(2.5); }
-  body.hovering #cursor-ring { width:60px; height:60px; opacity:.2; border-color:var(--gold); }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; inset: 0 0 auto;
-    z-index: 500;
-    padding: 28px 64px;
-    display: flex; align-items: center; justify-content: space-between;
-    transition: padding .35s, background .35s, border-bottom .35s;
-  }
-  nav.scrolled {
-    padding: 16px 64px;
-    background: rgba(245,241,232,0.9);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: var(--serif);
-    font-size: 17px; font-weight: 700;
-    letter-spacing: -0.3px;
-    color: var(--dark); text-decoration: none;
-  }
-  .nav-logo b { color: var(--gold); }
-  .nav-links { display:flex; align-items:center; gap:44px; list-style:none; }
-  .nav-links a {
-    font-size: 13.5px; font-weight: 500;
-    color: var(--dark); text-decoration: none;
-    opacity: .6; transition: opacity .2s;
-  }
-  .nav-links a:hover { opacity:1; }
-  .nav-cta {
-    background: var(--dark) !important; color: var(--bg) !important;
-    opacity: 1 !important; padding: 11px 24px; border-radius: 100px;
-    font-weight: 600 !important;
-    transition: background .25s, transform .2s !important;
-  }
-  .nav-cta:hover { background: var(--green) !important; transform: translateY(-1px); }
-
-  /* ── ALL SECTIONS sit above canvas ── */
-  nav, section, .marquee, .form-wrap, footer { position: relative; z-index: 1; }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100svh;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 0 64px 80px;
-    position: relative;
-    /* NO background — canvas shows through */
-  }
-
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: flex-end; gap: 64px;
-  }
-
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 3px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 32px;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 100;
     opacity: 0;
+    transition: opacity 0.6s;
   }
-  .hero-eyebrow::before {
-    content: ''; display: block;
-    width: 28px; height: 1.5px; background: var(--gold);
+  #scroll-ui.visible { opacity: 1; }
+  #scroll-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
-
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(56px, 7.5vw, 100px);
-    font-weight: 900;
-    line-height: 0.96; letter-spacing: -3px;
-    color: var(--dark); max-width: 860px;
+  #progress-track {
+    width: 2px;
+    height: 80px;
+    background: rgba(196,144,48,0.2);
+    border-radius: 2px;
+    overflow: hidden;
   }
-  .hero-title .line { display:block; overflow:hidden; padding-bottom:6px; }
-  .hero-title .line > span { display:block; transform:translateY(110%); }
-  .hero-title em { font-style:italic; color:var(--green); }
-
-  .hero-right {
-    display: flex; flex-direction: column;
-    align-items: flex-end; gap: 24px;
-    padding-bottom: 8px; opacity: 0;
-  }
-  .hero-sub {
-    font-size: 16px; line-height: 1.65;
-    color: var(--muted); max-width: 300px; text-align: right;
-  }
-  .hero-actions { display:flex; gap:14px; flex-direction:column; align-items:flex-end; }
-
-  /* Scroll indicator */
-  .hero-scroll {
-    position: absolute; bottom: 36px; left: 64px;
-    display: flex; align-items: center; gap: 12px;
-    opacity: 0; z-index: 1;
-  }
-  .scroll-line {
-    width: 1px; height: 52px; background: rgba(26,36,16,0.2);
-    position: relative; overflow: hidden;
-  }
-  .scroll-line::after {
-    content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+  #progress-fill {
+    width: 100%;
+    height: 0%;
     background: var(--gold);
-    animation: scrollDown 2s ease-in-out infinite;
+    border-radius: 2px;
+    transition: height 0.1s linear;
   }
-  @keyframes scrollDown {
-    0%   { transform: translateY(-100%); }
-    50%  { transform: translateY(0); }
-    100% { transform: translateY(100%); }
-  }
-  .scroll-label {
-    font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
-    text-transform: uppercase; color: var(--muted);
+  #sec-counter {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
     writing-mode: vertical-rl;
   }
 
-  /* ── BUTTONS ── */
-  .btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 28px; border-radius: 100px;
-    font-size: 14.5px; font-weight: 600;
+  /* ── HEADER / NAV ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(3,8,4,0.5);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold-l);
+    letter-spacing: 0.03em;
     text-decoration: none;
-    transition: all .28s ease;
-    position: relative; overflow: hidden;
-    white-space: nowrap;
   }
-  .btn-dark { background: var(--dark); color: var(--bg); }
-  .btn-dark::after {
-    content:''; position:absolute; inset:0;
-    background: var(--green); transform: translateX(-101%);
-    transition: transform .3s ease;
+  nav { display: flex; gap: 2.5rem; align-items: center; }
+  nav a {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
   }
-  .btn-dark:hover::after { transform: translateX(0); }
-  .btn-dark span, .btn-dark > :not(::after) { position:relative; z-index:1; }
-  .btn-dark:hover { transform: translateY(-2px); }
-  .btn-ghost {
-    border: 1.5px solid var(--border); color: var(--dark); background: transparent;
+  nav a:hover { color: var(--gold); }
+  .btn-nav {
+    padding: 0.55rem 1.4rem;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    color: var(--gold) !important;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s !important;
   }
-  .btn-ghost:hover { border-color:var(--dark); background:var(--dark); color:var(--bg); }
-  .btn-white { background: white; color: var(--dark); }
-  .btn-white:hover { background:var(--gold); color:white; transform:translateY(-2px); }
-  .btn-outline-white {
-    border: 1.5px solid rgba(255,255,255,.3); color:rgba(255,255,255,.85); background:transparent;
-  }
-  .btn-outline-white:hover { border-color:white; color:white; }
+  .btn-nav:hover { background: var(--gold); color: var(--bg) !important; }
 
-  /* ── MARQUEE ── */
-  .marquee {
-    overflow: hidden;
-    background: var(--dark);
-    border-top: 1px solid rgba(255,255,255,.06);
-    border-bottom: 1px solid rgba(255,255,255,.06);
-    padding: 18px 0;
+  /* ── SECTIONS BASE ── */
+  section {
+    position: relative;
+    z-index: 10;
   }
-  .marquee-track {
-    display:flex; width:max-content;
-    animation: ticker 28s linear infinite;
+
+  /* ── HERO ── */
+  #hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
   }
-  .marquee-track:hover { animation-play-state: paused; }
-  .marquee-item {
-    display:flex; align-items:center;
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .hero-title {
     font-family: var(--serif);
-    font-size: 14px; font-style: italic;
-    color: rgba(247,244,238,.45);
-    padding: 0 36px; white-space: nowrap;
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--cream);
+    max-width: 900px;
+    opacity: 0;
+    transform: translateY(30px);
   }
-  .mdot {
-    display:inline-block; width:5px; height:5px;
-    border-radius:50%; background:var(--gold);
-    margin-left:36px; opacity:.7;
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-l);
   }
-  @keyframes ticker {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  .hero-sub {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .btn-primary {
+    padding: 0.9rem 2.4rem;
+    background: var(--gold);
+    color: #020401;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-l); transform: translateY(-2px); }
+  .btn-secondary {
+    padding: 0.9rem 2.4rem;
+    border: 1px solid rgba(196,144,48,0.4);
+    color: var(--cream);
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: border-color 0.3s, color 0.3s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── SCROLL HINT ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
   }
 
-  /* ── SECTION COMMONS ── */
-  .section {
-    padding: 120px 64px;
-    backdrop-filter: blur(2px);
+  /* ── GLASS CARD ── */
+  .glass-section {
+    background: var(--glass);
+    backdrop-filter: blur(24px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 4rem;
   }
-  .s-bg    { background: rgba(245,241,232,0.86); }
-  .s-cream { background: rgba(250,247,240,0.86); }
-  .s-dark  { background: rgba(26,36,16,0.96); }
-
-  .eyebrow {
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 3.5px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 18px;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
   }
-  .headline {
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .section-title {
     font-family: var(--serif);
-    font-size: clamp(36px,4.5vw,58px);
-    font-weight: 700; line-height: 1.08; letter-spacing: -1.5px;
-    color: var(--dark);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
   }
-  .headline em { font-style:italic; color:var(--green); }
-  .headline-light { color: white; }
-  .headline-light em { color: var(--gold); }
-
-  .sec-header {
-    display:flex; align-items:flex-end; justify-content:space-between;
-    gap:48px; margin-bottom:80px;
-  }
-  .sec-aside {
-    font-size: 15.5px; line-height: 1.7;
-    color: var(--muted); max-width: 340px; flex-shrink:0;
+  .section-title em { font-style: italic; color: var(--gold-l); }
+  .section-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 640px;
   }
 
-  /* ── SERVICES ── */
-  .grid-svc {
-    display: grid; grid-template-columns: repeat(3,1fr);
-    gap: 2px; background: var(--border);
-    border-radius: 24px; overflow:hidden;
+  /* ── SERVICES GRID ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+  .service-card {
+    background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
   }
-  .svc {
-    background: rgba(250,247,240,0.95);
-    padding: 52px 44px 48px;
-    position: relative; transition: background .3s; overflow:hidden;
+  .service-card:hover {
+    border-color: rgba(196,144,48,0.45);
+    transform: translateY(-4px);
   }
-  .svc::after {
-    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
-    background: linear-gradient(90deg,var(--green),var(--gold));
-    transform: scaleX(0); transform-origin:left; transition: transform .35s;
+  .service-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
-  .svc:hover { background: rgba(245,241,232,0.98); }
-  .svc:hover::after { transform: scaleX(1); }
-  .svc-n {
-    position:absolute; top:24px; right:28px;
-    font-size:10px; font-weight:700; letter-spacing:2px;
-    color: rgba(26,36,16,.12);
+  .service-name {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
   }
-  .svc-icon {
-    width:52px; height:52px; background:var(--dark);
-    border-radius:14px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:22px; margin-bottom:32px; transition:background .3s;
+  .service-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--muted);
   }
-  .svc:hover .svc-icon { background: var(--green); }
-  .svc-name {
-    font-family:var(--serif); font-size:21px; font-weight:700;
-    color:var(--dark); line-height:1.2; margin-bottom:14px;
-  }
-  .svc-desc { font-size:14px; line-height:1.75; color:var(--muted); }
 
   /* ── MANIFESTO ── */
-  .manifesto-inner { position:relative; z-index:1; max-width:820px; }
-  .m-label {
-    font-size:11px; font-weight:600; letter-spacing:3.5px;
-    text-transform:uppercase; color:var(--gold); margin-bottom:48px;
+  #manifesto {
+    padding: 9rem 4rem;
+    text-align: center;
   }
-  .m-quote {
-    font-family:var(--serif);
-    font-size: clamp(26px,4vw,50px);
-    font-weight:400; line-height:1.35; letter-spacing:-0.8px;
-    color:rgba(247,244,238,.88);
+  .manifesto-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--cream);
+    max-width: 860px;
+    margin: 0 auto 2rem;
   }
-  .m-quote em { font-style:italic; color:var(--gold); }
-  .m-quote strong { color:white; font-weight:700; }
-  .m-sig { margin-top:64px; display:flex; align-items:center; gap:18px; }
-  .m-avatar {
-    width:52px; height:52px; border-radius:50%; background:var(--green);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--serif); font-size:18px; font-weight:700; color:white; flex-shrink:0;
+  .manifesto-quote strong { color: var(--gold-l); font-style: normal; }
+  .manifesto-attr {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .m-name { font-size:14px; font-weight:600; color:white; }
-  .m-role { font-size:12.5px; color:rgba(247,244,238,.45); margin-top:2px; }
 
   /* ── PROCESS ── */
-  .process-grid {
-    display:grid; grid-template-columns:repeat(4,1fr);
-    gap:2px; background:var(--border);
-    border-radius:24px; overflow:hidden; border:1px solid var(--border);
+  .process-steps {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-  .step {
-    background:rgba(250,247,240,.95); padding:48px 36px; transition:background .3s;
+  .process-step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
   }
-  .step:hover { background:rgba(245,241,232,.98); }
-  .step-n {
-    font-family:var(--serif); font-size:54px; font-weight:900;
-    line-height:1; color:rgba(26,36,16,.06); margin-bottom:20px; transition:color .3s;
+  .process-step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(196,144,48,0.25);
+    line-height: 1;
   }
-  .step:hover .step-n { color:var(--gold); }
-  .step-title { font-family:var(--serif); font-size:20px; font-weight:700; color:var(--dark); margin-bottom:12px; }
-  .step-desc { font-size:14px; line-height:1.75; color:var(--muted); }
+  .step-content {}
+  .step-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+  .step-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
 
   /* ── SEGMENTS ── */
-  .tags { display:flex; flex-wrap:wrap; gap:10px; margin-top:56px; }
-  .tag {
-    display:inline-flex; align-items:center; gap:8px;
-    padding:11px 22px; border:1.5px solid var(--border);
-    border-radius:100px; font-size:14px; font-weight:500;
-    color:var(--dark); background:rgba(255,255,255,0.7);
-    cursor:default; transition:all .22s;
+  .segments-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
   }
-  .tag .dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; transition:background .2s; }
-  .tag:hover { border-color:var(--green); background:var(--green); color:white; }
-  .tag:hover .dot { background:white; }
+  .segment-tag {
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .segment-tag:hover { border-color: var(--gold); color: var(--gold); }
 
   /* ── DIFFERENTIALS ── */
   .diff-grid {
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:2px; background:var(--border);
-    border-radius:24px; overflow:hidden; border:1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
   }
-  .diff {
-    background:rgba(250,247,240,.95); padding:56px 52px; transition:background .3s;
+  .diff-item {}
+  .diff-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
   }
-  .diff:hover { background:rgba(245,241,232,.98); }
-  .diff-icon { font-size:36px; margin-bottom:24px; display:block; }
-  .diff-title { font-family:var(--serif); font-size:23px; font-weight:700; color:var(--dark); margin-bottom:14px; line-height:1.2; }
-  .diff-desc { font-size:14.5px; line-height:1.75; color:var(--muted); }
+  .diff-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
 
-  /* ── LEAD FORM ── */
-  .form-wrap { padding: 80px 64px; }
-  .form-box {
-    border-radius:32px; overflow:hidden;
-    display:grid; grid-template-columns:1fr 1fr;
-    min-height:580px;
-    box-shadow: 0 32px 80px rgba(26,36,16,.12);
+  /* ── CONTACT / FORM ── */
+  #contato {
+    padding: 7rem 4rem;
   }
-  .form-left {
-    background:var(--dark);
-    padding:72px 56px;
-    position:relative; overflow:hidden;
-    display:flex; flex-direction:column; justify-content:center;
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
   }
-  .fl-blob { position:absolute; border-radius:50%; filter:blur(90px); pointer-events:none; }
-  .fl-b1 { width:500px; height:500px; background:var(--green); opacity:.22; top:-180px; left:-120px; }
-  .fl-b2 { width:320px; height:320px; background:var(--gold); opacity:.11; bottom:-100px; right:-60px; }
-  .fl-inner { position:relative; z-index:1; }
-  .fl-ey {
-    font-size:11px; font-weight:600; letter-spacing:3.5px;
-    text-transform:uppercase; color:var(--gold); margin-bottom:24px;
+  @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 3rem; } }
+  .contact-info {}
+  .contact-detail {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
-  .fl-title {
-    font-family:var(--serif);
-    font-size:clamp(28px,3vw,42px); font-weight:700;
-    line-height:1.1; letter-spacing:-1px;
-    color:white; margin-bottom:20px;
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
   }
-  .fl-title em { font-style:italic; color:var(--gold); }
-  .fl-sub { font-size:15px; line-height:1.65; color:rgba(247,244,238,.5); margin-bottom:44px; }
-  .fl-benefits { list-style:none; display:flex; flex-direction:column; gap:14px; }
-  .fl-benefits li { display:flex; align-items:center; gap:12px; font-size:14.5px; font-weight:500; color:rgba(247,244,238,.82); }
-  .fl-check { width:22px; height:22px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; flex-shrink:0; }
-  .form-right { background:var(--cream); padding:60px 52px; display:flex; flex-direction:column; justify-content:center; }
-  .fform { display:flex; flex-direction:column; gap:18px; }
-  .f-group { display:flex; flex-direction:column; gap:6px; }
-  .f-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .f-label { font-size:12px; font-weight:600; color:var(--dark); letter-spacing:.4px; }
-  .f-label span { color:var(--muted); font-weight:400; }
-  .f-input,.f-select,.f-textarea {
-    width:100%; padding:12px 15px;
-    border:1.5px solid var(--border); border-radius:10px;
-    font-family:var(--sans); font-size:14px; color:var(--dark); background:white;
-    outline:none; transition:border-color .2s, box-shadow .2s;
-    -webkit-appearance:none; appearance:none;
+  .contact-link:hover { color: var(--gold); }
+  .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Form */
+  .form-card {
+    background: var(--glass2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2.5rem;
   }
-  .f-input::placeholder,.f-textarea::placeholder { color:rgba(26,36,16,.28); }
-  .f-input:focus,.f-select:focus,.f-textarea:focus {
-    border-color:var(--green); box-shadow:0 0 0 3px rgba(59,110,34,.1);
+  .form-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 1.8rem;
   }
-  .f-select {
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%236E7F61' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat; background-position:right 14px center;
-    padding-right:38px; cursor:pointer;
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.45rem;
   }
-  .f-textarea { resize:vertical; min-height:84px; }
-  .f-submit {
-    width:100%; padding:14px 24px;
-    background:var(--dark); color:white;
-    border:none; border-radius:10px;
-    font-family:var(--sans); font-size:15px; font-weight:700;
-    cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    transition:background .25s, transform .2s;
-    margin-top:4px; position:relative; overflow:hidden;
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.75rem 1rem;
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
   }
-  .f-submit::after {
-    content:''; position:absolute; inset:0;
-    background:var(--green); transform:translateX(-101%); transition:transform .3s;
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: #0d1a0a; color: var(--cream); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .btn-form {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--gold);
+    color: #020401;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 0.5rem;
   }
-  .f-submit:hover::after { transform:translateX(0); }
-  .f-submit > * { position:relative; z-index:1; }
-  .f-submit:hover { transform:translateY(-1px); }
-  .f-submit:disabled { opacity:.6; cursor:not-allowed; transform:none; }
-  .f-privacy { font-size:11.5px; color:var(--muted); text-align:center; line-height:1.5; }
-  .f-success { display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:16px; min-height:300px; }
-  .f-success.show { display:flex; }
-  .f-success-icon { width:68px; height:68px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:30px; color:white; margin-bottom:8px; }
-  .f-success h3 { font-family:var(--serif); font-size:26px; font-weight:700; color:var(--dark); }
-  .f-success p { font-size:15px; line-height:1.6; color:var(--muted); max-width:280px; }
+  .btn-form:hover { background: var(--gold-l); }
+  .form-feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .form-feedback.ok { background: rgba(92,168,50,0.15); border: 1px solid rgba(92,168,50,0.3); color: #8ed464; display: block; }
+  .form-feedback.err { background: rgba(220,50,50,0.12); border: 1px solid rgba(220,50,50,0.3); color: #f08080; display: block; }
 
   /* ── FOOTER ── */
   footer {
-    padding:52px 64px;
-    border-top:1px solid var(--border);
-    background: rgba(245,241,232,.9);
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px;
+    background: #020402;
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 10;
   }
-  .footer-logo { font-family:var(--serif); font-size:17px; font-weight:700; color:var(--dark); }
-  .footer-logo b { color:var(--gold); }
-  .footer-links { display:flex; gap:36px; list-style:none; }
-  .footer-links a { font-size:13px; color:var(--muted); text-decoration:none; transition:color .2s; }
-  .footer-links a:hover { color:var(--dark); }
-  .footer-copy { font-size:12.5px; color:var(--muted); }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(240,237,228,0.3);
+  }
 
-  /* ── SCROLL REVEAL ── */
-  .sr { opacity:0; transform:translateY(36px); }
+  /* ── REVEAL ANIMATION ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   /* ── RESPONSIVE ── */
-  @media (max-width:1080px) {
-    nav, nav.scrolled { padding-left:36px; padding-right:36px; }
-    .hero { padding:0 36px 72px; }
-    .section { padding-left:36px; padding-right:36px; }
-    .hero-inner { grid-template-columns:1fr; }
-    .hero-right { align-items:flex-start; }
-    .hero-sub { text-align:left; }
-    .grid-svc { grid-template-columns:1fr 1fr; }
-    .process-grid { grid-template-columns:1fr 1fr; }
-    .form-wrap { padding:80px 36px; }
-    footer { padding:52px 36px; }
-  }
-  @media (max-width:768px) {
-    body { cursor:auto; }
-    #cursor, #cursor-ring { display:none; }
-    nav { padding:18px 24px; }
-    nav.scrolled { padding:13px 24px; }
-    .nav-links { display:none; }
-    .hero { padding:0 24px 60px; }
-    .hero-title { font-size:clamp(44px,12vw,64px); letter-spacing:-2px; }
-    .section { padding:72px 24px; }
-    .sec-header { flex-direction:column; gap:24px; }
-    .sec-aside { max-width:100%; }
-    .grid-svc, .diff-grid { grid-template-columns:1fr; }
-    .process-grid { grid-template-columns:1fr; }
-    .form-wrap { padding:0; }
-    .form-box { grid-template-columns:1fr; border-radius:0; box-shadow:none; }
-    .form-left { padding:52px 24px; }
-    .form-right { padding:40px 24px; }
-    .f-row { grid-template-columns:1fr; }
-    .hero-scroll { left:24px; }
-    footer { padding:36px 24px; flex-direction:column; text-align:center; }
-    .footer-links { flex-wrap:wrap; justify-content:center; gap:20px; }
+  @media (max-width: 900px) {
+    header { padding: 1.2rem 2rem; }
+    nav { display: none; }
+    .glass-section, #contato, #manifesto { padding-left: 2rem; padding-right: 2rem; }
+    footer { padding: 2rem; }
+    #scroll-ui { display: none; }
   }
   </style>
 </head>
 <body>
 
-  <!-- ── CANVAS BACKGROUND (growing tree) ── -->
-  <canvas id="bgCanvas"></canvas>
+<!-- THREE.JS CANVAS -->
+<canvas id="bgCanvas"></canvas>
 
-  <!-- ── CURSOR ── -->
-  <div id="cursor"></div>
-  <div id="cursor-ring"></div>
+<!-- SCROLL UI -->
+<div id="scroll-ui">
+  <span id="scroll-label">SCROLL</span>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+  <span id="sec-counter">01 / 05</span>
+</div>
 
-  <!-- ── NAV ── -->
-  <nav id="nav">
-    <a href="#" class="nav-logo">Grão <b>de</b> Mostarda</a>
-    <ul class="nav-links">
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#processo">Processo</a></li>
-      <li><a href="#diferenciais">Diferenciais</a></li>
-      <li><a href="#contato" class="nav-cta">Falar com a gente</a></li>
-    </ul>
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">Grão de Mostarda</a>
+  <nav>
+    <a href="#servicos">Serviços</a>
+    <a href="#processo">Processo</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#contato" class="btn-nav">Falar conosco</a>
   </nav>
+</header>
 
-  <!-- ── HERO (canvas mostra por baixo) ── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <p class="hero-eyebrow">Marketing · Tecnologia · IA</p>
-        <h1 class="hero-title">
-          <span class="line"><span>Fazemos seu</span></span>
-          <span class="line"><span>negócio crescer</span></span>
-          <span class="line"><span><em>de verdade.</em></span></span>
-        </h1>
-      </div>
-      <div class="hero-right">
-        <p class="hero-sub">
-          Estratégia de marketing, automação com IA e gestão de vendas —
-          tudo junto, para quem quer resultado, não relatório bonito.
-        </p>
-        <div class="hero-actions">
-          <a href="#contato" class="btn btn-dark">
-            <span>Quero crescer</span><span>→</span>
-          </a>
-          <a href="#servicos" class="btn btn-ghost">Ver serviços</a>
-        </div>
-      </div>
-    </div>
-    <div class="hero-scroll">
-      <div class="scroll-line"></div>
-      <span class="scroll-label">Scroll</span>
-    </div>
-  </section>
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Marketing · Tecnologia · IA</p>
+  <h1 class="hero-title">
+    Da pequena semente<br/>ao <em>crescimento</em> real
+  </h1>
+  <p class="hero-sub">
+    Estratégia, execução e inteligência artificial integradas para transformar PMEs em referências no mercado.
+  </p>
+  <div class="hero-cta">
+    <a href="#contato" class="btn-primary">Quero crescer agora</a>
+    <a href="#servicos" class="btn-secondary">Ver serviços</a>
+  </div>
+  <div class="scroll-hint">Rolar</div>
+</section>
 
-  <!-- ── MARQUEE ── -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span class="marquee-item">Marketing Digital<span class="mdot"></span></span>
-      <span class="marquee-item">Automação com IA<span class="mdot"></span></span>
-      <span class="marquee-item">Tráfego Pago<span class="mdot"></span></span>
-      <span class="marquee-item">Gestão de Conteúdo<span class="mdot"></span></span>
-      <span class="marquee-item">Consultoria em Vendas<span class="mdot"></span></span>
-      <span class="marquee-item">Tecnologia para PMEs<span class="mdot"></span></span>
-      <span class="marquee-item">Estratégia de Crescimento<span class="mdot"></span></span>
-      <span class="marquee-item">Marketing Digital<span class="mdot"></span></span>
-      <span class="marquee-item">Automação com IA<span class="mdot"></span></span>
-      <span class="marquee-item">Tráfego Pago<span class="mdot"></span></span>
-      <span class="marquee-item">Gestão de Conteúdo<span class="mdot"></span></span>
-      <span class="marquee-item">Consultoria em Vendas<span class="mdot"></span></span>
-      <span class="marquee-item">Tecnologia para PMEs<span class="mdot"></span></span>
-      <span class="marquee-item">Estratégia de Crescimento<span class="mdot"></span></span>
+<!-- SERVICES -->
+<section id="servicos" class="glass-section">
+  <div class="container">
+    <p class="section-label reveal">O que fazemos</p>
+    <h2 class="section-title reveal">Serviços que <em>geram resultado</em></h2>
+    <p class="section-body reveal">
+      Unimos estratégia de marketing, tecnologia prática e inteligência artificial para entregar crescimento mensurável — sem promessas vazias.
+    </p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">🌱</div>
+        <div class="service-name">Estratégia Digital</div>
+        <div class="service-desc">Diagnóstico completo do seu negócio, posicionamento de marca e plano de crescimento com metas reais e mensuráveis.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🤖</div>
+        <div class="service-name">Automação com IA</div>
+        <div class="service-desc">Implementamos agentes de IA, chatbots e fluxos automáticos que trabalham 24h para captar, nutrir e converter leads.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📈</div>
+        <div class="service-name">Tráfego Pago</div>
+        <div class="service-desc">Gestão profissional de Meta Ads e Google Ads com otimização contínua focada em ROI — não em cliques vazios.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">✍️</div>
+        <div class="service-name">Conteúdo & Orgânico</div>
+        <div class="service-desc">Produção de conteúdo estratégico, SEO e presença orgânica que constróem autoridade e atraem clientes naturalmente.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">⚙️</div>
+        <div class="service-name">CRM & Funil de Vendas</div>
+        <div class="service-desc">Estruturação de funis de vendas, CRM e processos comerciais integrados para converter mais com o mesmo investimento.</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📊</div>
+        <div class="service-name">Analytics & Dados</div>
+        <div class="service-desc">Dashboards em tempo real, rastreamento de conversão e relatórios que te mostram exatamente onde seu dinheiro está rendendo.</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- ── SERVICES ── -->
-  <section class="section s-bg" id="servicos">
-    <div class="sec-header">
-      <div>
-        <p class="eyebrow">O que fazemos</p>
-        <h2 class="headline">Serviços que<br><em>geram resultado</em></h2>
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="container" style="text-align:center;">
+    <blockquote class="manifesto-quote reveal">
+      "A menor de todas as sementes — mas quando cresce, torna-se <strong>maior do que as outras plantas.</strong>"
+    </blockquote>
+    <p class="manifesto-attr reveal">Mateus 13:32 &nbsp;·&nbsp; A filosofia por trás do nome</p>
+    <p class="section-body reveal" style="margin: 2rem auto 0; text-align:center;">
+      Grão de Mostarda nasceu da crença de que todo grande negócio começa com uma semente. Nossa missão é plantar as estratégias certas, regar com tecnologia e colher crescimento duradouro.
+    </p>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="processo" class="glass-section">
+  <div class="container">
+    <p class="section-label reveal">Como trabalhamos</p>
+    <h2 class="section-title reveal">Método <em>orgânico e humano</em></h2>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-name">Diagnóstico Profundo</div>
+          <div class="step-desc">Entendemos seu negócio, mercado, concorrentes e objetivos antes de propor qualquer ação. Sem atalhos.</div>
+        </div>
       </div>
-      <p class="sec-aside sr">Não vendemos pacotes prontos. Entendemos o seu negócio e montamos a solução certa para a fase em que você está.</p>
-    </div>
-    <div class="grid-svc">
-      <div class="svc sr"><span class="svc-n">01</span><div class="svc-icon">📊</div><h3 class="svc-name">Estratégia de Marketing Digital</h3><p class="svc-desc">Diagnóstico completo, posicionamento e plano de ação focado nas suas metas. Sem achismo, sem genérico.</p></div>
-      <div class="svc sr"><span class="svc-n">02</span><div class="svc-icon">🤖</div><h3 class="svc-name">Automação e IA para Negócios</h3><p class="svc-desc">Implantamos IA nos seus processos: atendimento, vendas, conteúdo e operação. Mais resultado, menos custo fixo.</p></div>
-      <div class="svc sr"><span class="svc-n">03</span><div class="svc-icon">🎯</div><h3 class="svc-name">Gestão de Tráfego Pago</h3><p class="svc-desc">Campanhas no Meta e Google gerenciadas com dados reais. Cada real investido rastreado e otimizado.</p></div>
-      <div class="svc sr"><span class="svc-n">04</span><div class="svc-icon">✍️</div><h3 class="svc-name">Conteúdo e Redes Sociais</h3><p class="svc-desc">Estratégia, produção e publicação de conteúdo que posiciona sua marca e converte — não só engaja.</p></div>
-      <div class="svc sr"><span class="svc-n">05</span><div class="svc-icon">💼</div><h3 class="svc-name">Consultoria em Vendas</h3><p class="svc-desc">Pipeline, follow-up sistemático e proposta comercial de alto impacto. Transformamos leads em clientes.</p></div>
-      <div class="svc sr"><span class="svc-n">06</span><div class="svc-icon">⚙️</div><h3 class="svc-name">Soluções Personalizadas com IA</h3><p class="svc-desc">Sistemas e aplicativos com IA feitos sob medida para resolver problemas específicos do seu negócio.</p></div>
-    </div>
-  </section>
-
-  <!-- ── MANIFESTO ── -->
-  <section class="section s-dark" id="sobre">
-    <div class="manifesto-inner">
-      <p class="m-label">Nosso manifesto</p>
-      <p class="m-quote sr">
-        O grão de mostarda começa pequeno.<br>
-        <em>Mas cresce mais do que qualquer coisa no jardim.</em><br><br>
-        Toda PME tem potencial enorme.<br>
-        O que falta é <strong>estratégia, execução e tecnologia certa</strong>.<br><br>
-        A gente não fala sobre IA.<br>
-        <em>A gente usa IA para o seu negócio crescer de verdade.</em>
-      </p>
-      <div class="m-sig sr">
-        <div class="m-avatar">A</div>
-        <div>
-          <div class="m-name">Alfredo</div>
-          <div class="m-role">Fundador · Grão de Mostarda</div>
+      <div class="process-step reveal">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-name">Estratégia Personalizada</div>
+          <div class="step-desc">Montamos um plano sob medida — com canais, investimentos e metas realistas para o seu momento.</div>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-name">Execução com Tecnologia</div>
+          <div class="step-desc">Implementamos ferramentas de IA, automações e criação de conteúdo de alto nível — tudo integrado.</div>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-name">Otimização Contínua</div>
+          <div class="step-desc">Medimos tudo, ajustamos semanalmente e evoluímos conforme os dados — não suposições.</div>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-name">Crescimento Sustentável</div>
+          <div class="step-desc">O objetivo não é um pico de resultado, mas uma estrutura que continua crescendo mês após mês.</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ── PROCESS ── -->
-  <section class="section s-bg" id="processo">
-    <div class="sec-header">
-      <div>
-        <p class="eyebrow">Como funciona</p>
-        <h2 class="headline">Do diagnóstico<br>ao <em>resultado</em></h2>
+<!-- SEGMENTS -->
+<section id="sobre" style="padding: 7rem 4rem;">
+  <div class="container">
+    <p class="section-label reveal">Para quem é</p>
+    <h2 class="section-title reveal">Atendemos quem <em>quer crescer de verdade</em></h2>
+    <p class="section-body reveal">PMEs, profissionais liberais e empreendedores que precisam de estratégia real — não de slides bonitos.</p>
+    <div class="segments-grid reveal">
+      <span class="segment-tag">Clínicas & Saúde</span>
+      <span class="segment-tag">E-commerce</span>
+      <span class="segment-tag">Imobiliárias</span>
+      <span class="segment-tag">Advocacia</span>
+      <span class="segment-tag">Restaurantes & Food</span>
+      <span class="segment-tag">Educação & Cursos</span>
+      <span class="segment-tag">Serviços B2B</span>
+      <span class="segment-tag">Varejo Local</span>
+      <span class="segment-tag">Profissionais Liberais</span>
+      <span class="segment-tag">Tech & SaaS</span>
+    </div>
+
+    <div class="diff-grid" style="margin-top: 4rem;">
+      <div class="diff-item reveal">
+        <div class="diff-num">+12</div>
+        <div class="diff-label">anos de experiência em marketing e tecnologia</div>
       </div>
-      <p class="sec-aside sr">Cada etapa tem propósito. Sem dar voltas, sem desperdiçar seu tempo ou seu investimento.</p>
-    </div>
-    <div class="process-grid">
-      <div class="step sr"><div class="step-n">01</div><h3 class="step-title">Diagnóstico</h3><p class="step-desc">Mergulhamos no seu negócio, entendemos os gargalos reais e mapeamos onde está a maior oportunidade agora.</p></div>
-      <div class="step sr"><div class="step-n">02</div><h3 class="step-title">Estratégia</h3><p class="step-desc">Montamos um plano claro com prioridades, metas e métricas. Tudo personalizado para o seu segmento e momento.</p></div>
-      <div class="step sr"><div class="step-n">03</div><h3 class="step-title">Execução</h3><p class="step-desc">Marketing, IA, vendas — a gente executa junto. Não só orienta. Somos parceiro no dia a dia, não consultor de slide.</p></div>
-      <div class="step sr"><div class="step-n">04</div><h3 class="step-title">Resultado</h3><p class="step-desc">Acompanhamos KPIs e ajustamos continuamente. O objetivo é número real no seu negócio, não relatório bonito.</p></div>
-    </div>
-  </section>
-
-  <!-- ── SEGMENTS ── -->
-  <section class="section s-cream">
-    <div class="sec-header">
-      <div>
-        <p class="eyebrow">Especialidade</p>
-        <h2 class="headline">Segmentos que<br><em>conhecemos</em> a fundo</h2>
+      <div class="diff-item reveal">
+        <div class="diff-num">100%</div>
+        <div class="diff-label">foco em resultado mensurável e ROI positivo</div>
+      </div>
+      <div class="diff-item reveal">
+        <div class="diff-num">IA</div>
+        <div class="diff-label">integrada em todos os projetos — não como buzzword, mas como ferramenta real</div>
+      </div>
+      <div class="diff-item reveal">
+        <div class="diff-num">1:1</div>
+        <div class="diff-label">atendimento direto, sem conta de terceiros ou intermediários</div>
       </div>
     </div>
-    <div class="tags">
-      <div class="tag"><span class="dot"></span>Educação</div>
-      <div class="tag"><span class="dot"></span>Turismo Esportivo</div>
-      <div class="tag"><span class="dot"></span>Eventos</div>
-      <div class="tag"><span class="dot"></span>Esportes</div>
-      <div class="tag"><span class="dot"></span>Saúde</div>
-      <div class="tag"><span class="dot"></span>Construção Civil</div>
-      <div class="tag"><span class="dot"></span>Serviços</div>
-      <div class="tag"><span class="dot"></span>Varejo</div>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ── DIFFERENTIALS ── -->
-  <section class="section s-bg" id="diferenciais">
-    <div class="sec-header">
-      <div>
-        <p class="eyebrow">Por que a Grão</p>
-        <h2 class="headline">Diferentes<br><em>de verdade</em></h2>
-      </div>
-      <p class="sec-aside sr">A maioria faz só uma parte. Aqui você tem tudo junto, com visão de negócio e IA aplicada de verdade.</p>
-    </div>
-    <div class="diff-grid">
-      <div class="diff sr"><span class="diff-icon">🔬</span><h3 class="diff-title">Usamos IA — não só falamos sobre ela</h3><p class="diff-desc">Nossa operação inteira roda com IA. Quando implantamos no seu negócio, sabemos exatamente o que fazemos porque já fizemos para nós.</p></div>
-      <div class="diff sr"><span class="diff-icon">🎯</span><h3 class="diff-title">Especialistas nos segmentos que atendemos</h3><p class="diff-desc">Não somos generalistas. Trabalhamos profundo em segmentos específicos e entendemos as particularidades de cada mercado.</p></div>
-      <div class="diff sr"><span class="diff-icon">⚡</span><h3 class="diff-title">Estratégia + execução + tecnologia juntos</h3><p class="diff-desc">Você não precisa de três fornecedores. Entregamos o pacote completo, integrado, com visão de quem entende de negócio.</p></div>
-      <div class="diff sr"><span class="diff-icon">📈</span><h3 class="diff-title">Resultado prático, sem enrolação</h3><p class="diff-desc">Nossa régua é simples: o que fizemos gerou resultado? Se não, ajustamos. Sem relatório bonito vazio. Sem desculpa de mercado.</p></div>
-    </div>
-  </section>
-
-  <!-- ── LEAD FORM ── -->
-  <div class="form-wrap" id="contato">
-    <div class="form-box">
-      <div class="form-left">
-        <div class="fl-blob fl-b1"></div>
-        <div class="fl-blob fl-b2"></div>
-        <div class="fl-inner">
-          <p class="fl-ey">Próximo passo</p>
-          <h2 class="fl-title sr">Quer ver como<br>isso <em>funciona</em><br>no seu negócio?</h2>
-          <p class="fl-sub sr">Deixa seus dados. A gente entra em contato em até 24h — sem enrolação, sem pitch de vendas.</p>
-          <ul class="fl-benefits sr">
-            <li><span class="fl-check">✓</span>Diagnóstico gratuito</li>
-            <li><span class="fl-check">✓</span>Sem compromisso</li>
-            <li><span class="fl-check">✓</span>Retorno em até 24h</li>
-          </ul>
+<!-- CONTACT -->
+<section id="contato" class="glass-section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p class="section-label reveal">Vamos conversar</p>
+        <h2 class="section-title reveal">Sua semente<br/><em>começa aqui</em></h2>
+        <p class="section-body reveal">Preencha o formulário e entro em contato em até 24 horas. Ou, se preferir, me chama direto no WhatsApp.</p>
+        <div class="contact-detail reveal">
+          <a href="https://wa.me/5521980911444" target="_blank" rel="noopener" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            (21) 98091-1444
+          </a>
+          <a href="mailto:alfredo@agenciagraodemostarda.com.br" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            alfredo@agenciagraodemostarda.com.br
+          </a>
         </div>
       </div>
-      <div class="form-right">
-        <form class="fform" id="leadForm">
-          <input type="hidden" name="data_hora" id="tsField">
-          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-          <div class="f-group">
-            <label class="f-label">Nome completo</label>
-            <input class="f-input" type="text" name="nome" placeholder="Seu nome" required>
+
+      <!-- LEAD FORM -->
+      <div class="reveal">
+        <form id="leadForm" class="form-card" novalidate>
+          <h3 class="form-title">Quero crescer com vocês</h3>
+
+          <input type="hidden" name="_subject" value="Novo lead — Grão de Mostarda"/>
+          <input type="hidden" name="_captcha" value="false"/>
+          <input type="hidden" id="fieldTimestamp" name="timestamp" value=""/>
+
+          <div class="form-group">
+            <label for="nome">Nome completo *</label>
+            <input type="text" id="nome" name="nome" required placeholder="Seu nome"/>
           </div>
-          <div class="f-row">
-            <div class="f-group">
-              <label class="f-label">WhatsApp</label>
-              <input class="f-input" type="tel" name="whatsapp" placeholder="(21) 99999-9999" required>
-            </div>
-            <div class="f-group">
-              <label class="f-label">E-mail <span>(opcional)</span></label>
-              <input class="f-input" type="email" name="email" placeholder="seu@email.com">
-            </div>
+          <div class="form-group">
+            <label for="whatsapp">WhatsApp *</label>
+            <input type="tel" id="whatsapp" name="whatsapp" required placeholder="(00) 00000-0000"/>
           </div>
-          <div class="f-group">
-            <label class="f-label">Seu segmento</label>
-            <select class="f-select" name="segmento" required>
-              <option value="">Selecione o segmento</option>
-              <option>Educação</option><option>Turismo Esportivo</option>
-              <option>Eventos</option><option>Esportes</option>
-              <option>Saúde</option><option>Construção Civil</option>
-              <option>Serviços</option><option>Varejo</option><option>Outro</option>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com"/>
+          </div>
+          <div class="form-group">
+            <label for="segmento">Segmento</label>
+            <select id="segmento" name="segmento">
+              <option value="">Selecione seu segmento</option>
+              <option>Clínicas & Saúde</option>
+              <option>E-commerce</option>
+              <option>Imobiliárias</option>
+              <option>Advocacia</option>
+              <option>Restaurantes & Food</option>
+              <option>Educação & Cursos</option>
+              <option>Serviços B2B</option>
+              <option>Varejo Local</option>
+              <option>Profissionais Liberais</option>
+              <option>Tech & SaaS</option>
+              <option>Outro</option>
             </select>
           </div>
-          <div class="f-group">
-            <label class="f-label">Como posso te ajudar? <span>(opcional)</span></label>
-            <textarea class="f-textarea" name="mensagem" rows="3" placeholder="Me conta o seu principal desafio..."></textarea>
+          <div class="form-group">
+            <label for="mensagem">O que você precisa?</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Conte brevemente seu desafio atual..."></textarea>
           </div>
-          <button type="submit" class="f-submit" id="submitBtn">
-            <span>Quero meu diagnóstico gratuito</span><span>→</span>
-          </button>
-          <p class="f-privacy">Seus dados são usados só para entrarmos em contato. Zero spam.</p>
+
+          <button type="submit" class="btn-form" id="btnSubmit">Enviar mensagem</button>
+          <div class="form-feedback" id="formFeedback"></div>
         </form>
-        <div class="f-success" id="formSuccess">
-          <div class="f-success-icon">✓</div>
-          <h3>Recebemos seu contato!</h3>
-          <p>Alfredo vai entrar em contato em breve pelo WhatsApp ou e-mail.</p>
-        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ── FOOTER ── -->
-  <footer>
-    <div class="footer-logo">Grão <b>de</b> Mostarda</div>
-    <ul class="footer-links">
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#processo">Processo</a></li>
-      <li><a href="#diferenciais">Diferenciais</a></li>
-      <li><a href="#contato">Contato</a></li>
-    </ul>
-    <p class="footer-copy">© 2025 Grão de Mostarda</p>
-  </footer>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Grão de Mostarda</div>
+  <p class="footer-copy">© 2025 Grão de Mostarda — Marketing, Tecnologia e IA. Rio de Janeiro, RJ.</p>
+</footer>
 
-  <script>
-  /* ──────────────────────────────────────────
-     GROWING TREE — canvas scroll animation
-  ─────────────────────────────────────────── */
-  (function() {
-    const canvas = document.getElementById('bgCanvas');
-    const ctx    = canvas.getContext('2d');
+<!-- THREE.JS SCENE -->
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-    let W, H, cx, groundY;
-    const BRANCHES = [];
-    const LEAVES   = [];
-    let scrollProgress = 0;
-    let seedPulse = 0;
-    let rafId;
+// ── SCENE SETUP ──
+const canvas   = document.getElementById('bgCanvas');
+const scene    = new THREE.Scene();
+scene.fog      = new THREE.FogExp2(0x020604, 0.0065);
 
-    // ── resize & re-compute tree ──
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-      cx      = W * 0.68;   // anchor: 68% from left
-      groundY = H * 0.97;   // anchor: near bottom
-      buildTree();
+const camera   = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.1, 2000);
+camera.position.set(0, 6, 70);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.4;
+
+// ── BLOOM POST-PROCESSING ──
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(innerWidth, innerHeight), 1.6, 0.5, 0.28
+);
+composer.addPass(bloom);
+
+// ── NEBULA BACKGROUND ──
+const nebMat = new THREE.ShaderMaterial({
+  uniforms: {
+    time:   { value: 0 },
+    color1: { value: new THREE.Color(0x0d2206) },
+    color2: { value: new THREE.Color(0x3a2000) }
+  },
+  vertexShader: `
+    varying vec2 vUv;
+    uniform float time;
+    void main() {
+      vUv = uv;
+      vec3 p = position;
+      p.z += sin(p.x * 0.003 + time * 0.15) * cos(p.y * 0.004 + time * 0.1) * 18.0;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
     }
-
-    // ── deterministic tree (L-system style) ──
-    function buildTree() {
-      BRANCHES.length = 0;
-      LEAVES.length   = 0;
-      grow(cx, groundY, -Math.PI / 2, H * 0.26, 0);
+  `,
+  fragmentShader: `
+    varying vec2 vUv;
+    uniform vec3 color1, color2;
+    uniform float time;
+    void main() {
+      float m = sin(vUv.x * 8.0 + time * 0.3) * cos(vUv.y * 6.0 + time * 0.2) * 0.5 + 0.5;
+      vec3 col = mix(color1, color2, m);
+      float a = 0.18 * (1.0 - length(vUv - 0.5) * 1.8);
+      gl_FragColor = vec4(col, max(0.0, a));
     }
+  `,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  side: THREE.DoubleSide,
+  depthWrite: false
+});
+const nebPlane = new THREE.Mesh(
+  new THREE.PlaneGeometry(900, 600, 80, 60),
+  nebMat
+);
+nebPlane.position.z = -200;
+scene.add(nebPlane);
 
-    function grow(x, y, angle, len, depth) {
-      if (depth > 9 || len < 3) return;
+// ── PARTICLE SYSTEM ──
+function makeParticles(count, colorHex, size, spread, speed, depthRange) {
+  const geo  = new THREE.BufferGeometry();
+  const pos  = new Float32Array(count * 3);
+  const col  = new Float32Array(count * 3);
+  const sz   = new Float32Array(count);
+  const ph   = new Float32Array(count);
+  const base = new THREE.Color(colorHex);
 
-      const ex = x + Math.cos(angle) * len;
-      const ey = y + Math.sin(angle) * len;
-
-      // control point for organic curve
-      const mid = depth * 137.5; // golden-angle offset for variety
-      const cpx = (x + ex) / 2 + Math.sin(mid) * len * 0.18;
-      const cpy = (y + ey) / 2 + Math.cos(mid) * len * 0.10;
-
-      const t    = depth / 9;
-      const w    = Math.max(0.6, (10 - depth) * (depth < 3 ? 3.2 : 1.8));
-      // Colour: deep bark → fresh tip
-      const r    = Math.round(18  + t * 64);
-      const g    = Math.round(38  + t * 110);
-      const b    = Math.round(10  + t * 22);
-      const a    = 0.85 - t * 0.25;
-
-      const branch = {
-        x1:cx, y1:groundY,      // not used for drawing, just order anchor
-        sx: x, sy: y,
-        cpx, cpy,
-        ex, ey,
-        depth,
-        w,
-        color: `rgba(${r},${g},${b},${a})`,
-        isLeafHost: depth >= 7
-      };
-      BRANCHES.push(branch);
-
-      if (branch.isLeafHost) {
-        LEAVES.push({ x: ex, y: ey, phase: Math.random() * Math.PI * 2 });
-      }
-
-      const spread = 0.28 + depth * 0.025;
-      const ratio  = depth < 2 ? 0.72 : 0.66;
-
-      grow(ex, ey, angle - spread, len * ratio, depth + 1);
-      grow(ex, ey, angle + spread, len * ratio, depth + 1);
-    }
-
-    // ── draw frame ──
-    function draw(t) {
-      ctx.clearRect(0, 0, W, H);
-
-      const p = scrollProgress;
-
-      // Phase 1: seed pulse (p < 0.04)
-      const seedR = 5 + Math.sin(seedPulse) * 2;
-      seedPulse += 0.04;
-
-      if (p < 0.04) {
-        const alpha = (p < 0.02 ? p / 0.02 : 1) * (0.6 + 0.4 * Math.abs(Math.sin(seedPulse)));
-        ctx.beginPath();
-        ctx.arc(cx, groundY, seedR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(59,110,34,${alpha})`;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = 'rgba(196,144,48,0.5)';
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        return;
-      }
-
-      // Phase 2: branches grow progressively
-      const treeP = Math.min(1, (p - 0.04) / 0.84);
-      const total  = BRANCHES.length;
-      const visible = Math.floor(treeP * total);
-
-      for (let i = 0; i < visible; i++) {
-        const br = BRANCHES[i];
-        let ratio = 1;
-
-        // smooth leading edge: last visible branch draws partially
-        if (i === visible - 1) {
-          ratio = (treeP * total) - i;
-        }
-
-        const ex = br.sx + (br.ex - br.sx) * ratio;
-        const ey = br.sy + (br.ey - br.sy) * ratio;
-        const cpx = br.sx + (br.cpx - br.sx) * ratio;
-        const cpy = br.sy + (br.cpy - br.sy) * ratio;
-
-        ctx.beginPath();
-        ctx.moveTo(br.sx, br.sy);
-        ctx.quadraticCurveTo(cpx, cpy, ex, ey);
-        ctx.strokeStyle = br.color;
-        ctx.lineWidth   = br.w;
-        ctx.lineCap     = 'round';
-
-        if (br.depth >= 7) {
-          ctx.shadowBlur  = 5;
-          ctx.shadowColor = 'rgba(196,144,48,0.25)';
-        }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      // Phase 3: golden leaves bloom (p > 0.72)
-      if (p > 0.72) {
-        const leafP   = Math.min(1, (p - 0.72) / 0.28);
-        const leafCnt = Math.floor(leafP * LEAVES.length);
-
-        for (let i = 0; i < leafCnt; i++) {
-          const lf = LEAVES[i];
-          const bob = Math.sin(t * 0.001 + lf.phase) * 1.8;
-          const alpha = 0.5 + 0.4 * leafP;
-
-          ctx.beginPath();
-          ctx.ellipse(lf.x, lf.y + bob, 3.2, 2.2, lf.phase, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(196,144,48,${alpha})`;
-          ctx.shadowBlur  = 6;
-          ctx.shadowColor = 'rgba(196,144,48,0.35)';
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-
-      // Phase 4: drifting leaf particles (p > 0.88)
-      if (p > 0.88 && window._particles) {
-        const pp = (p - 0.88) / 0.12;
-        window._particles.forEach(pt => {
-          pt.y += pt.vy;
-          pt.x += pt.vx * Math.sin(t * 0.0008 + pt.phase);
-          pt.life -= 0.003;
-          if (pt.life <= 0) { pt.y = pt.originY; pt.x = pt.originX; pt.life = 0.6 + Math.random() * 0.4; }
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(196,144,48,${pt.life * pp * 0.6})`;
-          ctx.fill();
-        });
-      }
-    }
-
-    // ── animation loop ──
-    function loop(t) {
-      draw(t);
-      rafId = requestAnimationFrame(loop);
-    }
-
-    // ── scroll → progress via GSAP ScrollTrigger ──
-    function initScroll() {
-      if (typeof gsap === 'undefined') return;
-      gsap.registerPlugin(ScrollTrigger);
-      ScrollTrigger.create({
-        trigger: document.body,
-        start: 'top top',
-        end: 'bottom bottom',
-        onUpdate: self => { scrollProgress = self.progress; }
-      });
-    }
-
-    // ── spawn drifting particles from leaf positions ──
-    function spawnParticles() {
-      const pts = [];
-      LEAVES.slice(0, 60).forEach(lf => {
-        pts.push({
-          originX: lf.x, originY: lf.y,
-          x: lf.x, y: lf.y,
-          vx: (Math.random() - 0.5) * 0.6,
-          vy: 0.3 + Math.random() * 0.5,
-          r: 1.5 + Math.random() * 2,
-          phase: Math.random() * Math.PI * 2,
-          life: Math.random()
-        });
-      });
-      window._particles = pts;
-    }
-
-    // ── init ──
-    window.addEventListener('resize', resize, { passive: true });
-    resize();
-    spawnParticles();
-    requestAnimationFrame(t => {
-      initScroll();
-      loop(t);
-    });
-  })();
-
-
-  /* ──────────────────────────────────────────
-     CURSOR
-  ─────────────────────────────────────────── */
-  const cur  = document.getElementById('cursor');
-  const ring = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cur.style.left = (mx - 5) + 'px';
-    cur.style.top  = (my - 5) + 'px';
-  });
-  (function raf() {
-    rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
-    ring.style.left = (rx - 19) + 'px';
-    ring.style.top  = (ry - 19) + 'px';
-    requestAnimationFrame(raf);
-  })();
-  document.querySelectorAll('a,button,.svc,.diff,.tag,.step,.f-input,.f-select,.f-textarea').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-  });
-
-
-  /* ──────────────────────────────────────────
-     NAVBAR SCROLL
-  ─────────────────────────────────────────── */
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
-
-
-  /* ──────────────────────────────────────────
-     GSAP — entrance + scroll reveal
-  ─────────────────────────────────────────── */
-  window.addEventListener('load', () => {
-    if (typeof gsap === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Hero entrance
-    gsap.to('.hero-eyebrow', { opacity:1, duration:.8, delay:.3, ease:'power3.out' });
-    gsap.to('.hero-title .line > span', { y:0, duration:1.1, delay:.5, stagger:.12, ease:'power4.out' });
-    gsap.to('.hero-right',  { opacity:1, duration:.9, delay:1.1, ease:'power3.out' });
-    gsap.to('.hero-scroll', { opacity:1, duration:.8, delay:1.5, ease:'power3.out' });
-
-    // Scroll reveal
-    gsap.utils.toArray('.sr').forEach(el => {
-      gsap.to(el, {
-        opacity:1, y:0, duration:.85, ease:'power3.out',
-        scrollTrigger: { trigger:el, start:'top 88%', toggleActions:'play none none none' }
-      });
-    });
-
-    // Headlines
-    gsap.utils.toArray('.headline').forEach(el => {
-      gsap.fromTo(el, { opacity:0, y:40 }, {
-        opacity:1, y:0, duration:.9, ease:'power3.out',
-        scrollTrigger: { trigger:el, start:'top 88%' }
-      });
-    });
-
-    // Eyebrows
-    gsap.utils.toArray('.eyebrow,.m-label,.fl-ey').forEach(el => {
-      gsap.fromTo(el, { opacity:0, y:16 }, {
-        opacity:1, y:0, duration:.6, ease:'power3.out',
-        scrollTrigger: { trigger:el, start:'top 92%' }
-      });
-    });
-
-    // Segment tags stagger
-    gsap.fromTo('.tag', { opacity:0, scale:.88 }, {
-      opacity:1, scale:1, duration:.45, stagger:.06, ease:'back.out(1.4)',
-      scrollTrigger: { trigger:'.tags', start:'top 88%' }
-    });
-  });
-
-
-  /* ──────────────────────────────────────────
-     LEAD FORM
-  ─────────────────────────────────────────── */
-  const leadForm    = document.getElementById('leadForm');
-  const tsField     = document.getElementById('tsField');
-  const submitBtn   = document.getElementById('submitBtn');
-  const formSuccess = document.getElementById('formSuccess');
-
-  function nowBR() {
-    return new Date().toLocaleString('pt-BR', {
-      timeZone:'America/Sao_Paulo',
-      day:'2-digit', month:'2-digit', year:'numeric',
-      hour:'2-digit', minute:'2-digit', second:'2-digit'
-    });
+  for (let i = 0; i < count; i++) {
+    pos[i*3]   = (Math.random() - 0.5) * spread;
+    pos[i*3+1] = (Math.random() - 0.5) * spread * 0.45;
+    pos[i*3+2] = (Math.random() - 0.5) * depthRange;
+    const brightness = 0.7 + Math.random() * 0.6;
+    col[i*3]   = base.r * brightness;
+    col[i*3+1] = base.g * brightness;
+    col[i*3+2] = base.b * brightness;
+    sz[i] = size * (0.5 + Math.random());
+    ph[i] = Math.random() * Math.PI * 2;
   }
 
-  if (leadForm) {
-    leadForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      if (tsField) tsField.value = nowBR();
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span>Enviando...</span>';
-      try {
-        const res = await fetch(
-          'https://formsubmit.co/ajax/alfredo@agenciagraodemostarda.com.br',
-          { method:'POST', headers:{ 'Accept':'application/json' }, body: new FormData(this) }
-        );
-        if (res.ok) { leadForm.style.display = 'none'; formSuccess.classList.add('show'); }
-        else throw new Error();
-      } catch {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Tentar novamente</span><span>→</span>';
-        alert('Ops! Tente pelo WhatsApp: (21) 98091-1444');
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('size',     new THREE.BufferAttribute(sz,  1));
+  geo.setAttribute('phase',    new THREE.BufferAttribute(ph,  1));
+
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 0 },
+      spd:  { value: speed }
+    },
+    vertexShader: `
+      attribute float size;
+      attribute vec3  color;
+      attribute float phase;
+      varying vec3  vCol;
+      varying float vAl;
+      uniform float time;
+      uniform float spd;
+      void main() {
+        vCol = color;
+        vec3 p = position;
+        p.y += sin(p.x * 0.12 + time * spd + phase) * 1.2;
+        p.x += cos(p.z * 0.08 + time * spd * 0.7 + phase) * 0.8;
+        vAl = 0.55 + 0.45 * sin(time * spd * 1.5 + phase);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = size * (220.0 / -mv.z);
+        gl_Position  = projectionMatrix * mv;
       }
-    });
+    `,
+    fragmentShader: `
+      varying vec3  vCol;
+      varying float vAl;
+      void main() {
+        float d = length(gl_PointCoord - 0.5);
+        if (d > 0.5) discard;
+        float a = (1.0 - smoothstep(0.0, 0.5, d)) * vAl;
+        gl_FragColor = vec4(vCol, a);
+      }
+    `,
+    transparent: true,
+    blending:    THREE.AdditiveBlending,
+    depthWrite:  false,
+    vertexColors: true
+  });
+
+  return new THREE.Points(geo, mat);
+}
+
+const pGold   = makeParticles(2800, 0xC49030, 1.8, 110, 0.28, 300);
+const pGreen  = makeParticles(1800, 0x3B6E22, 1.2, 140, 0.18, 300);
+const pBright = makeParticles(400,  0xF0D080, 3.0,  70, 0.40, 200);
+scene.add(pGold, pGreen, pBright);
+
+// ── SEED ORB ──
+const orbGeo = new THREE.SphereGeometry(2.5, 32, 32);
+const orbMat = new THREE.MeshBasicMaterial({ color: 0xD4A840 });
+const orbMesh = new THREE.Mesh(orbGeo, orbMat);
+orbMesh.position.set(0, 0, -30);
+scene.add(orbMesh);
+
+const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+  color: 0xD4A840,
+  transparent: true,
+  opacity: 0.22,
+  blending: THREE.AdditiveBlending
+}));
+glowSprite.scale.set(42, 42, 1);
+glowSprite.position.copy(orbMesh.position);
+scene.add(glowSprite);
+
+// Ring around orb
+const ringGeo = new THREE.TorusGeometry(5.5, 0.08, 8, 80);
+const ringMat = new THREE.MeshBasicMaterial({ color: 0xC49030, transparent: true, opacity: 0.35 });
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.rotation.x = Math.PI / 2;
+ring.position.copy(orbMesh.position);
+scene.add(ring);
+
+// ── STEM / ROOT LINES ──
+function makeLine(points, colorHex, opacity) {
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const mat = new THREE.LineBasicMaterial({ color: colorHex, transparent: true, opacity });
+  return new THREE.Line(geo, mat);
+}
+const stemPts = [];
+for (let i = 0; i <= 40; i++) {
+  const t = i / 40;
+  stemPts.push(new THREE.Vector3(
+    Math.sin(t * Math.PI * 3) * t * 5,
+    -18 + t * 36,
+    -30 + Math.cos(t * Math.PI * 2) * t * 3
+  ));
+}
+scene.add(makeLine(stemPts, 0x5CA832, 0.4));
+scene.add(makeLine(stemPts.map(p => new THREE.Vector3(p.x * -1.3, p.y * 0.95 - 2, p.z)), 0xC49030, 0.25));
+
+// ── SCROLL CAMERA ──
+let scrollProg = 0;
+let targetZ = 70, targetY = 6, targetX = 0;
+let smoothZ = 70, smoothY = 6, smoothX = 0;
+
+const sections = ['01','02','03','04','05'];
+const secCounter = document.getElementById('sec-counter');
+const progressFill = document.getElementById('progress-fill');
+const scrollUI = document.getElementById('scroll-ui');
+
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  scrollProg = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+
+  targetZ = 70  - scrollProg * 130;
+  targetY =  6  - scrollProg * 12;
+  targetX = Math.sin(scrollProg * Math.PI) * 8;
+
+  progressFill.style.height = (scrollProg * 100) + '%';
+  const idx = Math.min(Math.floor(scrollProg * sections.length), sections.length - 1);
+  secCounter.textContent = `0${idx + 1} / 0${sections.length}`;
+
+  if (window.scrollY > 80) scrollUI.classList.add('visible');
+  else scrollUI.classList.remove('visible');
+}, { passive: true });
+
+// ── RESIZE ──
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+});
+
+// ── ANIMATION LOOP ──
+let time = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  time += 0.008;
+
+  // Update particle uniforms
+  for (const pts of [pGold, pGreen, pBright]) {
+    pts.material.uniforms.time.value = time;
   }
-  </script>
+  nebMat.uniforms.time.value = time;
+
+  // Orb pulse
+  const pulse = 1 + Math.sin(time * 1.2) * 0.06;
+  orbMesh.scale.setScalar(pulse);
+  glowSprite.scale.set(42 * (1 + Math.sin(time * 0.8) * 0.12), 42 * (1 + Math.sin(time * 0.8) * 0.12), 1);
+  ring.rotation.z = time * 0.3;
+  ring.material.opacity = 0.25 + Math.sin(time * 1.8) * 0.1;
+
+  // Smooth camera
+  smoothZ += (targetZ - smoothZ) * 0.055;
+  smoothY += (targetY - smoothY) * 0.055;
+  smoothX += (targetX - smoothX) * 0.055;
+
+  // Floating motion
+  camera.position.x = smoothX + Math.sin(time * 0.22) * 1.2;
+  camera.position.y = smoothY + Math.sin(time * 0.17) * 0.6;
+  camera.position.z = smoothZ;
+  camera.lookAt(0, 0, -800);
+
+  composer.render();
+}
+animate();
+</script>
+
+<!-- GSAP ANIMATIONS -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+const tl = gsap.timeline({ delay: 0.3 });
+tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+  .to('.hero-title',   { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, '-=0.5')
+  .to('.hero-sub',     { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5')
+  .to('.hero-cta',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+
+// Scroll reveals
+const reveals = document.querySelectorAll('.reveal');
+reveals.forEach(el => {
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 88%',
+    onEnter: () => el.classList.add('in-view')
+  });
+});
+</script>
+
+<!-- LEAD FORM -->
+<script>
+(function() {
+  const form    = document.getElementById('leadForm');
+  const btn     = document.getElementById('btnSubmit');
+  const fb      = document.getElementById('formFeedback');
+  const tsField = document.getElementById('fieldTimestamp');
+
+  form.addEventListener('focusin', function stamp() {
+    tsField.value = new Date().toLocaleString('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    form.removeEventListener('focusin', stamp);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!tsField.value) {
+      tsField.value = new Date().toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    fb.className = 'form-feedback';
+
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/alfredo@agenciagraodemostarda.com.br', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      });
+      const json = await res.json();
+      if (json.success === 'true' || json.success === true) {
+        fb.textContent = '✓ Mensagem enviada! Entrarei em contato em breve.';
+        fb.className = 'form-feedback ok';
+        form.reset();
+      } else {
+        throw new Error('fail');
+      }
+    } catch {
+      fb.textContent = '✗ Erro ao enviar. Tente via WhatsApp: (21) 98091-1444';
+      fb.className = 'form-feedback err';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensagem';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
