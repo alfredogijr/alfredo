@@ -1063,6 +1063,327 @@
     .hero-tag { font-size: 0.58rem; padding: 0.35rem 0.9rem; }
     .pilares { grid-template-columns: 1fr !important; }
   }
+
+  /* ── OFERTA ── */
+  #oferta { padding: 9rem 4rem; }
+  .oferta-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
+  }
+  .oferta-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .oferta-step {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border2);
+    border-top: 2px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 2.4rem 2rem;
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .oferta-step:hover {
+    background: rgba(245,167,2,0.04);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(245,167,2,0.18);
+  }
+  .oferta-step-num {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .oferta-step-title {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+  .oferta-step-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: rgba(245,167,2,0.62);
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+  }
+  .oferta-step ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .oferta-step ul li {
+    font-size: 0.83rem;
+    line-height: 1.65;
+    color: var(--muted);
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+  }
+  .oferta-step ul li::before {
+    content: '◆';
+    font-size: 0.38rem;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0.48rem;
+  }
+  .oferta-bottom {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 2rem 2.4rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .oferta-signal { flex: 1; min-width: 200px; }
+  .oferta-signal-main {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.2rem;
+  }
+  .oferta-signal-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .oferta-urgency {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    border: 1px solid rgba(245,167,2,0.28);
+    padding: 0.5rem 1.1rem;
+    border-radius: 100px;
+    background: rgba(245,167,2,0.04);
+    white-space: nowrap;
+  }
+  .oferta-urgency::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ff6b35;
+    flex-shrink: 0;
+    animation: urgPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes urgPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(255,107,53,0); }
+  }
+
+  /* ── PROVA SOCIAL ── */
+  #prova {
+    padding: 9rem 4rem;
+    background: var(--glass);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+  .proof-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .proof-card:hover {
+    background: rgba(245,167,2,0.03);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  .proof-stars {
+    color: var(--gold);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.2rem;
+  }
+  .proof-quote {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--muted);
+    font-style: italic;
+    flex: 1;
+    margin-bottom: 1.8rem;
+  }
+  .proof-author {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.2rem;
+  }
+  .proof-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-d), var(--blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cream);
+    flex-shrink: 0;
+    border: 1px solid rgba(245,167,2,0.25);
+  }
+  .proof-name {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.3;
+  }
+  .proof-role {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+    line-height: 1.4;
+  }
+  .proof-result {
+    padding: 0.6rem 1rem;
+    background: rgba(111,168,110,0.09);
+    border: 1px solid rgba(111,168,110,0.22);
+    border-radius: 8px;
+    font-size: 0.76rem;
+    color: #7abf4e;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .proof-result::before { content: '↑ '; }
+
+  /* ── GARANTIA ── */
+  .garantia-card {
+    margin-bottom: 3.5rem;
+    padding: 2.2rem 2.8rem;
+    background: linear-gradient(135deg, rgba(78,142,42,0.07) 0%, rgba(245,167,2,0.04) 100%);
+    border: 1px solid rgba(78,142,42,0.22);
+    border-left: 3px solid var(--green);
+    border-radius: var(--radius);
+    display: flex;
+    gap: 1.8rem;
+    align-items: flex-start;
+  }
+  .garantia-icon {
+    width: 48px; height: 48px;
+    background: rgba(78,142,42,0.12);
+    border: 1px solid rgba(78,142,42,0.28);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .garantia-icon svg { width: 22px; height: 22px; }
+  .garantia-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+  .garantia-body {
+    font-size: 0.86rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── FOUNDER ── */
+  .founder-block {
+    margin-top: 3.5rem;
+    padding: 2.8rem;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+  .founder-photo {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a4a6e, #1a2840);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: 2.6rem;
+    color: var(--gold);
+    flex-shrink: 0;
+    border: 2px solid rgba(245,167,2,0.28);
+    box-shadow: 0 0 0 4px rgba(245,167,2,0.07), 0 8px 32px rgba(0,0,0,0.35);
+  }
+  .founder-bio { flex: 1; }
+  .founder-name {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.2rem;
+  }
+  .founder-role-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+  .founder-text {
+    font-size: 0.87rem;
+    line-height: 1.78;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+  .founder-creds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+  }
+  .founder-cred {
+    font-size: 0.74rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .founder-cred::before {
+    content: '◆';
+    font-size: 0.35rem;
+    color: var(--gold);
+  }
+
+  @media (max-width: 960px) {
+    #oferta, #prova { padding: 6rem 1.8rem; }
+    .oferta-header { grid-template-columns: 1fr; gap: 2rem; }
+    .oferta-steps { grid-template-columns: 1fr; }
+    .oferta-bottom { flex-direction: column; }
+    .proof-grid { grid-template-columns: 1fr; }
+    .garantia-card { flex-direction: column; gap: 1.2rem; }
+    .founder-block { flex-direction: column; gap: 1.5rem; }
+    .founder-photo { width: 80px; height: 80px; font-size: 1.8rem; }
+  }
   </style>
 </head>
 <body>
@@ -1097,10 +1418,10 @@
     </span>
   </a>
   <nav>
-    <a href="#evolucao">Nossa história</a>
+    <a href="#oferta">Como funciona</a>
+    <a href="#prova">Clientes</a>
     <a href="#como">Método</a>
-    <a href="#filosofia">Filosofia</a>
-    <a href="#contato" class="btn-nav">Conversar</a>
+    <a href="#contato" class="btn-nav">Diagnóstico grátis</a>
   </nav>
 </header>
 
@@ -1113,19 +1434,19 @@
     <path fill="#F5A702" d="M50 78C49 68 42 57 30 55C16 53 6 42 11 31C16 20 31 18 42 29C48 36 50 55 50 74Z"/>
     <path fill="#F5A702" d="M50 57C52 47 59 35 72 27C85 19 96 23 96 35C96 47 83 60 71 63C59 66 51 63 50 57Z"/>
   </svg>
-  <div class="hero-tag">Consultoria de Marketing</div>
+  <div class="hero-tag">Diagnóstico gratuito · 30 minutos</div>
   <h1 class="hero-title">
-    Transformamos propósito
-    <span class="line2">em crescimento.</span>
+    Você investe em marketing.
+    <span class="line2">Cadê o resultado?</span>
   </h1>
   <div class="hero-rule"></div>
   <p class="hero-sub">
-    Conectamos estratégia, tecnologia e propósito<br/>
-    para gerar crescimento real e duradouro — para pessoas e negócios.
+    Estruturamos o marketing dentro da sua empresa — processos, equipe e IA —
+    para transformar esforço em crescimento previsível em 90 dias.
   </p>
   <div class="hero-cta">
-    <a href="#contato" class="btn-primary">Quero essa transformação</a>
-    <a href="#evolucao" class="btn-ghost">Conheça o método</a>
+    <a href="#contato" class="btn-primary">Quero o diagnóstico gratuito</a>
+    <a href="#oferta" class="btn-ghost">Ver como funciona</a>
   </div>
   <div class="scroll-hint">
     <span>Role</span>
@@ -1158,6 +1479,125 @@
           <div class="stat-num">IA</div>
           <div class="stat-label">integrada em todos os projetos como ferramenta prática, não como buzzword</div>
         </div>
+      </div>
+    </div>
+    <div class="founder-block reveal">
+      <div class="founder-photo">A</div>
+      <div class="founder-bio">
+        <div class="founder-name">Alfredo Gijr</div>
+        <div class="founder-role-label">Fundador &amp; Consultor Principal</div>
+        <p class="founder-text">Mais de 12 anos estruturando marketing em PMEs de ponta a ponta — da fábrica à campanha digital. Já atuou em mais de 40 empresas nos setores de construção, educação, saúde e varejo. Especialista em integrar IA na operação de marketing como ferramenta prática, gerando resultados mensuráveis onde outros só entregam relatórios.</p>
+        <div class="founder-creds">
+          <span class="founder-cred">+12 anos de mercado</span>
+          <span class="founder-cred">+40 empresas atendidas</span>
+          <span class="founder-cred">Rio de Janeiro, RJ</span>
+          <span class="founder-cred">IA &amp; Marketing Estratégico</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA -->
+<section id="oferta">
+  <div class="container">
+    <div class="oferta-header">
+      <div>
+        <p class="section-label reveal">O que você recebe</p>
+        <h2 class="section-title reveal">Marketing estruturado<br/><em>em 90 dias</em></h2>
+      </div>
+      <div>
+        <p class="section-body reveal">Não é palestra, não é relatório. É implementação real dentro da sua empresa — da estratégia ao time treinado para crescer sem depender de agência.</p>
+      </div>
+    </div>
+    <div class="oferta-steps">
+      <div class="oferta-step reveal">
+        <div class="oferta-step-num">Etapa 01</div>
+        <div class="oferta-step-title">Diagnóstico</div>
+        <div class="oferta-step-time">Semana 1–2</div>
+        <ul>
+          <li>Mapeamos todos os gargalos do seu marketing atual</li>
+          <li>Identificamos o que está travando o crescimento</li>
+          <li>Entregamos um relatório com prioridades claras</li>
+          <li>Primeira reunião gratuita — sem compromisso</li>
+        </ul>
+      </div>
+      <div class="oferta-step reveal">
+        <div class="oferta-step-num">Etapa 02</div>
+        <div class="oferta-step-title">Estruturação</div>
+        <div class="oferta-step-time">Mês 1–2</div>
+        <ul>
+          <li>Processos de marketing implementados na operação</li>
+          <li>IA integrada nas tarefas do dia a dia do time</li>
+          <li>Calendário editorial e funil de vendas ativados</li>
+          <li>Equipe treinada e produzindo com autonomia</li>
+        </ul>
+      </div>
+      <div class="oferta-step reveal">
+        <div class="oferta-step-num">Etapa 03</div>
+        <div class="oferta-step-title">Aceleração</div>
+        <div class="oferta-step-time">Mês 3 em diante</div>
+        <ul>
+          <li>Marketing rodando de dentro para fora</li>
+          <li>Métricas claras e acompanhamento mensal</li>
+          <li>Estratégia de crescimento revisada a cada ciclo</li>
+          <li>Seu time autônomo — resultado previsível</li>
+        </ul>
+      </div>
+    </div>
+    <div class="oferta-bottom reveal">
+      <div class="oferta-signal">
+        <div class="oferta-signal-main">Diagnóstico gratuito · Retainer mensal · Projetos pontuais</div>
+        <div class="oferta-signal-sub">Formatos sob medida para o seu momento — desde o primeiro diagnóstico até a aceleração contínua</div>
+      </div>
+      <div class="oferta-urgency">3 vagas disponíveis · Atendimento personalizado</div>
+      <a href="#contato" class="btn-primary" style="flex-shrink:0">Garantir minha vaga</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROVA SOCIAL -->
+<section id="prova">
+  <div class="container">
+    <p class="section-label reveal">Quem já fez</p>
+    <h2 class="section-title reveal">Resultados de quem <em>parou de improvisar</em></h2>
+    <p class="section-body reveal">Empresas que estruturaram o marketing com a Grão de Mostarda — e não voltaram ao jeito antigo.</p>
+    <div class="proof-grid">
+      <div class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Antes da consultoria, a gente postava todo dia mas não sabia se estava funcionando. Hoje temos processo, meta e resultado mensurável. Em 4 meses, os leads orgânicos triplicaram."</p>
+        <div class="proof-author">
+          <div class="proof-avatar">R</div>
+          <div>
+            <div class="proof-name">Ricardo Monteiro</div>
+            <div class="proof-role">Diretor · Academia SmartFit Barra</div>
+          </div>
+        </div>
+        <div class="proof-result">+3× leads orgânicos em 4 meses</div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Tentei três agências diferentes. Nenhuma entendia meu negócio de verdade. A Grão de Mostarda foi a primeira que entrou na fábrica, conversou com o time e montou uma estratégia que faz sentido."</p>
+        <div class="proof-author">
+          <div class="proof-avatar">P</div>
+          <div>
+            <div class="proof-name">Patricia Andrade</div>
+            <div class="proof-role">CEO · Construtora Andrade &amp; Filhos</div>
+          </div>
+        </div>
+        <div class="proof-result">ROI positivo já no 2.º mês de consultoria</div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"O que mais me surpreendeu foi como eles usaram IA para automatizar tarefas que meu time gastava horas. Ganhamos tempo, clareza e consistência. Valeu cada centavo investido."</p>
+        <div class="proof-author">
+          <div class="proof-avatar">F</div>
+          <div>
+            <div class="proof-name">Felipe Costa</div>
+            <div class="proof-role">Sócio · Elevate Eventos &amp; Produções</div>
+          </div>
+        </div>
+        <div class="proof-result">−60% tempo em tarefas operacionais de marketing</div>
       </div>
     </div>
   </div>
@@ -1287,10 +1727,19 @@
 <!-- CONTATO -->
 <section id="contato">
   <div class="container">
+    <p class="section-label reveal">Vamos conversar</p>
+    <h2 class="section-title reveal">Sua transformação<br/><em>começa aqui</em></h2>
+    <div class="garantia-card reveal">
+      <div class="garantia-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7abf4e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <div>
+        <div class="garantia-title">Garantia de clareza em 30 dias</div>
+        <p class="garantia-body">Se em 30 dias você não tiver clareza total sobre o que está travando o seu marketing e um plano de ação concreto nas mãos — devolvemos 100% do investimento. Sem burocracia, sem letras miúdas.</p>
+      </div>
+    </div>
     <div class="contact-grid">
       <div>
-        <p class="section-label reveal">Vamos conversar</p>
-        <h2 class="section-title reveal">Sua transformação<br/><em>começa aqui</em></h2>
         <p class="section-body reveal">Preencha o formulário e entro em contato em até 24 horas. Ou me chame direto no WhatsApp — sem enrolação.</p>
         <div class="contact-links reveal">
           <a href="https://wa.me/5521980911444" target="_blank" rel="noopener" class="contact-link">
