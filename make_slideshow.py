@@ -162,7 +162,7 @@ def make_cta_bg(w: int, h: int, brand_color: list,
 
 # ── Text rendering ────────────────────────────────────────────────────────────
 def box_y(position: str, h: int, box_h: int) -> int:
-    if position == "top":    return int(h * 0.07)
+    if position == "top":    return int(h * 0.25)
     if position == "center": return (h - box_h) // 2
     return int(h * 0.76) - box_h
 
