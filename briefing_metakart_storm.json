@@ -1,0 +1,78 @@
+{
+  "brand_color": [30, 160, 60],
+  "vignette": 0.68,
+  "font_main": 58,
+  "font_sub": 28,
+  "transition_dur": 0.5,
+  "fit_mode": "cover",
+
+  "slides": [
+    {
+      "image": "FOTO_1",
+      "duration": 5.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "in_center",
+      "kb_zoom": 0.10,
+      "main": ["VOCÊ JÁ CORRE NO META KART."],
+      "sub": ["Mas já pensou em competir de verdade?"]
+    },
+    {
+      "image": "FOTO_2",
+      "duration": 5.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "left",
+      "kb_zoom": 0.10,
+      "main": ["CONHEÇA A CATEGORIA STORM."],
+      "sub": ["A porta de entrada para o Campeonato Meta Kart."]
+    },
+    {
+      "image": "FOTO_3",
+      "duration": 5.0,
+      "anim": "typewriter",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "up",
+      "kb_zoom": 0.08,
+      "main": ["SEM PRESSÃO.", "SÓ VONTADE DE EVOLUIR."],
+      "sub": ["Sem precisar ser piloto profissional."]
+    },
+    {
+      "image": "FOTO_4",
+      "duration": 5.0,
+      "anim": "slide_up",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "in_tl",
+      "kb_zoom": 0.12,
+      "main": ["SUA PRIMEIRA CORRIDA OFICIAL", "COMEÇA AQUI."],
+      "sub": []
+    },
+    {
+      "image": "FOTO_5",
+      "duration": 5.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "right",
+      "kb_zoom": 0.10,
+      "main": ["FAÇA PARTE DO GRID."],
+      "sub": []
+    },
+    {
+      "type": "cta",
+      "duration": 5.0,
+      "anim": "fade",
+      "position": "center",
+      "accent": true,
+      "main": ["INSCRIÇÕES ABERTAS."],
+      "sub": ["Acesse o link da bio."],
+      "logo": "/root/.claude/uploads/1f16a562-b586-47a3-b92f-29672541131c/00671956-META_KART_LOGO01_3_20260530_123808_0000.png",
+      "logo_y_frac": 0.38,
+      "logo_width_pct": 0.55
+    }
+  ]
+}
