@@ -1,0 +1,100 @@
+{
+  "brand_color": [30, 160, 60],
+  "vignette": 0.65,
+  "font_main": 56,
+  "font_sub": 26,
+  "transition_dur": 0.4,
+  "fit_mode": "cover",
+
+  "slides": [
+    {
+      "image": "/home/user/alfredo/fotos_newgen/20260621_103619.jpg",
+      "duration": 4.0,
+      "anim": "slide_up",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "in_center",
+      "kb_zoom": 0.10,
+      "main": ["TEM PAI QUE ACHA", "QUE VELOCIDADE E PERIGO", "ANDAM JUNTOS."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/103523.jpg",
+      "duration": 4.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "left",
+      "kb_zoom": 0.10,
+      "main": ["AQUI A GENTE", "MOSTRA O CONTRÁRIO."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/20260621_103601.jpg",
+      "duration": 4.0,
+      "anim": "typewriter",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "right",
+      "kb_zoom": 0.08,
+      "main": ["CATEGORIA NEW GENERATION,", "OITAVA ETAPA DO CAMPEONATO."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/20260621_103613.jpg",
+      "duration": 4.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "up",
+      "kb_zoom": 0.10,
+      "main": ["ANTES DE CADA BATERIA,", "TREINO E BRIEFING", "DE SEGURANÇA."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/20260621_103602.jpg",
+      "duration": 4.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "in_tl",
+      "kb_zoom": 0.10,
+      "main": ["CAPACETE, REGRAS EXPLICADAS,", "PISTA PREPARADA."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/20260621_103540.jpg",
+      "duration": 4.0,
+      "anim": "slide_up",
+      "position": "top",
+      "accent": true,
+      "kb_direction": "in_center",
+      "kb_zoom": 0.12,
+      "main": ["CRIANÇA COMPETINDO DE VERDADE,", "COM ESTRUTURA DE VERDADE."],
+      "sub": []
+    },
+    {
+      "image": "/home/user/alfredo/fotos_newgen/103532.jpg",
+      "duration": 4.0,
+      "anim": "scale_fade",
+      "position": "top",
+      "accent": false,
+      "kb_direction": "right",
+      "kb_zoom": 0.10,
+      "main": ["TALVEZ O PRÓXIMO PILOTO", "DA PISTA SEJA O SEU FILHO."],
+      "sub": []
+    },
+    {
+      "type": "cta",
+      "duration": 2.0,
+      "anim": "fade",
+      "position": "center",
+      "accent": true,
+      "main": ["META KART.", "ONDE A PAIXÃO", "POR CORRIDA COMEÇA CEDO."],
+      "sub": [],
+      "logo": "/root/.claude/uploads/1f16a562-b586-47a3-b92f-29672541131c/00671956-META_KART_LOGO01_3_20260530_123808_0000.png",
+      "logo_y_frac": 0.38,
+      "logo_width_pct": 0.55
+    }
+  ]
+}

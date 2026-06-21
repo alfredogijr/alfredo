@@ -11,7 +11,7 @@ import json
 import textwrap
 import numpy as np
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 from moviepy import VideoClip
 
 
@@ -56,7 +56,7 @@ def load_portrait(path: str, out_w: int = 1080, out_h: int = 1920,
     fit_mode="cover"   – fill frame, center-crop (default, good for portrait photos)
     fit_mode="blur_bg" – show full photo, fill gaps with heavily blurred background
     """
-    img = Image.open(path).convert("RGB")
+    img = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
     w, h = img.size
     aspect = w / h
     frame_aspect = out_w / out_h  # 0.5625 for 9:16
