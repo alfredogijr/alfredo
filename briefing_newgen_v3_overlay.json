@@ -1,0 +1,108 @@
+{
+  "inputs": ["/home/user/alfredo/newgen_base_v3.mp4"],
+  "duration": 30.0,
+  "brand_color": [30, 160, 60],
+  "progress_bar": false,
+  "ken_burns": 0,
+  "vignette": 0.68,
+  "contrast": 1.12,
+  "color_grade": "cinematic",
+  "audio_fade": 0,
+  "audio_volume": 0,
+  "font_size_main": 62,
+  "font_size_sub": 28,
+  "logos": [
+    {
+      "path": "/root/.claude/uploads/1f16a562-b586-47a3-b92f-29672541131c/00671956-META_KART_LOGO01_3_20260530_123808_0000.png",
+      "x_frac": 0.50,
+      "y_frac": 0.35,
+      "width_pct": 0.55
+    }
+  ],
+  "logos_start": 27.2,
+  "logos_end": 29.8,
+  "logos_fade_dur": 0.6,
+
+  "segments": [
+    {
+      "start": 0.2,
+      "end": 5.0,
+      "anim": "slide_up",
+      "main": ["AQUELE OLHAR", "QUANDO ELE CRUZA", "A LINHA DE CHEGADA."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 5.2,
+      "end": 7.5,
+      "anim": "scale_fade",
+      "main": ["É DIFERENTE", "DE TUDO."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 7.7,
+      "end": 10.5,
+      "anim": "typewriter",
+      "main": ["NEW GENERATION.", "8ª ETAPA. META KART."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 10.7,
+      "end": 13.5,
+      "anim": "fade",
+      "main": ["CAPACETE.", "PISTA LIMPA.", "PILOTO CONFIANTE."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 13.7,
+      "end": 18.0,
+      "anim": "slide_up",
+      "main": ["ELE NÃO ESTAVA", "SÓ BRINCANDO."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 18.2,
+      "end": 21.0,
+      "anim": "slide_up",
+      "main": ["ELE ESTAVA", "COMPETINDO DE VERDADE."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 21.2,
+      "end": 26.8,
+      "anim": "word_reveal",
+      "main": ["E O SEU PODE ESTAR", "NA PRÓXIMA."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 27.2,
+      "end": 29.8,
+      "anim": "fade",
+      "main": ["META KART.", "INSCRIÇÕES", "ABERTAS."],
+      "sub": [],
+      "position": "center",
+      "accent": true,
+      "drop_shadow": true
+    }
+  ]
+}
