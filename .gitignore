@@ -4,3 +4,6 @@ output_*.mov
 temp_audio.*
 fonts/HKModular*
 fonts/HK-Modular*
+# rendered videos e fotos baixadas (media, não source)
+newgen_8etapa.mp4
+fotos_newgen/
