@@ -15,18 +15,18 @@
       "accent": true,
       "kb_direction": "in_center",
       "kb_zoom": 0.10,
-      "main": ["TEM PAI QUE ACHA", "QUE VELOCIDADE E PERIGO", "ANDAM JUNTOS."],
+      "main": ["VELOCIDADE E PERIGO", "ANDAM JUNTOS?"],
       "sub": []
     },
     {
       "image": "/home/user/alfredo/fotos_newgen/103523.jpg",
       "duration": 4.0,
-      "anim": "scale_fade",
+      "anim": "fade",
       "position": "top",
       "accent": false,
       "kb_direction": "left",
       "kb_zoom": 0.10,
-      "main": ["AQUI A GENTE", "MOSTRA O CONTRÁRIO."],
+      "main": ["A GENTE", "PROVA O CONTRÁRIO."],
       "sub": []
     },
     {
@@ -43,7 +43,7 @@
     {
       "image": "/home/user/alfredo/fotos_newgen/20260621_103613.jpg",
       "duration": 4.0,
-      "anim": "scale_fade",
+      "anim": "slide_up",
       "position": "top",
       "accent": false,
       "kb_direction": "up",
@@ -54,7 +54,7 @@
     {
       "image": "/home/user/alfredo/fotos_newgen/20260621_103602.jpg",
       "duration": 4.0,
-      "anim": "scale_fade",
+      "anim": "fade",
       "position": "top",
       "accent": false,
       "kb_direction": "in_tl",
@@ -65,7 +65,7 @@
     {
       "image": "/home/user/alfredo/fotos_newgen/20260621_103540.jpg",
       "duration": 4.0,
-      "anim": "slide_up",
+      "anim": "word_reveal",
       "position": "top",
       "accent": true,
       "kb_direction": "in_center",
@@ -76,12 +76,12 @@
     {
       "image": "/home/user/alfredo/fotos_newgen/103532.jpg",
       "duration": 4.0,
-      "anim": "scale_fade",
+      "anim": "slide_up",
       "position": "top",
       "accent": false,
-      "kb_direction": "right",
+      "kb_direction": "in_center",
       "kb_zoom": 0.10,
-      "main": ["TALVEZ O PRÓXIMO PILOTO", "DA PISTA SEJA O SEU FILHO."],
+      "main": ["O PRÓXIMO PILOTO", "DESTA PISTA", "PODE SER O SEU FILHO."],
       "sub": []
     },
     {
