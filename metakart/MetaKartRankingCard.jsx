@@ -76,7 +76,7 @@ const TRACK_CONFIG = {
 
 // ─── Hierarquia de pódio ───────────────────────────────────────────────────────
 const PODIUM = {
-  1: { accent: '#D4AF37', label: 'gold'   }, // Ouro F1 championship
+  1: { accent: '#FFD700', label: 'gold'   }, // Ouro F1 championship
   2: { accent: '#A8A9AD', label: 'silver' }, // Prata pódio
   3: { accent: '#CD7F32', label: 'bronze' }, // Bronze pódio
 };
@@ -121,7 +121,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
   // Inclinação do parallelogram em px (22% da altura — estilo F1 timing board)
   const slant      = Math.round(rowHeight * 0.22);
   // Espessura da faixa de acento colorido (ouro/prata/bronze ou cor da pista)
-  const stripeW    = isP1 ? 14 : isPodium ? 10 : 5;
+  const stripeW    = isP1 ? 22 : isPodium ? 14 : 6;
 
   // Cores da faixa de posição e fundo da linha
   const accentColor = podium
@@ -133,7 +133,7 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
   const baseRowBg   = isZebraAlt ? lerpHex(cfg.rowBg, cfg.numBg, 0.25) : cfg.rowBg;
   const rowBgLeft  = isPodium
     ? isP1
-      ? lerpHex(cfg.primaryLight, '#ffffff', 0.30)
+      ? lerpHex(cfg.primary, cfg.primaryLight, 0.45)
       : lerpHex(cfg.primaryLight, cfg.primary, 0.15)
     : baseRowBg;
   const rowBgRight = isPodium
@@ -145,8 +145,8 @@ function RankingRow({ entry, cfg, format, rowHeight, isLast }) {
 
   // Tamanho da fonte de nome: maior no P1
   const nameFontSize   = format === 'tv'
-    ? (isP1 ? 22 : isPodium ? 20 : 17)
-    : (isP1 ? Math.round(rowHeight * 0.36) : Math.round(rowHeight * 0.30));
+    ? (isP1 ? 26 : isPodium ? 21 : 17)
+    : (isP1 ? Math.round(rowHeight * 0.44) : Math.round(rowHeight * 0.30));
   const numFontSize    = format === 'tv'
     ? (isP1 ? 42 : isPodium ? 36 : 30)
     : Math.round(rowHeight * 0.75);
@@ -356,7 +356,7 @@ function SpeedLines({ primaryLight, count = 14 }) {
             left:       l.xOffset,
             right:      '-5%',
             height:     l.height,
-            background: `linear-gradient(90deg, transparent, ${primaryLight}${Math.round(l.opacity * 255).toString(16).padStart(2, '0')}, transparent)`,
+            background: `linear-gradient(90deg, transparent 0%, ${primaryLight}${Math.round(l.opacity * 255).toString(16).padStart(2, '0')} 15%, ${primaryLight}${Math.round(l.opacity * 0.35 * 255).toString(16).padStart(2, '0')} 60%, transparent 100%)`,
           }}
         />
       ))}
@@ -373,8 +373,9 @@ function HalftoneDots() {
       inset:         0,
       pointerEvents: 'none',
       // SVG inline como background para halftone sem canvas
-      backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px)`,
+      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='1.5' fill='rgba(255%2C255%2C255%2C0.08)'/%3E%3C%2Fsvg%3E")`,
       backgroundSize: '20px 20px',
+      backgroundRepeat: 'repeat',
     }} />
   );
 }
@@ -385,9 +386,9 @@ function PodiumSeparator({ cfg, format }) {
   return (
     <div style={{
       width:      '100%',
-      height:     1,
-      background: `linear-gradient(90deg, transparent, ${cfg.primaryLight}55, transparent)`,
-      margin:     `${format === 'tv' ? 2 : 3}px 0`,
+      height:     format === 'tv' ? 3 : 2,
+      background: `linear-gradient(90deg, transparent 2%, ${cfg.primaryLight}CC 25%, ${cfg.primaryLight}CC 75%, transparent 98%)`,
+      margin:     `${format === 'tv' ? 6 : 5}px 0`,
       flexShrink: 0,
     }} />
   );
@@ -408,11 +409,11 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
   const footerH    = 88;
   const rowGap     = 5;
   const available  = H - topBarH - headerH - sepH - footerH - (9 * rowGap);
-  const baseRowH   = Math.max(80, Math.round((available) / (1.42 + 1.14 + 1.06 + 7.0)));
+  const baseRowH   = Math.max(72, Math.round((available) / (1.72 + 1.20 + 1.08 + 7.0)));
   const rowHeights = {
-    1: Math.round(baseRowH * 1.42),
-    2: Math.round(baseRowH * 1.14),
-    3: Math.round(baseRowH * 1.06),
+    1: Math.round(baseRowH * 1.72),
+    2: Math.round(baseRowH * 1.20),
+    3: Math.round(baseRowH * 1.08),
   };
   const getRowH = (pos) => rowHeights[pos] || baseRowH;
 
@@ -558,11 +559,12 @@ function RankingCardInstagram({ cfg, category, entries, period, logoUrl, scale }
           </span>
         )}
         <span style={{
-          fontFamily:    "'Montserrat', sans-serif",
-          fontSize:      13,
-          fontWeight:    700,
-          color:         `${cfg.primaryLight}88`,
-          letterSpacing: '0.10em',
+          fontFamily:    "'Bebas Neue', Impact, sans-serif",
+          fontSize:      16,
+          fontWeight:    400,
+          color:         cfg.primaryLight,
+          letterSpacing: '0.16em',
+          opacity:       0.90,
         }}>
           #METAKART
         </span>
@@ -589,11 +591,11 @@ function RankingCardTV({ cfg, category, entries, period, logoUrl, scale }) {
   const sidebarW = 272;
 
   // Alturas das linhas para TV
-  const baseRowH = 72;
+  const baseRowH = 68;
   const getRowH  = (pos) => {
-    if (pos === 1) return Math.round(baseRowH * 1.38);
-    if (pos === 2) return Math.round(baseRowH * 1.12);
-    if (pos === 3) return Math.round(baseRowH * 1.05);
+    if (pos === 1) return Math.round(baseRowH * 1.72);
+    if (pos === 2) return Math.round(baseRowH * 1.22);
+    if (pos === 3) return Math.round(baseRowH * 1.08);
     return baseRowH;
   };
 
@@ -841,7 +843,7 @@ function CategoryBadge({ label, cfg, size = 'instagram' }) {
     }}>
       <span style={{
         display:    'inline-block',
-        background: cfg.primary,
+        background: cfg.primaryDark,
         clipPath:   `polygon(${chevron}px 0, 100% 0, calc(100% - ${chevron}px) 100%, 0 100%)`,
         padding:    `${padY}px ${padX + chevron / 2}px`,
         fontFamily: "'Montserrat', sans-serif",
@@ -857,15 +859,39 @@ function CategoryBadge({ label, cfg, size = 'instagram' }) {
   );
 }
 
+// ─── Utilitário de exportação: converte logo para branco puro ────────────────
+// html2canvas não suporta CSS filter — pré-processa o logo em canvas
+
+async function makeWhiteDataUrl(dataUrl) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const d = ctx.getImageData(0, 0, c.width, c.height);
+      for (let i = 0; i < d.data.length; i += 4) {
+        if (d.data[i + 3] > 0) { d.data[i] = 255; d.data[i+1] = 255; d.data[i+2] = 255; }
+      }
+      ctx.putImageData(d, 0, 0);
+      resolve(c.toDataURL('image/png'));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
 // ─── Painel de controles de export ────────────────────────────────────────────
 
 function ExportPanel({ cardProps, format, track, category }) {
-  const [exporting, setExporting] = React.useState(false);
+  const [exporting,    setExporting]    = React.useState(false);
+  const [exportStatus, setExportStatus] = React.useState(null); // {type:'success'|'error', msg:string}
 
   const handleExport = useCallback(async () => {
     setExporting(true);
+    setExportStatus(null);
 
-    // Referências declaradas fora do try para o finally poder limpá-las
     let offscreen = null;
     let root      = null;
 
@@ -875,47 +901,52 @@ function ExportPanel({ cardProps, format, track, category }) {
       const { width, height }         = FORMATS[format];
       const CardComponent             = format === 'tv' ? RankingCardTV : RankingCardInstagram;
 
-      // ── 1. Wrapper invisível no topo do document (não usa posição negativa).
-      //       visibility:hidden mantém o layout intacto sem mostrar ao usuário.
-      //       O wrapper tem as dimensões exatas do card — html2canvas captura
-      //       o elemento passado diretamente, sem depender de coordenadas absolutas.
+      // ── 0. Pré-processa logo para branco (html2canvas ignora CSS filter)
+      let whiteLogo = cardProps.logoUrl;
+      if (cardProps.logoUrl) {
+        try { whiteLogo = await makeWhiteDataUrl(cardProps.logoUrl); } catch(_) {}
+      }
+
+      // ── 1. Wrapper invisível
       const wrapper = document.createElement('div');
       wrapper.style.cssText = [
-        'position:absolute',
-        'top:0',
-        'left:0',
-        `width:${width}px`,
-        `height:${height}px`,
-        'overflow:hidden',
-        'visibility:hidden',
-        'pointer-events:none',
-        'z-index:-9999',
+        'position:absolute', 'top:0', 'left:0',
+        `width:${width}px`, `height:${height}px`,
+        'overflow:hidden', 'visibility:hidden',
+        'pointer-events:none', 'z-index:-9999',
       ].join(';');
       document.body.appendChild(wrapper);
       offscreen = wrapper;
 
-      // ── 2. Renderiza o card em escala 1:1 (sem nenhum CSS transform).
+      // ── 2. Renderiza em escala 1:1 com logo pré-processado
       root = createRoot(offscreen);
       await new Promise((resolve) => {
         root.render(
-          React.createElement(CardComponent, {
-            ...cardProps,
-            scale: 1,
-          })
+          React.createElement(CardComponent, { ...cardProps, logoUrl: whiteLogo, scale: 1 })
         );
-        // 400ms: React concurrent mode flush + imagens inline (logo dataURL)
         setTimeout(resolve, 400);
       });
 
-      // Aguarda fontes do documento (Bebas Neue + Montserrat)
+      // Aguarda decodificação das imagens no offscreen
+      const imgs = [...offscreen.querySelectorAll('img')];
+      await Promise.all(imgs.map(img =>
+        img.complete ? Promise.resolve() :
+        new Promise(r => {
+          img.addEventListener('load',  r, { once: true });
+          img.addEventListener('error', r, { once: true });
+        })
+      ));
+
+      // Carregamento explícito das fontes (evita race condition com iframe clonado)
+      await Promise.all([
+        document.fonts.load("700 72px 'Bebas Neue'"),
+        document.fonts.load("700 24px Montserrat"),
+        document.fonts.load("600 16px Montserrat"),
+        document.fonts.load("400 16px Montserrat"),
+      ]).catch(() => {});
       if (document.fonts?.ready) await document.fonts.ready;
 
-      // ── 3. Captura com html2canvas.
-      //       • Não passamos x/y/scrollX/scrollY — deixa o html2canvas localizar
-      //         o elemento pelo bounding rect real dele no DOM.
-      //       • windowWidth/windowHeight = dimensões do card, não da tela,
-      //         para que vh/vw resolvam corretamente dentro do card.
-      //       • scale:1 → canvas pixels = DOM pixels (sem HiDPI artificioso).
+      // ── 3. Captura com html2canvas
       const canvas = await html2canvas(offscreen, {
         width,
         height,
@@ -927,33 +958,24 @@ function ExportPanel({ cardProps, format, track, category }) {
         windowWidth:     width,
         windowHeight:    height,
         onclone: (clonedDoc, clonedEl) => {
-          // Remove visibility:hidden do clone para o html2canvas enxergar o conteúdo
           clonedEl.style.visibility = 'visible';
-
-          // Injeta as fontes no documento clonado caso ainda não existam
           if (!clonedDoc.querySelector('link[href*="googleapis"]')) {
             const link = clonedDoc.createElement('link');
-            link.rel   = 'stylesheet';
-            link.href  = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap';
+            link.rel  = 'stylesheet';
+            link.href = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap';
             clonedDoc.head.appendChild(link);
           }
         },
       });
 
-      // Valida dimensões — falha rápida se o canvas saiu menor que o esperado
       if (canvas.width !== width || canvas.height !== height) {
-        console.warn(
-          `[MetaKart export] Canvas ${canvas.width}×${canvas.height} difere do esperado ${width}×${height}. Verifique o DPR do browser.`
-        );
+        console.warn(`[MetaKart export] Canvas ${canvas.width}×${canvas.height} ≠ ${width}×${height}`);
       }
 
       // ── 4. Download
       const trackSlug = track.replace(/_/g, '-');
-      const catSlug   = category
-        .toLowerCase()
-        .replace(/\s+/g, '_')
-        .replace(/[àáâã]/g, 'a')
-        .replace(/[éê]/g, 'e');
+      const catSlug   = category.toLowerCase()
+        .replace(/\s+/g, '_').replace(/[àáâã]/g, 'a').replace(/[éê]/g, 'e');
       const filename = `metakart_${trackSlug}_${catSlug}_${format}.png`;
 
       await new Promise((resolve, reject) => {
@@ -961,24 +983,22 @@ function ExportPanel({ cardProps, format, track, category }) {
           if (!blob) { reject(new Error('toBlob retornou null — verifique CORS do logo.')); return; }
           const url = URL.createObjectURL(blob);
           const a   = document.createElement('a');
-          a.href     = url;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          a.href = url; a.download = filename;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
           setTimeout(() => { URL.revokeObjectURL(url); resolve(); }, 100);
-        }, 'image/png', 1.0);
+        }, 'image/png');
       });
+
+      setExportStatus({ type: 'success', msg: '✓ PNG salvo!' });
+      setTimeout(() => setExportStatus(null), 4000);
 
     } catch (err) {
       console.error('[MetaKart export]', err);
-      alert(`Erro ao exportar: ${err.message}`);
+      setExportStatus({ type: 'error', msg: `Falha: ${err.message || 'erro desconhecido'}` });
+      setTimeout(() => setExportStatus(null), 6000);
     } finally {
-      // Cleanup garantido — root e offscreen declarados no escopo da função
       try { root?.unmount(); } catch (_) {}
-      if (offscreen && document.body.contains(offscreen)) {
-        document.body.removeChild(offscreen);
-      }
+      if (offscreen && document.body.contains(offscreen)) document.body.removeChild(offscreen);
       setExporting(false);
     }
   }, [cardProps, format, track, category]);
@@ -995,31 +1015,41 @@ function ExportPanel({ cardProps, format, track, category }) {
       borderTop:    '1px solid rgba(255,255,255,0.1)',
       borderRadius: '0 0 8px 8px',
     }}>
-      <span style={{
-        color:      'rgba(255,255,255,0.5)',
-        fontSize:   13,
-        fontFamily: 'monospace',
-      }}>
+      <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, fontFamily: 'monospace' }}>
         {width}×{height}px · PNG
       </span>
+
+      {/* Feedback inline de sucesso/erro — substitui alert() */}
+      {exportStatus && (
+        <span style={{
+          fontSize:   12,
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: 600,
+          color:      exportStatus.type === 'success' ? '#3CD758' : '#FF6B6B',
+          transition: 'opacity 0.3s',
+        }}>
+          {exportStatus.msg}
+        </span>
+      )}
+
       <button
         onClick={handleExport}
         disabled={exporting}
         style={{
-          marginLeft:  'auto',
-          padding:     '8px 20px',
-          background:  exporting
+          marginLeft:   'auto',
+          padding:      '8px 20px',
+          background:   exporting
             ? 'rgba(108,52,200,0.4)'
             : 'linear-gradient(135deg, #6C34C8, #B980FF)',
-          border:      'none',
+          border:       'none',
           borderRadius: 6,
-          color:       exporting ? 'rgba(255,255,255,0.5)' : '#fff',
-          fontFamily:  "'Montserrat', sans-serif",
-          fontSize:    14,
-          fontWeight:  700,
-          cursor:      exporting ? 'wait' : 'pointer',
+          color:        exporting ? 'rgba(255,255,255,0.5)' : '#fff',
+          fontFamily:   "'Montserrat', sans-serif",
+          fontSize:     14,
+          fontWeight:   700,
+          cursor:       exporting ? 'wait' : 'pointer',
           letterSpacing: '0.06em',
-          transition:  'all 0.2s',
+          transition:   'all 0.2s',
         }}
       >
         {exporting ? 'GERANDO...' : 'EXPORTAR PNG'}
@@ -1144,17 +1174,23 @@ export function RankingPreviewPage() {
   const [format,   setFormat]   = React.useState('instagram');
   const [category, setCategory] = React.useState('ATÉ 75KG');
   const [period,   setPeriod]   = React.useState('25/05/2026 a 31/05/2026');
-  const [logoUrl,  setLogoUrl]  = React.useState(null);
+  const [logoUrl,  setLogoUrl]  = React.useState(() => {
+    try { return localStorage.getItem('metakart_logo') || null; } catch(_) { return null; }
+  });
   const [entries,  setEntries]  = React.useState(DEMO_ENTRIES);
 
   const cfg = TRACK_CONFIG[track];
 
-  // Upload da logo como data URL
+  // Upload da logo como data URL — persiste no localStorage
   const handleLogoUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => setLogoUrl(ev.target.result);
+    reader.onload = (ev) => {
+      const url = ev.target.result;
+      setLogoUrl(url);
+      try { localStorage.setItem('metakart_logo', url); } catch(_) {}
+    };
     reader.readAsDataURL(file);
   };
 
