@@ -5,5 +5,7 @@ temp_audio.*
 fonts/HKModular*
 fonts/HK-Modular*
 # rendered videos e fotos baixadas (media, não source)
-newgen_8etapa.mp4
+newgen_*.mp4
 fotos_newgen/
+videos_newgen/
+raw_turista_*/
