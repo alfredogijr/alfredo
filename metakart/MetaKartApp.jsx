@@ -135,7 +135,12 @@ async function parsePDF(file) {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page    = await pdf.getPage(i);
     const content = await page.getTextContent();
-    const text    = content.items.map(item => item.str).join(' ');
+    const raw  = content.items.map(item => item.str).join(' ');
+    // Normaliza tokens de tempo fragmentados pelo PDF:
+    // "00:31 :21 2" → "00:31:212"  (join com espaço separa colon e dígitos)
+    const text = raw
+      .replace(/(\d)\s+:/g, '$1:')                          // "31 :" → "31:"
+      .replace(/:\s*(\d+)\s+(\d+)/g, (_, a, b) => `:${a}${b}`); // ":21 2" → ":212"
     lines.push(...text.split(/\n|\s{3,}/));
   }
 
