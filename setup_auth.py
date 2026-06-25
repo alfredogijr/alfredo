@@ -1,108 +1,107 @@
 """
-Script para configurar autenticação OAuth2 com o Google Ads.
-Execute este script UMA VEZ para obter o refresh_token.
-
-Uso:
-    python setup_auth.py
-
-Pré-requisitos:
-    1. Crie um projeto no Google Cloud Console
-    2. Ative a Google Ads API
-    3. Crie credenciais OAuth2 (tipo: Desktop app)
-    4. Baixe o JSON de credenciais
+Gera o Refresh Token para autenticacao com o Google Ads.
+Execute este script para (re)autenticar.
 """
 import os
-import json
-import sys
+import webbrowser
+import urllib.parse
+import requests
 from pathlib import Path
-from google_auth_oauthlib.flow import InstalledAppFlow
+from dotenv import load_dotenv
 
-SCOPES = ["https://www.googleapis.com/auth/adwords"]
-
-OAUTH_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+load_dotenv()
 
 
-def run_setup():
-    print("=" * 60)
-    print("  Configuração OAuth2 - Google Ads MCC")
-    print("=" * 60)
+def main():
+    print()
+    print("=" * 55)
+    print("  Autenticacao Google Ads — Gerando Refresh Token")
+    print("=" * 55)
     print()
 
-    # Verifica se o arquivo de credenciais existe
-    client_secrets = input(
-        "Caminho para o arquivo client_secret.json (ou pressione Enter para digitar manualmente): "
-    ).strip()
+    client_id = os.getenv("GOOGLE_ADS_CLIENT_ID", "").strip()
+    client_secret = os.getenv("GOOGLE_ADS_CLIENT_SECRET", "").strip()
 
-    if client_secrets and Path(client_secrets).exists():
-        flow = InstalledAppFlow.from_client_secrets_file(client_secrets, scopes=SCOPES)
-    else:
-        print("\nDigite as credenciais manualmente:")
+    if not client_id or not client_secret:
+        print("Nao encontrei Client ID ou Client Secret no .env")
+        print("Cole abaixo:")
         client_id = input("Client ID: ").strip()
         client_secret = input("Client Secret: ").strip()
 
-        client_config = {
-            "installed": {
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "redirect_uris": [OAUTH_REDIRECT_URI],
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-            }
-        }
-        flow = InstalledAppFlow.from_client_config(client_config, scopes=SCOPES)
+    # Gerar URL de autorizacao (sem PKCE para simplificar)
+    params = {
+        "response_type": "code",
+        "client_id": client_id,
+        "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
+        "scope": "https://www.googleapis.com/auth/adwords",
+        "access_type": "offline",
+        "prompt": "consent",
+    }
+    auth_url = "https://accounts.google.com/o/oauth2/auth?" + urllib.parse.urlencode(params)
 
-    flow.redirect_uri = OAUTH_REDIRECT_URI
+    print("Abrindo o navegador para autorizar...")
+    print()
+    webbrowser.open(auth_url)
 
-    auth_url, _ = flow.authorization_url(
-        access_type="offline",
-        prompt="consent",
-    )
+    print("Se o navegador nao abrir, copie e acesse este link:")
+    print()
+    print(auth_url)
+    print()
+    print("-" * 55)
+    print("1. Faca login com a conta Google Ads")
+    print('2. Clique em "Permitir"')
+    print("3. Copie o codigo que aparecer na tela")
+    print("-" * 55)
+    print()
 
-    print("\n1. Abra este URL no seu navegador:")
-    print(f"\n   {auth_url}\n")
-    print("2. Faça login com a conta Google Ads")
-    print("3. Autorize o acesso")
-    print("4. Copie o código de autorização\n")
+    auth_code = input("Cole o codigo aqui: ").strip()
 
-    auth_code = input("Cole o código de autorização aqui: ").strip()
+    # Trocar codigo por refresh token
+    resp = requests.post("https://oauth2.googleapis.com/token", data={
+        "code": auth_code,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
+        "grant_type": "authorization_code",
+    })
 
-    flow.fetch_token(code=auth_code)
-    credentials = flow.credentials
+    data = resp.json()
+    if "refresh_token" not in data:
+        print(f"\n[ERRO] {data.get('error_description', data)}")
+        input("\nPressione Enter para fechar...")
+        return
 
-    print("\n✅ Autenticação bem-sucedida!\n")
-    print("Adicione estas variáveis ao seu arquivo .env:\n")
-    print(f"GOOGLE_ADS_CLIENT_ID={credentials.client_id}")
-    print(f"GOOGLE_ADS_CLIENT_SECRET={credentials.client_secret}")
-    print(f"GOOGLE_ADS_REFRESH_TOKEN={credentials.refresh_token}")
+    refresh_token = data["refresh_token"]
+    print(f"\n[OK] Refresh Token gerado!")
 
-    # Salva automaticamente no .env se existir
+    # Salvar no .env
     env_path = Path(".env")
     if env_path.exists():
-        save = input("\nDeseja salvar automaticamente no .env? (s/n): ").strip().lower()
-        if save == "s":
-            lines = env_path.read_text().splitlines()
-            new_lines = []
-            keys_updated = set()
-
-            for line in lines:
-                if line.startswith("GOOGLE_ADS_CLIENT_ID="):
-                    new_lines.append(f"GOOGLE_ADS_CLIENT_ID={credentials.client_id}")
-                    keys_updated.add("client_id")
-                elif line.startswith("GOOGLE_ADS_CLIENT_SECRET="):
-                    new_lines.append(f"GOOGLE_ADS_CLIENT_SECRET={credentials.client_secret}")
-                    keys_updated.add("client_secret")
-                elif line.startswith("GOOGLE_ADS_REFRESH_TOKEN="):
-                    new_lines.append(f"GOOGLE_ADS_REFRESH_TOKEN={credentials.refresh_token}")
-                    keys_updated.add("refresh_token")
+        content = env_path.read_text(encoding="utf-8")
+        if "GOOGLE_ADS_REFRESH_TOKEN=" in content:
+            lines = []
+            for line in content.splitlines():
+                if line.startswith("GOOGLE_ADS_REFRESH_TOKEN="):
+                    lines.append(f"GOOGLE_ADS_REFRESH_TOKEN={refresh_token}")
                 else:
-                    new_lines.append(line)
+                    lines.append(line)
+            env_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        else:
+            with env_path.open("a", encoding="utf-8") as f:
+                f.write(f"\nGOOGLE_ADS_REFRESH_TOKEN={refresh_token}\n")
+        print("[OK] Salvo no .env automaticamente!")
+    else:
+        print(f"\nAdicione ao seu .env:")
+        print(f"GOOGLE_ADS_REFRESH_TOKEN={refresh_token}")
 
-            if "refresh_token" not in keys_updated:
-                new_lines.append(f"GOOGLE_ADS_REFRESH_TOKEN={credentials.refresh_token}")
-
-            env_path.write_text("\n".join(new_lines) + "\n")
-            print("✅ Arquivo .env atualizado!")
+    print()
+    print("=" * 55)
+    print("  Autenticacao concluida!")
+    print("  Agora rode: python test_connection.py")
+    print("=" * 55)
+    print()
+    input("Pressione Enter para fechar...")
 
 
 if __name__ == "__main__":
-    run_setup()
+    main()
