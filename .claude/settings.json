@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "google-ads-mcc": {
+      "command": "python",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "/home/user/alfredo",
+      "env": {
+        "PYTHONPATH": "/home/user/alfredo"
+      }
+    }
+  }
+}
