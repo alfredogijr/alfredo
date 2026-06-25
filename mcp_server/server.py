@@ -11,7 +11,7 @@ import mcp.types as types
 from mcp.server import Server
 
 from mcp_server.auth import get_client, get_login_customer_id
-from mcp_server.tools import accounts, campaigns, keywords, reports, ads
+from mcp_server.tools import accounts, campaigns, keywords, reports, ads, optimization
 
 app = Server("google-ads-mcc")
 
@@ -226,6 +226,70 @@ async def list_tools() -> list[types.Tool]:
                 "required": ["customer_id"],
             },
         ),
+        # ── Optimization tools ─────────────────────────────────────────────
+        types.Tool(
+            name="resumo_executivo",
+            description="Resumo executivo completo da conta: top campanhas por gasto e conversão, pior CPA, médias globais. Bom ponto de partida para qualquer análise.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "customer_id": {"type": "string"},
+                    "date_range": {"type": "string", "default": "LAST_30_DAYS"},
+                },
+                "required": ["customer_id"],
+            },
+        ),
+        types.Tool(
+            name="analisar_oportunidades",
+            description="Identifica automaticamente: campanhas limitadas por budget, campanhas sem conversão gastando dinheiro, campanhas com CTR baixo e CPC alto.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "customer_id": {"type": "string"},
+                    "date_range": {"type": "string", "default": "LAST_30_DAYS"},
+                },
+                "required": ["customer_id"],
+            },
+        ),
+        types.Tool(
+            name="sugerir_palavras_negativas",
+            description="Analisa termos de busca e retorna candidatos a palavras negativas: termos com cliques mas zero conversão, e termos com CTR muito baixo.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "customer_id": {"type": "string"},
+                    "campaign_id": {"type": "string", "description": "Filtrar por campanha (opcional)"},
+                    "date_range": {"type": "string", "default": "LAST_30_DAYS"},
+                    "min_clicks": {
+                        "type": "integer",
+                        "default": 3,
+                        "description": "Mínimo de cliques sem conversão para sinalizar o termo",
+                    },
+                },
+                "required": ["customer_id"],
+            },
+        ),
+        types.Tool(
+            name="analisar_quality_score",
+            description="Auditoria de Quality Score: distribuição por faixa, palavras críticas (QS < 5) com maior gasto, e recomendações de melhoria.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "customer_id": {"type": "string"},
+                    "campaign_id": {"type": "string", "description": "Filtrar por campanha (opcional)"},
+                    "date_range": {"type": "string", "default": "LAST_30_DAYS"},
+                },
+                "required": ["customer_id"],
+            },
+        ),
+        types.Tool(
+            name="verificar_conexao",
+            description="Verifica se as credenciais estão corretas e a conexão com a API do Google Ads está funcionando.",
+            inputSchema={
+                "type": "object",
+                "properties": {},
+            },
+        ),
     ]
 
 
@@ -348,6 +412,45 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
                     arguments["customer_id"],
                     arguments.get("date_range", "LAST_30_DAYS"),
                 ))
+
+            case "resumo_executivo":
+                return _ok(optimization.resumo_executivo(
+                    client,
+                    arguments["customer_id"],
+                    arguments.get("date_range", "LAST_30_DAYS"),
+                ))
+
+            case "analisar_oportunidades":
+                return _ok(optimization.analisar_oportunidades(
+                    client,
+                    arguments["customer_id"],
+                    arguments.get("date_range", "LAST_30_DAYS"),
+                ))
+
+            case "sugerir_palavras_negativas":
+                return _ok(optimization.sugerir_palavras_negativas(
+                    client,
+                    arguments["customer_id"],
+                    arguments.get("campaign_id"),
+                    arguments.get("date_range", "LAST_30_DAYS"),
+                    arguments.get("min_clicks", 3),
+                ))
+
+            case "analisar_quality_score":
+                return _ok(optimization.analisar_quality_score(
+                    client,
+                    arguments["customer_id"],
+                    arguments.get("campaign_id"),
+                    arguments.get("date_range", "LAST_30_DAYS"),
+                ))
+
+            case "verificar_conexao":
+                accs = accounts.list_accounts(client, mcc_id)
+                return _ok({
+                    "status": "conectado",
+                    "mcc_id": mcc_id,
+                    "contas_encontradas": len(accs),
+                })
 
             case _:
                 return _err(f"Ferramenta desconhecida: {name}")
