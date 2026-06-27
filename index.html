@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#081019" />
+  <meta name="theme-color" content="#081a2e" />
   <title>Grão de Mostarda — Marketing digital potencializado por IA</title>
-  <meta name="description" content="Menos dependência, mais controle. Estruturamos seu time interno de marketing e transferimos o conhecimento para você ter autonomia, clareza e resultados reais — sem ser refém de agências." />
+  <meta name="description" content="Transformamos propósito em crescimento. Estruturamos seu time interno de marketing e transferimos o conhecimento para você ter autonomia, clareza e resultados reais — sem ser refém de agências." />
 
   <!-- Favicon: broto da marca -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%23F5A702'/%3E%3Cpath d='M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z' fill='white'/%3E%3Cpath d='M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z' fill='white'/%3E%3Cpath d='M24 23V41 M17 41H31' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5A702'/%3E%3Cpath d='M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z' fill='white'/%3E%3Cpath d='M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z' fill='white'/%3E%3Cpath d='M31 34C31 43 33 47 32 53' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M22 54H42' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
 
   <!-- ====== Fonts (Raleway + Inter) ====== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,8 +23,9 @@
         extend: {
           fontFamily: { display: ['Raleway','sans-serif'], body: ['Inter','sans-serif'] },
           colors: {
-            ink:'#081019', navy:'#1a2840', navyDeep:'#0e1828', blue:'#2a6496',
-            amber:'#F5A702', amberLight:'#FFCA3C', amberDark:'#C48500', cream:'#F0EDE4',
+            ink:'#081a2e', navy:'#0E2A4E', navyDeep:'#0a2038',
+            amber:'#F5A702', gold:'#D4B81E', amberLight:'#FFCA3C',
+            green:'#6FA86E', cream:'#FBF7EF', mustardLight:'#FFF4DA',
           },
         },
       },
@@ -38,14 +39,14 @@
   <style>
     * { -webkit-font-smoothing: antialiased; }
     html { scroll-behavior: smooth; }
-    body { background:#081019; color:#F0EDE4; font-family:'Inter',sans-serif; overflow-x:hidden; }
+    body { background:#081a2e; color:#FBF7EF; font-family:'Inter',sans-serif; overflow-x:hidden; }
 
     .aurora {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .6;
       background:
-        radial-gradient(40% 50% at 15% 20%, rgba(42,100,150,.35), transparent 60%),
+        radial-gradient(40% 50% at 15% 20%, rgba(14,42,78,.7), transparent 60%),
         radial-gradient(45% 55% at 85% 15%, rgba(245,167,2,.18), transparent 60%),
-        radial-gradient(55% 60% at 50% 105%, rgba(26,40,64,.65), transparent 60%);
+        radial-gradient(55% 60% at 50% 105%, rgba(212,184,30,.12), transparent 60%);
       filter: blur(20px); animation: drift 18s ease-in-out infinite alternate;
     }
     @keyframes drift { 0%{transform:translate3d(0,0,0) scale(1);} 100%{transform:translate3d(0,-4%,0) scale(1.1);} }
@@ -58,14 +59,14 @@
     }
 
     .text-gradient {
-      background: linear-gradient(100deg,#F5A702 0%, #FFCA3C 45%, #F0EDE4 100%);
+      background: linear-gradient(100deg,#F5A702 0%, #FFCA3C 45%, #FBF7EF 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
 
     .glow-border { position: relative; border-radius: 1.25rem; }
     .glow-border::before {
       content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background: linear-gradient(130deg, rgba(245,167,2,.6), rgba(255,202,60,.22), transparent 60%);
+      background: linear-gradient(130deg, rgba(245,167,2,.6), rgba(212,184,30,.22), transparent 60%);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;
     }
@@ -87,10 +88,7 @@
     .sway { animation: sway 7s ease-in-out infinite; transform-origin: 50% 90%; }
     @keyframes sway { 0%,100%{ transform: rotate(-7deg); } 50%{ transform: rotate(7deg); } }
 
-    .float { animation: floaty 6s ease-in-out infinite; }
-    @keyframes floaty { 50% { transform: translateY(-14px); } }
-
-    .nav-blur { backdrop-filter: blur(12px); background: rgba(8,16,25,.65); }
+    .nav-blur { backdrop-filter: blur(12px); background: rgba(8,26,46,.7); }
     ::selection { background: rgba(245,167,2,.3); }
   </style>
 </head>
@@ -104,15 +102,17 @@
     <nav class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
       <a href="#topo" class="flex items-center gap-2.5 font-display font-700 text-lg tracking-tight">
         <span class="inline-grid place-items-center w-9 h-9 rounded-lg bg-amber">
-          <svg viewBox="0 0 48 48" class="w-5 h-5 text-ink" fill="none">
-            <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
-            <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
-            <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <svg viewBox="0 0 64 64" class="w-6 h-6 text-ink" fill="none">
+            <path d="M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z" fill="currentColor"/>
+            <path d="M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z" fill="currentColor"/>
+            <path d="M31 34C31 43 33 47 32 53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M22 54H42" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
           </svg>
         </span>
         Grão de Mostarda
       </a>
       <div class="hidden md:flex items-center gap-8 text-sm text-cream/70">
+        <a href="#pilares" class="hover:text-amber transition">A marca</a>
         <a href="#solucoes" class="hover:text-amber transition">Soluções</a>
         <a href="#resultados" class="hover:text-amber transition">Resultados</a>
         <a href="#depoimentos" class="hover:text-amber transition">Depoimentos</a>
@@ -169,17 +169,18 @@
           <defs>
             <path id="selo" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
           </defs>
-          <text fill="#F0EDE4" font-family="Raleway, sans-serif" font-size="13" font-weight="600" letter-spacing="4">
+          <text fill="#FBF7EF" font-family="Raleway, sans-serif" font-size="13" font-weight="600" letter-spacing="4">
             <textPath href="#selo" startOffset="0">GRÃO DE MOSTARDA • MARKETING + IA • </textPath>
           </text>
         </svg>
         <!-- broto central que balança -->
         <span class="absolute inset-0 grid place-items-center">
           <span class="sway grid place-items-center w-16 h-16 rounded-2xl bg-amber shadow-xl shadow-amber/30">
-            <svg viewBox="0 0 48 48" class="w-9 h-9 text-ink" fill="none">
-              <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
-              <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
-              <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <svg viewBox="0 0 64 64" class="w-10 h-10 text-ink" fill="none">
+              <path d="M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z" fill="currentColor"/>
+              <path d="M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z" fill="currentColor"/>
+              <path d="M31 34C31 43 33 47 32 53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M22 54H42" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
             </svg>
           </span>
         </span>
@@ -209,6 +210,39 @@
     </div>
   </section>
 
+  <!-- ====================== PILARES DA MARCA ====================== -->
+  <section id="pilares" class="relative z-10 py-24">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="max-w-2xl mb-14 reveal">
+        <p class="text-amber font-600 text-sm mb-3">O que fazemos por quem confia</p>
+        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Cinco verbos sustentam tudo o que entregamos</h2>
+        <p class="mt-4 text-cream/60 text-lg">Acreditamos no poder das pequenas sementes. Pequenas conexões bem cuidadas geram grandes resultados.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div class="reveal border-t-2 border-amber/60 pt-5">
+          <h3 class="font-display font-700 text-lg tracking-wide mb-1">Conectamos</h3>
+          <p class="text-cream/55 text-sm">Pessoas, ideias e oportunidades.</p>
+        </div>
+        <div class="reveal border-t-2 border-amber/60 pt-5">
+          <h3 class="font-display font-700 text-lg tracking-wide mb-1">Estruturamos</h3>
+          <p class="text-cream/55 text-sm">Estratégias claras e processos inteligentes.</p>
+        </div>
+        <div class="reveal border-t-2 border-amber/60 pt-5">
+          <h3 class="font-display font-700 text-lg tracking-wide mb-1">Transformamos</h3>
+          <p class="text-cream/55 text-sm">Ideias em sistemas que geram resultado.</p>
+        </div>
+        <div class="reveal border-t-2 border-amber/60 pt-5">
+          <h3 class="font-display font-700 text-lg tracking-wide mb-1">Aceleramos</h3>
+          <p class="text-cream/55 text-sm">Negócios com visão, tecnologia e propósito.</p>
+        </div>
+        <div class="reveal border-t-2 border-green/70 pt-5">
+          <h3 class="font-display font-700 text-lg tracking-wide mb-1">Cuidamos</h3>
+          <p class="text-cream/55 text-sm">De cada detalhe como se fosse a semente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ====================== SOLUÇÕES ====================== -->
   <section id="solucoes" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
@@ -225,12 +259,12 @@
           <p class="text-cream/60">Mergulhamos no seu negócio para diagnosticar gargalos e desenhar um plano estratégico que conecte marketing, tecnologia e resultados reais.</p>
         </div>
         <div class="glow-border card-hover bg-navy/40 p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-blue/25 grid place-items-center text-2xl mb-5">🤖</div>
+          <div class="w-12 h-12 rounded-xl bg-gold/20 grid place-items-center text-2xl mb-5">🤖</div>
           <h3 class="font-display font-600 text-xl mb-2">Desenvolvimento de Sistemas com IA</h3>
           <p class="text-cream/60">Criamos CRMs, automações e sistemas web sob medida, integrando inteligência artificial para otimizar processos e dar clareza à sua operação.</p>
         </div>
         <div class="glow-border card-hover bg-navy/40 p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-amber/15 grid place-items-center text-2xl mb-5">🎓</div>
+          <div class="w-12 h-12 rounded-xl bg-green/20 grid place-items-center text-2xl mb-5">🎓</div>
           <h3 class="font-display font-600 text-xl mb-2">Treinamento e Mentoria Interna</h3>
           <p class="text-cream/60">Capacitamos seu time com treinamentos e mentorias práticas, transferindo o conhecimento necessário para que executem o marketing com autonomia e excelência.</p>
         </div>
@@ -296,7 +330,7 @@
           <blockquote class="text-cream/85 text-lg leading-snug">“Já cansei de indicar de olhos fechados. Quando penso em Marketing Digital, eu confio na Grão.”</blockquote>
           <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Orlando Ribero</span><br/><span class="text-cream/50">Tom Consultoria</span></figcaption>
         </figure>
-        <div class="glow-border bg-gradient-to-br from-amber/15 to-blue/10 p-7 grid place-items-center text-center reveal">
+        <div class="glow-border bg-gradient-to-br from-amber/15 to-navy/30 p-7 grid place-items-center text-center reveal">
           <div>
             <p class="font-display font-700 text-xl mb-2">A sua empresa é a próxima?</p>
             <a href="#contato" class="inline-flex items-center gap-2 text-amber font-600 hover:gap-3 transition-all">Vamos conversar →</a>
@@ -341,15 +375,18 @@
       <div>
         <div class="flex items-center gap-2.5 font-display font-600 text-cream mb-3">
           <span class="inline-grid place-items-center w-8 h-8 rounded-md bg-amber">
-            <svg viewBox="0 0 48 48" class="w-4 h-4 text-ink" fill="none">
-              <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
-              <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
-              <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <svg viewBox="0 0 64 64" class="w-5 h-5 text-ink" fill="none">
+              <path d="M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z" fill="currentColor"/>
+              <path d="M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z" fill="currentColor"/>
+              <path d="M31 34C31 43 33 47 32 53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M22 54H42" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
             </svg>
           </span>
           Grão de Mostarda
         </div>
-        <p>Marketing digital potencializado por IA. Transformamos seu negócio com estratégias que geram resultados reais.</p>
+        <p class="text-amber/90 font-display font-600 mb-2">Transformamos propósito em crescimento.</p>
+        <p>Marketing digital potencializado por IA. Soluções que geram crescimento de verdade.</p>
+        <p class="mt-3 text-cream/45">Alfredo Girolani Jr. · Estrategista &amp; Fundador</p>
       </div>
       <div>
         <p class="text-cream font-600 mb-3">Soluções</p>
