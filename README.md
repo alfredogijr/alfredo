@@ -12,11 +12,16 @@ Abra o arquivo `index.html` no navegador. Não precisa instalar nada.
 - **GitHub Pages**: Settings → Pages → branch → `/root`
 - **Vercel**: importe o repositório
 
-## O que ainda é exemplo (a trocar pelo conteúdo real)
-- Textos de hero, soluções, processo e depoimento
-- Números da seção de resultados
-- Logo / cores (hoje: verde + dourado, conceito "grão de mostarda")
-- Formulário: hoje só demonstra; precisa ligar ao seu e-mail/WhatsApp/CRM
+## Conteúdo
+Textos, soluções, resultados e depoimentos são os reais, extraídos do site
+oficial (consultoriagrao.com.br). Posicionamento: marketing digital + IA,
+foco em dar autonomia ao time interno e reduzir dependência de agências.
+
+## Ainda a ajustar
+- **Logo real** (hoje há um "G" estilizado como placeholder)
+- **Número de WhatsApp** no botão flutuante (hoje aponta pro formulário)
+- **Formulário**: abre um e-mail pré-preenchido (mailto). Para captar leads de
+  forma automática, ligar a um backend/CRM (ex: Formspree, RD Station, etc.)
 
 ## Tecnologias (via CDN, sem build)
 - Tailwind CSS · GSAP + ScrollTrigger · Google Fonts (Sora + Inter)

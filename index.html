@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grão de Mostarda — Consultoria que faz seu negócio crescer</title>
-  <meta name="description" content="Consultoria estratégica para empresas que querem crescer de verdade. Do grão à colheita: estratégia, processos e resultado." />
+  <title>Grão de Mostarda — Marketing digital potencializado por IA</title>
+  <meta name="description" content="Menos dependência, mais controle. Estruturamos seu time interno de marketing e transferimos o conhecimento para você ter autonomia, clareza e resultados reais — sem ser refém de agências." />
 
   <!-- ====== Fonts ====== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,18 +17,10 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            display: ['Sora', 'sans-serif'],
-            body: ['Inter', 'sans-serif'],
-          },
+          fontFamily: { display: ['Sora','sans-serif'], body: ['Inter','sans-serif'] },
           colors: {
-            ink: '#0a140e',
-            moss: '#0f3d2e',
-            leaf: '#1f7a4d',
-            mint: '#34d399',
-            gold: '#e6b54a',
-            mustard: '#f0c14b',
-            cream: '#f5f3ec',
+            ink:'#0a140e', moss:'#0f3d2e', leaf:'#1f7a4d', mint:'#34d399',
+            gold:'#e6b54a', mustard:'#f0c14b', cream:'#f5f3ec',
           },
         },
       },
@@ -40,27 +32,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <style>
-    :root { --gold: #e6b54a; --mint: #34d399; }
     * { -webkit-font-smoothing: antialiased; }
     html { scroll-behavior: smooth; }
     body { background:#06100b; color:#f5f3ec; font-family:'Inter',sans-serif; overflow-x:hidden; }
 
-    /* ---- Gradiente vivo de fundo ---- */
     .aurora {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .55;
       background:
         radial-gradient(40% 50% at 15% 20%, rgba(52,211,153,.25), transparent 60%),
         radial-gradient(45% 55% at 85% 15%, rgba(230,181,74,.20), transparent 60%),
         radial-gradient(50% 60% at 50% 100%, rgba(31,122,77,.30), transparent 60%);
-      filter: blur(20px);
-      animation: drift 18s ease-in-out infinite alternate;
+      filter: blur(20px); animation: drift 18s ease-in-out infinite alternate;
     }
-    @keyframes drift {
-      0%   { transform: translate3d(0,0,0) scale(1); }
-      100% { transform: translate3d(0,-4%,0) scale(1.1); }
-    }
+    @keyframes drift { 0%{transform:translate3d(0,0,0) scale(1);} 100%{transform:translate3d(0,-4%,0) scale(1.1);} }
 
-    /* ---- Brilho que segue o mouse ---- */
     .spotlight {
       position: fixed; width: 600px; height: 600px; border-radius: 50%; z-index: 1;
       pointer-events: none; mix-blend-mode: screen; transition: opacity .4s;
@@ -68,13 +53,11 @@
       transform: translate(-50%,-50%);
     }
 
-    /* ---- Texto com gradiente ---- */
     .text-gradient {
       background: linear-gradient(100deg,#34d399 0%, #a7f3d0 35%, #f0c14b 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
 
-    /* ---- Borda animada (glow) ---- */
     .glow-border { position: relative; border-radius: 1.25rem; }
     .glow-border::before {
       content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
@@ -86,15 +69,12 @@
     .card-hover { transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s; }
     .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 60px -20px rgba(52,211,153,.35); }
 
-    /* ---- Marquee ---- */
-    .marquee { display:flex; gap:3rem; width:max-content; animation: scrollx 28s linear infinite; }
+    .marquee { display:flex; gap:3rem; width:max-content; animation: scrollx 30s linear infinite; }
     @keyframes scrollx { to { transform: translateX(-50%); } }
 
-    /* ---- Reveal inicial (caso JS falhe, mostra mesmo assim) ---- */
     .reveal { opacity: 0; transform: translateY(24px); }
     .reveal.in { opacity: 1; transform: none; transition: opacity .8s, transform .8s; }
 
-    /* ---- Grão flutuante decorativo ---- */
     .float { animation: floaty 6s ease-in-out infinite; }
     @keyframes floaty { 50% { transform: translateY(-14px); } }
 
@@ -116,12 +96,12 @@
       </a>
       <div class="hidden md:flex items-center gap-8 text-sm text-cream/70">
         <a href="#solucoes" class="hover:text-mint transition">Soluções</a>
-        <a href="#processo" class="hover:text-mint transition">Como funciona</a>
         <a href="#resultados" class="hover:text-mint transition">Resultados</a>
+        <a href="#depoimentos" class="hover:text-mint transition">Depoimentos</a>
         <a href="#contato" class="hover:text-mint transition">Contato</a>
       </div>
       <a href="#contato" class="text-sm font-600 px-4 py-2 rounded-full bg-mint text-ink hover:bg-mint/90 transition shadow-lg shadow-mint/20">
-        Agendar reunião
+        Falar com especialista
       </a>
     </nav>
   </header>
@@ -131,39 +111,37 @@
     <div class="max-w-6xl mx-auto px-5 w-full">
       <div class="inline-flex items-center gap-2 text-xs font-600 px-3 py-1.5 rounded-full border border-mint/30 bg-mint/10 text-mint mb-8 reveal" data-hero>
         <span class="w-1.5 h-1.5 rounded-full bg-mint animate-pulse"></span>
-        Consultoria estratégica para empresas em crescimento
+        Marketing digital potencializado por IA
       </div>
 
       <h1 class="font-display font-800 leading-[1.05] tracking-tight text-5xl md:text-7xl max-w-4xl reveal" data-hero>
-        Do <span class="text-gradient">grão</span> à
-        <span class="text-gradient">colheita</span>:<br/>
-        seu negócio crescendo<br class="hidden md:block"/> de verdade.
+        Menos <span class="text-gradient">dependência</span>.<br/>
+        Mais <span class="text-gradient">controle</span>.
       </h1>
 
       <p class="mt-7 text-lg md:text-xl text-cream/70 max-w-2xl reveal" data-hero>
-        A Grão de Mostarda ajuda empresas a sair do operacional sufocante e construir
-        uma máquina de crescimento — com estratégia, processos e números que fazem sentido.
+        Marketing estratégico feito dentro de casa. Chega de se sentir refém de agências:
+        estruturamos o seu time interno e transferimos o conhecimento para você ter
+        <span class="text-cream">autonomia, clareza e resultados reais</span>.
       </p>
 
       <div class="mt-10 flex flex-col sm:flex-row gap-4 reveal" data-hero>
         <a href="#contato" class="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-mint text-ink font-700 text-base hover:bg-mint/90 transition shadow-xl shadow-mint/25">
-          Quero crescer com método
+          Falar com um especialista
           <span class="group-hover:translate-x-1 transition">→</span>
         </a>
         <a href="#solucoes" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border border-white/15 text-cream/90 font-600 hover:border-mint/40 hover:text-mint transition">
-          Ver como funciona
+          Conheça as soluções
         </a>
       </div>
 
-      <!-- Mini-prova social -->
       <div class="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-cream/50 reveal" data-hero>
-        <span>✦ +120 projetos entregues</span>
-        <span>✦ Média de 3,4x em crescimento de receita</span>
-        <span>✦ Nota 9,7 de satisfação</span>
+        <span>✦ Time interno autônomo</span>
+        <span>✦ CRM sob medida, sem custo de licença</span>
+        <span>✦ Processos com IA</span>
       </div>
     </div>
 
-    <!-- grão decorativo -->
     <div class="float absolute right-10 top-1/3 hidden lg:block opacity-80" aria-hidden="true">
       <div class="w-40 h-40 rounded-full bg-gradient-to-br from-mint/40 to-gold/30 blur-2xl"></div>
     </div>
@@ -172,100 +150,119 @@
   <!-- ====================== MARQUEE ====================== -->
   <section class="relative z-10 py-8 border-y border-white/5 overflow-hidden">
     <div class="marquee text-cream/40 font-display font-600 text-lg">
-      <span>Estratégia</span><span>•</span><span>Posicionamento</span><span>•</span><span>Processos</span><span>•</span><span>Vendas</span><span>•</span><span>Gestão</span><span>•</span><span>Marketing</span><span>•</span>
-      <span>Estratégia</span><span>•</span><span>Posicionamento</span><span>•</span><span>Processos</span><span>•</span><span>Vendas</span><span>•</span><span>Gestão</span><span>•</span><span>Marketing</span><span>•</span>
+      <span>Marketing</span><span>•</span><span>Inteligência Artificial</span><span>•</span><span>CRM sob medida</span><span>•</span><span>Automação</span><span>•</span><span>Tráfego pago</span><span>•</span><span>Mentoria interna</span><span>•</span><span>Autonomia</span><span>•</span>
+      <span>Marketing</span><span>•</span><span>Inteligência Artificial</span><span>•</span><span>CRM sob medida</span><span>•</span><span>Automação</span><span>•</span><span>Tráfego pago</span><span>•</span><span>Mentoria interna</span><span>•</span><span>Autonomia</span><span>•</span>
+    </div>
+  </section>
+
+  <!-- ====================== PROBLEMA / BRIDGE ====================== -->
+  <section class="relative z-10 py-24">
+    <div class="max-w-4xl mx-auto px-5 text-center reveal">
+      <h2 class="font-display font-700 text-3xl md:text-4xl tracking-tight leading-tight">
+        Cansado de depender de agência pra cada <span class="text-gradient">post, campanha ou decisão</span>?
+      </h2>
+      <p class="mt-5 text-cream/60 text-lg">
+        A gente faz diferente: em vez de te prender num contrato eterno, nós montamos a
+        estrutura, treinamos o seu time e deixamos o conhecimento dentro da sua empresa.
+        Quando terminamos, você não precisa mais de nós — esse é o ponto.
+      </p>
     </div>
   </section>
 
   <!-- ====================== SOLUÇÕES ====================== -->
-  <section id="solucoes" class="relative z-10 py-28">
+  <section id="solucoes" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
-        <p class="text-mint font-600 text-sm mb-3">O que entregamos</p>
-        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Soluções que tiram a empresa do lugar</h2>
-        <p class="mt-4 text-cream/60 text-lg">Cada frente é desenhada pro seu momento. Nada de fórmula pronta.</p>
+        <p class="text-mint font-600 text-sm mb-3">Nossas soluções</p>
+        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Ferramentas e conhecimento para crescer com autonomia</h2>
+        <p class="mt-4 text-cream/60 text-lg">Nosso compromisso é entregar o que faz seu negócio crescer com mais eficiência e inovação.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-        <!-- card -->
         <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">🎯</div>
-          <h3 class="font-display font-600 text-xl mb-2">Estratégia & Posicionamento</h3>
-          <p class="text-cream/60">Clareza de para onde ir e por que sua empresa é a escolha óbvia no mercado.</p>
+          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">🔍</div>
+          <h3 class="font-display font-600 text-xl mb-2">Consultoria Imersiva</h3>
+          <p class="text-cream/60">Mergulhamos no seu negócio para diagnosticar gargalos e desenhar um plano estratégico que conecte marketing, tecnologia e resultados reais.</p>
         </div>
         <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-gold/15 grid place-items-center text-2xl mb-5">⚙️</div>
-          <h3 class="font-display font-600 text-xl mb-2">Processos & Gestão</h3>
-          <p class="text-cream/60">Organização que faz a empresa rodar sem depender de você 24 horas por dia.</p>
+          <div class="w-12 h-12 rounded-xl bg-gold/15 grid place-items-center text-2xl mb-5">🤖</div>
+          <h3 class="font-display font-600 text-xl mb-2">Desenvolvimento de Sistemas com IA</h3>
+          <p class="text-cream/60">Criamos CRMs, automações e sistemas web sob medida, integrando inteligência artificial para otimizar processos e dar clareza à sua operação.</p>
         </div>
         <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">📈</div>
-          <h3 class="font-display font-600 text-xl mb-2">Crescimento & Vendas</h3>
-          <p class="text-cream/60">Uma máquina previsível de gerar oportunidades e converter em receita.</p>
+          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">🎓</div>
+          <h3 class="font-display font-600 text-xl mb-2">Treinamento e Mentoria Interna</h3>
+          <p class="text-cream/60">Capacitamos seu time com treinamentos e mentorias práticas, transferindo o conhecimento necessário para que executem o marketing com autonomia e excelência.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====================== PROCESSO ====================== -->
-  <section id="processo" class="relative z-10 py-28">
+  <!-- ====================== RESULTADOS ====================== -->
+  <section id="resultados" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
-        <p class="text-mint font-600 text-sm mb-3">Como funciona</p>
-        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Um caminho em 3 etapas</h2>
+        <p class="text-mint font-600 text-sm mb-3">Resultados que falam por si</p>
+        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Metodologia focada em performance e autonomia</h2>
+        <p class="mt-4 text-cream/60 text-lg">Veja o impacto real que geramos para nossos clientes.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="reveal">
-          <div class="text-gradient font-display font-800 text-6xl mb-4">01</div>
-          <h3 class="font-display font-600 text-xl mb-2">Diagnóstico</h3>
-          <p class="text-cream/60">Mergulhamos no seu negócio pra entender gargalos, números e oportunidades reais.</p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
+          <p class="text-mint font-600 text-sm mb-2">CRMs Customizados</p>
+          <h3 class="font-display font-600 text-2xl mb-3">Operação Organizada</h3>
+          <p class="text-cream/60">Implementamos sistemas de CRM sob medida que centralizam dados e otimizam seu funil de vendas, sem custos de licença.</p>
         </div>
-        <div class="reveal">
-          <div class="text-gradient font-display font-800 text-6xl mb-4">02</div>
-          <h3 class="font-display font-600 text-xl mb-2">Plano de crescimento</h3>
-          <p class="text-cream/60">Desenhamos juntos um plano claro, com prioridades e metas mensuráveis.</p>
+        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
+          <p class="text-mint font-600 text-sm mb-2">Equipes Treinadas</p>
+          <h3 class="font-display font-600 text-2xl mb-3">Autonomia e Produtividade</h3>
+          <p class="text-cream/60">Capacitamos seu time com treinamentos práticos em IA e marketing, aumentando a produtividade e reduzindo a dependência de terceiros.</p>
         </div>
-        <div class="reveal">
-          <div class="text-gradient font-display font-800 text-6xl mb-4">03</div>
-          <h3 class="font-display font-600 text-xl mb-2">Execução acompanhada</h3>
-          <p class="text-cream/60">Acompanhamos a implementação de perto pra garantir que o plano vire resultado.</p>
+        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
+          <p class="text-mint font-600 text-sm mb-2">Processos Inteligentes</p>
+          <h3 class="font-display font-600 text-2xl mb-3">Mais Eficiência</h3>
+          <p class="text-cream/60">Estruturamos automações e processos com IA que economizam tempo, reduzem erros e liberam sua equipe para focar no que é estratégico.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====================== RESULTADOS (contadores) ====================== -->
-  <section id="resultados" class="relative z-10 py-28">
+  <!-- ====================== DEPOIMENTOS ====================== -->
+  <section id="depoimentos" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
-      <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent p-10 md:p-16 reveal">
-        <div class="grid md:grid-cols-4 gap-10 text-center">
+      <div class="max-w-2xl mb-16 reveal">
+        <p class="text-mint font-600 text-sm mb-3">Quem já cresceu com a gente</p>
+        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">O que nossos clientes dizem</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+          <blockquote class="text-cream/85 text-lg leading-snug">“Dobrei o faturamento do meu e-commerce em 2 anos otimizando o funil de vendas e desenvolvendo novos serviços.”</blockquote>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Rose Siqueira</span><br/><span class="text-cream/50">Super Saudável Shopping</span></figcaption>
+        </figure>
+        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+          <blockquote class="text-cream/85 text-lg leading-snug">“Hoje tenho clareza total dos meus investimentos graças ao trackeamento das campanhas de tráfego pago.”</blockquote>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Bruno Azeredo</span><br/><span class="text-cream/50">Sunset Controle de Pragas</span></figcaption>
+        </figure>
+        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+          <blockquote class="text-cream/85 text-lg leading-snug">“O volume de mensagens no WhatsApp disparou, o que aumentou bastante as reservas do kart.”</blockquote>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Márcio André</span><br/><span class="text-cream/50">Meta Kart</span></figcaption>
+        </figure>
+        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+          <blockquote class="text-cream/85 text-lg leading-snug">“Parceiros confiáveis que não medem esforços para fazer a ‘coisa’ acontecer.”</blockquote>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Bruno Aguiar</span><br/><span class="text-cream/50">Meta Bowling</span></figcaption>
+        </figure>
+        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+          <blockquote class="text-cream/85 text-lg leading-snug">“Já cansei de indicar de olhos fechados. Quando penso em Marketing Digital, eu confio na Grão.”</blockquote>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Orlando Ribero</span><br/><span class="text-cream/50">Tom Consultoria</span></figcaption>
+        </figure>
+        <div class="glow-border bg-gradient-to-br from-mint/15 to-gold/10 p-7 grid place-items-center text-center reveal">
           <div>
-            <div class="font-display font-800 text-5xl text-gradient" data-count="120" data-suffix="+">0</div>
-            <p class="text-cream/60 mt-2">Projetos entregues</p>
-          </div>
-          <div>
-            <div class="font-display font-800 text-5xl text-gradient" data-count="3.4" data-suffix="x" data-decimals="1">0</div>
-            <p class="text-cream/60 mt-2">Crescimento médio de receita</p>
-          </div>
-          <div>
-            <div class="font-display font-800 text-5xl text-gradient" data-count="97" data-suffix="%">0</div>
-            <p class="text-cream/60 mt-2">Clientes que renovam</p>
-          </div>
-          <div>
-            <div class="font-display font-800 text-5xl text-gradient" data-count="12" data-suffix="">0</div>
-            <p class="text-cream/60 mt-2">Anos de estrada</p>
+            <p class="font-display font-700 text-xl mb-2">A sua empresa é a próxima?</p>
+            <a href="#contato" class="inline-flex items-center gap-2 text-mint font-600 hover:gap-3 transition-all">Vamos conversar →</a>
           </div>
         </div>
       </div>
-
-      <!-- Depoimento -->
-      <figure class="max-w-3xl mx-auto text-center mt-20 reveal">
-        <blockquote class="font-display font-600 text-2xl md:text-3xl leading-snug">
-          “Em 8 meses saímos do caos operacional pra um crescimento previsível.
-          A Grão de Mostarda não entrega slide bonito — entrega <span class="text-gradient">resultado</span>.”
-        </blockquote>
-        <figcaption class="mt-6 text-cream/50">— Nome do Cliente, CEO da Empresa Exemplo</figcaption>
-      </figure>
     </div>
   </section>
 
@@ -273,99 +270,99 @@
   <section id="contato" class="relative z-10 py-28">
     <div class="max-w-3xl mx-auto px-5 text-center reveal">
       <h2 class="font-display font-800 text-4xl md:text-6xl tracking-tight">
-        Vamos plantar o <span class="text-gradient">próximo nível</span> da sua empresa?
+        Não encontrou a solução que <span class="text-gradient">procurava</span>?
       </h2>
       <p class="mt-5 text-cream/70 text-lg">
-        Agende uma conversa de diagnóstico gratuita. Em 30 minutos você sai com clareza
-        do próximo passo — mesmo que a gente não trabalhe junto.
+        Cada negócio é único e merece uma estratégia personalizada. Vamos conversar sobre o
+        seu desafio e desenhar a solução ideal para acelerar seus resultados.
       </p>
 
       <form class="mt-10 grid sm:grid-cols-2 gap-4 text-left" onsubmit="return enviarLead(event)">
-        <input required placeholder="Seu nome" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input required type="email" placeholder="Seu e-mail" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input placeholder="Sua empresa" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input placeholder="WhatsApp" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
+        <input id="f-nome" required placeholder="Seu nome" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
+        <input id="f-email" required type="email" placeholder="Seu e-mail" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
+        <input id="f-empresa" placeholder="Sua empresa" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
+        <input id="f-whats" placeholder="WhatsApp" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
+        <textarea id="f-msg" rows="3" placeholder="Conte rapidamente o seu desafio" class="sm:col-span-2 bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition"></textarea>
         <button class="sm:col-span-2 mt-2 px-7 py-4 rounded-full bg-mint text-ink font-700 text-base hover:bg-mint/90 transition shadow-xl shadow-mint/25">
-          Quero meu diagnóstico gratuito →
+          Falar com um especialista →
         </button>
       </form>
-      <p class="text-cream/40 text-sm mt-4">Resposta em até 1 dia útil. Sem compromisso.</p>
+      <p class="text-cream/40 text-sm mt-4">
+        Ou escreva direto para
+        <a href="mailto:alfredo@agenciagraodemostarda.com.br" class="text-mint hover:underline">alfredo@agenciagraodemostarda.com.br</a>
+        · Barra da Tijuca, Rio de Janeiro — RJ
+      </p>
     </div>
   </section>
 
   <!-- ====================== RODAPÉ ====================== -->
-  <footer class="relative z-10 border-t border-white/5 py-10">
-    <div class="max-w-6xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4 text-cream/50 text-sm">
-      <div class="flex items-center gap-2 font-display font-600">
-        <span class="inline-grid place-items-center w-7 h-7 rounded-md bg-gradient-to-br from-mint to-gold text-ink font-800">G</span>
-        Grão de Mostarda · Consultoria
+  <footer class="relative z-10 border-t border-white/5 py-12">
+    <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-3 gap-8 text-cream/60 text-sm">
+      <div>
+        <div class="flex items-center gap-2 font-display font-600 text-cream mb-3">
+          <span class="inline-grid place-items-center w-7 h-7 rounded-md bg-gradient-to-br from-mint to-gold text-ink font-800">G</span>
+          Grão de Mostarda
+        </div>
+        <p>Marketing digital potencializado por IA. Transformamos seu negócio com estratégias que geram resultados reais.</p>
       </div>
-      <p>© 2026 Grão de Mostarda. Feito pra fazer crescer.</p>
+      <div>
+        <p class="text-cream font-600 mb-3">Soluções</p>
+        <ul class="space-y-2">
+          <li><a href="#solucoes" class="hover:text-mint transition">Consultoria Estratégica</a></li>
+          <li><a href="#solucoes" class="hover:text-mint transition">Treinamentos In Company</a></li>
+          <li><a href="#solucoes" class="hover:text-mint transition">Treinamento de Vendas</a></li>
+          <li><a href="#solucoes" class="hover:text-mint transition">Sistemas Web e IA</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-cream font-600 mb-3">Contato</p>
+        <ul class="space-y-2">
+          <li><a href="mailto:alfredo@agenciagraodemostarda.com.br" class="hover:text-mint transition">alfredo@agenciagraodemostarda.com.br</a></li>
+          <li>Barra da Tijuca, Rio de Janeiro — RJ</li>
+        </ul>
+      </div>
     </div>
+    <p class="max-w-6xl mx-auto px-5 mt-10 text-cream/40 text-xs">© 2026 Grão de Mostarda. Todos os direitos reservados.</p>
   </footer>
 
-  <!-- WhatsApp flutuante -->
-  <a href="#contato" aria-label="Falar no WhatsApp"
+  <!-- WhatsApp flutuante (atualizar com o número real) -->
+  <a href="#contato" aria-label="Falar com a Grão de Mostarda"
      class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-mint text-ink grid place-items-center text-2xl shadow-xl shadow-mint/30 hover:scale-105 transition">
     💬
   </a>
 
   <!-- ====================== SCRIPTS ====================== -->
   <script>
-    // Spotlight segue o mouse
     const sp = document.getElementById('spotlight');
-    window.addEventListener('pointermove', e => {
-      sp.style.left = e.clientX + 'px';
-      sp.style.top = e.clientY + 'px';
-    });
+    window.addEventListener('pointermove', e => { sp.style.left = e.clientX+'px'; sp.style.top = e.clientY+'px'; });
 
-    // Animações de entrada (hero) e reveal no scroll via GSAP
     window.addEventListener('load', () => {
       if (window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
-
-        // Hero em cascata
         gsap.set('[data-hero]', { opacity: 0, y: 24 });
         gsap.to('[data-hero]', { opacity: 1, y: 0, duration: .9, stagger: .12, ease: 'power3.out', delay: .15,
           onStart: () => document.querySelectorAll('[data-hero]').forEach(el => el.classList.add('in')) });
-
-        // Reveal nas seções
         gsap.utils.toArray('.reveal:not([data-hero])').forEach(el => {
-          gsap.fromTo(el, { opacity: 0, y: 30 }, {
-            opacity: 1, y: 0, duration: .8, ease: 'power2.out',
-            scrollTrigger: { trigger: el, start: 'top 85%' },
-            onStart: () => el.classList.add('in')
-          });
-        });
-
-        // Contadores
-        document.querySelectorAll('[data-count]').forEach(el => {
-          const target = parseFloat(el.dataset.count);
-          const decimals = parseInt(el.dataset.decimals || '0');
-          const suffix = el.dataset.suffix || '';
-          ScrollTrigger.create({
-            trigger: el, start: 'top 90%', once: true,
-            onEnter: () => {
-              const obj = { v: 0 };
-              gsap.to(obj, { v: target, duration: 1.6, ease: 'power2.out',
-                onUpdate: () => { el.textContent = obj.v.toFixed(decimals) + suffix; } });
-            }
-          });
+          gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 85%' }, onStart: () => el.classList.add('in') });
         });
       } else {
-        // Fallback: mostra tudo
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
       }
     });
-
-    // Fallback de segurança
     setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('in')), 1200);
 
-    // Formulário (placeholder — depois ligamos ao seu e-mail/CRM)
+    // Formulário -> abre e-mail pré-preenchido (funciona sem servidor).
+    // Depois dá pra trocar por um formulário conectado a CRM/WhatsApp.
     function enviarLead(e) {
       e.preventDefault();
-      alert('Obrigado! 🌱 Em breve isto será conectado ao seu e-mail/WhatsApp. Por enquanto é uma demonstração.');
-      e.target.reset();
+      const nome = document.getElementById('f-nome').value;
+      const email = document.getElementById('f-email').value;
+      const empresa = document.getElementById('f-empresa').value;
+      const whats = document.getElementById('f-whats').value;
+      const msg = document.getElementById('f-msg').value;
+      const corpo = `Nome: ${nome}%0D%0AE-mail: ${email}%0D%0AEmpresa: ${empresa}%0D%0AWhatsApp: ${whats}%0D%0A%0D%0ADesafio:%0D%0A${msg}`;
+      window.location.href = `mailto:alfredo@agenciagraodemostarda.com.br?subject=Novo contato pelo site - ${encodeURIComponent(nome)}&body=${corpo}`;
       return false;
     }
   </script>
