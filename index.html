@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081019" />
   <title>Grão de Mostarda — Marketing digital potencializado por IA</title>
   <meta name="description" content="Menos dependência, mais controle. Estruturamos seu time interno de marketing e transferimos o conhecimento para você ter autonomia, clareza e resultados reais — sem ser refém de agências." />
 
-  <!-- ====== Fonts ====== -->
+  <!-- Favicon: broto da marca -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%23F5A702'/%3E%3Cpath d='M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z' fill='white'/%3E%3Cpath d='M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z' fill='white'/%3E%3Cpath d='M24 23V41 M17 41H31' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+  <!-- ====== Fonts (Raleway + Inter) ====== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- ====== Tailwind (CDN) ====== -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,10 +21,10 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { display: ['Sora','sans-serif'], body: ['Inter','sans-serif'] },
+          fontFamily: { display: ['Raleway','sans-serif'], body: ['Inter','sans-serif'] },
           colors: {
-            ink:'#0a140e', moss:'#0f3d2e', leaf:'#1f7a4d', mint:'#34d399',
-            gold:'#e6b54a', mustard:'#f0c14b', cream:'#f5f3ec',
+            ink:'#081019', navy:'#1a2840', navyDeep:'#0e1828', blue:'#2a6496',
+            amber:'#F5A702', amberLight:'#FFCA3C', amberDark:'#C48500', cream:'#F0EDE4',
           },
         },
       },
@@ -34,14 +38,14 @@
   <style>
     * { -webkit-font-smoothing: antialiased; }
     html { scroll-behavior: smooth; }
-    body { background:#06100b; color:#f5f3ec; font-family:'Inter',sans-serif; overflow-x:hidden; }
+    body { background:#081019; color:#F0EDE4; font-family:'Inter',sans-serif; overflow-x:hidden; }
 
     .aurora {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .55;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .6;
       background:
-        radial-gradient(40% 50% at 15% 20%, rgba(52,211,153,.25), transparent 60%),
-        radial-gradient(45% 55% at 85% 15%, rgba(230,181,74,.20), transparent 60%),
-        radial-gradient(50% 60% at 50% 100%, rgba(31,122,77,.30), transparent 60%);
+        radial-gradient(40% 50% at 15% 20%, rgba(42,100,150,.35), transparent 60%),
+        radial-gradient(45% 55% at 85% 15%, rgba(245,167,2,.18), transparent 60%),
+        radial-gradient(55% 60% at 50% 105%, rgba(26,40,64,.65), transparent 60%);
       filter: blur(20px); animation: drift 18s ease-in-out infinite alternate;
     }
     @keyframes drift { 0%{transform:translate3d(0,0,0) scale(1);} 100%{transform:translate3d(0,-4%,0) scale(1.1);} }
@@ -49,25 +53,25 @@
     .spotlight {
       position: fixed; width: 600px; height: 600px; border-radius: 50%; z-index: 1;
       pointer-events: none; mix-blend-mode: screen; transition: opacity .4s;
-      background: radial-gradient(circle, rgba(52,211,153,.12), transparent 65%);
+      background: radial-gradient(circle, rgba(245,167,2,.13), transparent 65%);
       transform: translate(-50%,-50%);
     }
 
     .text-gradient {
-      background: linear-gradient(100deg,#34d399 0%, #a7f3d0 35%, #f0c14b 100%);
+      background: linear-gradient(100deg,#F5A702 0%, #FFCA3C 45%, #F0EDE4 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
 
     .glow-border { position: relative; border-radius: 1.25rem; }
     .glow-border::before {
       content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
-      background: linear-gradient(130deg, rgba(52,211,153,.6), rgba(230,181,74,.25), transparent 60%);
+      background: linear-gradient(130deg, rgba(245,167,2,.6), rgba(255,202,60,.22), transparent 60%);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;
     }
 
     .card-hover { transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s; }
-    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 60px -20px rgba(52,211,153,.35); }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 60px -20px rgba(245,167,2,.40); }
 
     .marquee { display:flex; gap:3rem; width:max-content; animation: scrollx 30s linear infinite; }
     @keyframes scrollx { to { transform: translateX(-50%); } }
@@ -75,11 +79,19 @@
     .reveal { opacity: 0; transform: translateY(24px); }
     .reveal.in { opacity: 1; transform: none; transition: opacity .8s, transform .8s; }
 
+    /* elemento que gira (selo) */
+    .spin-slow { animation: spin 18s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* elemento que vai e volta (balança) */
+    .sway { animation: sway 7s ease-in-out infinite; transform-origin: 50% 90%; }
+    @keyframes sway { 0%,100%{ transform: rotate(-7deg); } 50%{ transform: rotate(7deg); } }
+
     .float { animation: floaty 6s ease-in-out infinite; }
     @keyframes floaty { 50% { transform: translateY(-14px); } }
 
-    .nav-blur { backdrop-filter: blur(12px); background: rgba(6,16,11,.6); }
-    ::selection { background: rgba(52,211,153,.3); }
+    .nav-blur { backdrop-filter: blur(12px); background: rgba(8,16,25,.65); }
+    ::selection { background: rgba(245,167,2,.3); }
   </style>
 </head>
 
@@ -90,17 +102,23 @@
   <!-- ====================== NAV ====================== -->
   <header class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-white/5">
     <nav class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-      <a href="#topo" class="flex items-center gap-2 font-display font-700 text-lg tracking-tight">
-        <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-gradient-to-br from-mint to-gold text-ink font-800">G</span>
+      <a href="#topo" class="flex items-center gap-2.5 font-display font-700 text-lg tracking-tight">
+        <span class="inline-grid place-items-center w-9 h-9 rounded-lg bg-amber">
+          <svg viewBox="0 0 48 48" class="w-5 h-5 text-ink" fill="none">
+            <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
+            <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
+            <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </span>
         Grão de Mostarda
       </a>
       <div class="hidden md:flex items-center gap-8 text-sm text-cream/70">
-        <a href="#solucoes" class="hover:text-mint transition">Soluções</a>
-        <a href="#resultados" class="hover:text-mint transition">Resultados</a>
-        <a href="#depoimentos" class="hover:text-mint transition">Depoimentos</a>
-        <a href="#contato" class="hover:text-mint transition">Contato</a>
+        <a href="#solucoes" class="hover:text-amber transition">Soluções</a>
+        <a href="#resultados" class="hover:text-amber transition">Resultados</a>
+        <a href="#depoimentos" class="hover:text-amber transition">Depoimentos</a>
+        <a href="#contato" class="hover:text-amber transition">Contato</a>
       </div>
-      <a href="#contato" class="text-sm font-600 px-4 py-2 rounded-full bg-mint text-ink hover:bg-mint/90 transition shadow-lg shadow-mint/20">
+      <a href="#contato" class="text-sm font-600 px-4 py-2 rounded-full bg-amber text-ink hover:bg-amberLight transition shadow-lg shadow-amber/20">
         Falar com especialista
       </a>
     </nav>
@@ -109,8 +127,8 @@
   <!-- ====================== HERO ====================== -->
   <section id="topo" class="relative z-10 min-h-screen flex items-center pt-28 pb-20">
     <div class="max-w-6xl mx-auto px-5 w-full">
-      <div class="inline-flex items-center gap-2 text-xs font-600 px-3 py-1.5 rounded-full border border-mint/30 bg-mint/10 text-mint mb-8 reveal" data-hero>
-        <span class="w-1.5 h-1.5 rounded-full bg-mint animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 text-xs font-600 px-3 py-1.5 rounded-full border border-amber/30 bg-amber/10 text-amber mb-8 reveal" data-hero>
+        <span class="w-1.5 h-1.5 rounded-full bg-amber animate-pulse"></span>
         Marketing digital potencializado por IA
       </div>
 
@@ -126,11 +144,11 @@
       </p>
 
       <div class="mt-10 flex flex-col sm:flex-row gap-4 reveal" data-hero>
-        <a href="#contato" class="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-mint text-ink font-700 text-base hover:bg-mint/90 transition shadow-xl shadow-mint/25">
+        <a href="#contato" class="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-amber text-ink font-700 text-base hover:bg-amberLight transition shadow-xl shadow-amber/25">
           Falar com um especialista
           <span class="group-hover:translate-x-1 transition">→</span>
         </a>
-        <a href="#solucoes" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border border-white/15 text-cream/90 font-600 hover:border-mint/40 hover:text-mint transition">
+        <a href="#solucoes" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border border-white/15 text-cream/90 font-600 hover:border-amber/40 hover:text-amber transition">
           Conheça as soluções
         </a>
       </div>
@@ -142,16 +160,38 @@
       </div>
     </div>
 
-    <div class="float absolute right-10 top-1/3 hidden lg:block opacity-80" aria-hidden="true">
-      <div class="w-40 h-40 rounded-full bg-gradient-to-br from-mint/40 to-gold/30 blur-2xl"></div>
+    <!-- SELO QUE GIRA + broto que balança -->
+    <div class="absolute right-8 lg:right-16 top-1/4 hidden md:block" aria-hidden="true">
+      <div class="relative w-44 h-44 lg:w-52 lg:h-52 grid place-items-center">
+        <div class="absolute -inset-6 rounded-full bg-amber/15 blur-2xl"></div>
+        <!-- texto circular girando -->
+        <svg viewBox="0 0 200 200" class="spin-slow w-full h-full">
+          <defs>
+            <path id="selo" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+          </defs>
+          <text fill="#F0EDE4" font-family="Raleway, sans-serif" font-size="13" font-weight="600" letter-spacing="4">
+            <textPath href="#selo" startOffset="0">GRÃO DE MOSTARDA • MARKETING + IA • </textPath>
+          </text>
+        </svg>
+        <!-- broto central que balança -->
+        <span class="absolute inset-0 grid place-items-center">
+          <span class="sway grid place-items-center w-16 h-16 rounded-2xl bg-amber shadow-xl shadow-amber/30">
+            <svg viewBox="0 0 48 48" class="w-9 h-9 text-ink" fill="none">
+              <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
+              <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
+              <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </span>
+      </div>
     </div>
   </section>
 
   <!-- ====================== MARQUEE ====================== -->
   <section class="relative z-10 py-8 border-y border-white/5 overflow-hidden">
     <div class="marquee text-cream/40 font-display font-600 text-lg">
-      <span>Marketing</span><span>•</span><span>Inteligência Artificial</span><span>•</span><span>CRM sob medida</span><span>•</span><span>Automação</span><span>•</span><span>Tráfego pago</span><span>•</span><span>Mentoria interna</span><span>•</span><span>Autonomia</span><span>•</span>
-      <span>Marketing</span><span>•</span><span>Inteligência Artificial</span><span>•</span><span>CRM sob medida</span><span>•</span><span>Automação</span><span>•</span><span>Tráfego pago</span><span>•</span><span>Mentoria interna</span><span>•</span><span>Autonomia</span><span>•</span>
+      <span>Marketing</span><span class="text-amber">•</span><span>Inteligência Artificial</span><span class="text-amber">•</span><span>CRM sob medida</span><span class="text-amber">•</span><span>Automação</span><span class="text-amber">•</span><span>Tráfego pago</span><span class="text-amber">•</span><span>Mentoria interna</span><span class="text-amber">•</span><span>Autonomia</span><span class="text-amber">•</span>
+      <span>Marketing</span><span class="text-amber">•</span><span>Inteligência Artificial</span><span class="text-amber">•</span><span>CRM sob medida</span><span class="text-amber">•</span><span>Automação</span><span class="text-amber">•</span><span>Tráfego pago</span><span class="text-amber">•</span><span>Mentoria interna</span><span class="text-amber">•</span><span>Autonomia</span><span class="text-amber">•</span>
     </div>
   </section>
 
@@ -173,24 +213,24 @@
   <section id="solucoes" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
-        <p class="text-mint font-600 text-sm mb-3">Nossas soluções</p>
+        <p class="text-amber font-600 text-sm mb-3">Nossas soluções</p>
         <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Ferramentas e conhecimento para crescer com autonomia</h2>
         <p class="mt-4 text-cream/60 text-lg">Nosso compromisso é entregar o que faz seu negócio crescer com mais eficiência e inovação.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-        <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">🔍</div>
+        <div class="glow-border card-hover bg-navy/40 p-7 reveal">
+          <div class="w-12 h-12 rounded-xl bg-amber/15 grid place-items-center text-2xl mb-5">🔍</div>
           <h3 class="font-display font-600 text-xl mb-2">Consultoria Imersiva</h3>
           <p class="text-cream/60">Mergulhamos no seu negócio para diagnosticar gargalos e desenhar um plano estratégico que conecte marketing, tecnologia e resultados reais.</p>
         </div>
-        <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-gold/15 grid place-items-center text-2xl mb-5">🤖</div>
+        <div class="glow-border card-hover bg-navy/40 p-7 reveal">
+          <div class="w-12 h-12 rounded-xl bg-blue/25 grid place-items-center text-2xl mb-5">🤖</div>
           <h3 class="font-display font-600 text-xl mb-2">Desenvolvimento de Sistemas com IA</h3>
           <p class="text-cream/60">Criamos CRMs, automações e sistemas web sob medida, integrando inteligência artificial para otimizar processos e dar clareza à sua operação.</p>
         </div>
-        <div class="glow-border card-hover bg-white/[.03] p-7 reveal">
-          <div class="w-12 h-12 rounded-xl bg-mint/15 grid place-items-center text-2xl mb-5">🎓</div>
+        <div class="glow-border card-hover bg-navy/40 p-7 reveal">
+          <div class="w-12 h-12 rounded-xl bg-amber/15 grid place-items-center text-2xl mb-5">🎓</div>
           <h3 class="font-display font-600 text-xl mb-2">Treinamento e Mentoria Interna</h3>
           <p class="text-cream/60">Capacitamos seu time com treinamentos e mentorias práticas, transferindo o conhecimento necessário para que executem o marketing com autonomia e excelência.</p>
         </div>
@@ -202,24 +242,24 @@
   <section id="resultados" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
-        <p class="text-mint font-600 text-sm mb-3">Resultados que falam por si</p>
+        <p class="text-amber font-600 text-sm mb-3">Resultados que falam por si</p>
         <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Metodologia focada em performance e autonomia</h2>
         <p class="mt-4 text-cream/60 text-lg">Veja o impacto real que geramos para nossos clientes.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
-          <p class="text-mint font-600 text-sm mb-2">CRMs Customizados</p>
+        <div class="glow-border bg-gradient-to-br from-navy/60 to-transparent card-hover p-8 reveal">
+          <p class="text-amber font-600 text-sm mb-2">CRMs Customizados</p>
           <h3 class="font-display font-600 text-2xl mb-3">Operação Organizada</h3>
           <p class="text-cream/60">Implementamos sistemas de CRM sob medida que centralizam dados e otimizam seu funil de vendas, sem custos de licença.</p>
         </div>
-        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
-          <p class="text-mint font-600 text-sm mb-2">Equipes Treinadas</p>
+        <div class="glow-border bg-gradient-to-br from-navy/60 to-transparent card-hover p-8 reveal">
+          <p class="text-amber font-600 text-sm mb-2">Equipes Treinadas</p>
           <h3 class="font-display font-600 text-2xl mb-3">Autonomia e Produtividade</h3>
           <p class="text-cream/60">Capacitamos seu time com treinamentos práticos em IA e marketing, aumentando a produtividade e reduzindo a dependência de terceiros.</p>
         </div>
-        <div class="glow-border bg-gradient-to-br from-moss/40 to-transparent card-hover p-8 reveal">
-          <p class="text-mint font-600 text-sm mb-2">Processos Inteligentes</p>
+        <div class="glow-border bg-gradient-to-br from-navy/60 to-transparent card-hover p-8 reveal">
+          <p class="text-amber font-600 text-sm mb-2">Processos Inteligentes</p>
           <h3 class="font-display font-600 text-2xl mb-3">Mais Eficiência</h3>
           <p class="text-cream/60">Estruturamos automações e processos com IA que economizam tempo, reduzem erros e liberam sua equipe para focar no que é estratégico.</p>
         </div>
@@ -231,35 +271,35 @@
   <section id="depoimentos" class="relative z-10 py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
-        <p class="text-mint font-600 text-sm mb-3">Quem já cresceu com a gente</p>
+        <p class="text-amber font-600 text-sm mb-3">Quem já cresceu com a gente</p>
         <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">O que nossos clientes dizem</h2>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+        <figure class="glow-border card-hover bg-navy/40 p-7 reveal">
           <blockquote class="text-cream/85 text-lg leading-snug">“Dobrei o faturamento do meu e-commerce em 2 anos otimizando o funil de vendas e desenvolvendo novos serviços.”</blockquote>
-          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Rose Siqueira</span><br/><span class="text-cream/50">Super Saudável Shopping</span></figcaption>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Rose Siqueira</span><br/><span class="text-cream/50">Super Saudável Shopping</span></figcaption>
         </figure>
-        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+        <figure class="glow-border card-hover bg-navy/40 p-7 reveal">
           <blockquote class="text-cream/85 text-lg leading-snug">“Hoje tenho clareza total dos meus investimentos graças ao trackeamento das campanhas de tráfego pago.”</blockquote>
-          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Bruno Azeredo</span><br/><span class="text-cream/50">Sunset Controle de Pragas</span></figcaption>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Bruno Azeredo</span><br/><span class="text-cream/50">Sunset Controle de Pragas</span></figcaption>
         </figure>
-        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+        <figure class="glow-border card-hover bg-navy/40 p-7 reveal">
           <blockquote class="text-cream/85 text-lg leading-snug">“O volume de mensagens no WhatsApp disparou, o que aumentou bastante as reservas do kart.”</blockquote>
-          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Márcio André</span><br/><span class="text-cream/50">Meta Kart</span></figcaption>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Márcio André</span><br/><span class="text-cream/50">Meta Kart</span></figcaption>
         </figure>
-        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+        <figure class="glow-border card-hover bg-navy/40 p-7 reveal">
           <blockquote class="text-cream/85 text-lg leading-snug">“Parceiros confiáveis que não medem esforços para fazer a ‘coisa’ acontecer.”</blockquote>
-          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Bruno Aguiar</span><br/><span class="text-cream/50">Meta Bowling</span></figcaption>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Bruno Aguiar</span><br/><span class="text-cream/50">Meta Bowling</span></figcaption>
         </figure>
-        <figure class="glow-border card-hover bg-white/[.03] p-7 reveal">
+        <figure class="glow-border card-hover bg-navy/40 p-7 reveal">
           <blockquote class="text-cream/85 text-lg leading-snug">“Já cansei de indicar de olhos fechados. Quando penso em Marketing Digital, eu confio na Grão.”</blockquote>
-          <figcaption class="mt-5 text-sm"><span class="font-600 text-mint">Orlando Ribero</span><br/><span class="text-cream/50">Tom Consultoria</span></figcaption>
+          <figcaption class="mt-5 text-sm"><span class="font-600 text-amber">Orlando Ribero</span><br/><span class="text-cream/50">Tom Consultoria</span></figcaption>
         </figure>
-        <div class="glow-border bg-gradient-to-br from-mint/15 to-gold/10 p-7 grid place-items-center text-center reveal">
+        <div class="glow-border bg-gradient-to-br from-amber/15 to-blue/10 p-7 grid place-items-center text-center reveal">
           <div>
             <p class="font-display font-700 text-xl mb-2">A sua empresa é a próxima?</p>
-            <a href="#contato" class="inline-flex items-center gap-2 text-mint font-600 hover:gap-3 transition-all">Vamos conversar →</a>
+            <a href="#contato" class="inline-flex items-center gap-2 text-amber font-600 hover:gap-3 transition-all">Vamos conversar →</a>
           </div>
         </div>
       </div>
@@ -278,18 +318,18 @@
       </p>
 
       <form class="mt-10 grid sm:grid-cols-2 gap-4 text-left" onsubmit="return enviarLead(event)">
-        <input id="f-nome" required placeholder="Seu nome" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input id="f-email" required type="email" placeholder="Seu e-mail" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input id="f-empresa" placeholder="Sua empresa" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <input id="f-whats" placeholder="WhatsApp" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition" />
-        <textarea id="f-msg" rows="3" placeholder="Conte rapidamente o seu desafio" class="sm:col-span-2 bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-mint/50 focus:outline-none transition"></textarea>
-        <button class="sm:col-span-2 mt-2 px-7 py-4 rounded-full bg-mint text-ink font-700 text-base hover:bg-mint/90 transition shadow-xl shadow-mint/25">
+        <input id="f-nome" required placeholder="Seu nome" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-amber/50 focus:outline-none transition" />
+        <input id="f-email" required type="email" placeholder="Seu e-mail" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-amber/50 focus:outline-none transition" />
+        <input id="f-empresa" placeholder="Sua empresa" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-amber/50 focus:outline-none transition" />
+        <input id="f-whats" placeholder="WhatsApp" class="bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-amber/50 focus:outline-none transition" />
+        <textarea id="f-msg" rows="3" placeholder="Conte rapidamente o seu desafio" class="sm:col-span-2 bg-white/[.04] border border-white/10 rounded-xl px-4 py-3 focus:border-amber/50 focus:outline-none transition"></textarea>
+        <button class="sm:col-span-2 mt-2 px-7 py-4 rounded-full bg-amber text-ink font-700 text-base hover:bg-amberLight transition shadow-xl shadow-amber/25">
           Falar com um especialista →
         </button>
       </form>
       <p class="text-cream/40 text-sm mt-4">
         Ou escreva direto para
-        <a href="mailto:alfredo@agenciagraodemostarda.com.br" class="text-mint hover:underline">alfredo@agenciagraodemostarda.com.br</a>
+        <a href="mailto:alfredo@agenciagraodemostarda.com.br" class="text-amber hover:underline">alfredo@agenciagraodemostarda.com.br</a>
         · Barra da Tijuca, Rio de Janeiro — RJ
       </p>
     </div>
@@ -299,8 +339,14 @@
   <footer class="relative z-10 border-t border-white/5 py-12">
     <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-3 gap-8 text-cream/60 text-sm">
       <div>
-        <div class="flex items-center gap-2 font-display font-600 text-cream mb-3">
-          <span class="inline-grid place-items-center w-7 h-7 rounded-md bg-gradient-to-br from-mint to-gold text-ink font-800">G</span>
+        <div class="flex items-center gap-2.5 font-display font-600 text-cream mb-3">
+          <span class="inline-grid place-items-center w-8 h-8 rounded-md bg-amber">
+            <svg viewBox="0 0 48 48" class="w-4 h-4 text-ink" fill="none">
+              <path d="M24 25 C27 15 37 13 41 14 C40 24 30 27 24 25Z" fill="currentColor"/>
+              <path d="M24 28 C21 21 13 21 9 22 C11 29 18 31 24 28Z" fill="currentColor"/>
+              <path d="M24 23V41 M17 41H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </span>
           Grão de Mostarda
         </div>
         <p>Marketing digital potencializado por IA. Transformamos seu negócio com estratégias que geram resultados reais.</p>
@@ -308,16 +354,16 @@
       <div>
         <p class="text-cream font-600 mb-3">Soluções</p>
         <ul class="space-y-2">
-          <li><a href="#solucoes" class="hover:text-mint transition">Consultoria Estratégica</a></li>
-          <li><a href="#solucoes" class="hover:text-mint transition">Treinamentos In Company</a></li>
-          <li><a href="#solucoes" class="hover:text-mint transition">Treinamento de Vendas</a></li>
-          <li><a href="#solucoes" class="hover:text-mint transition">Sistemas Web e IA</a></li>
+          <li><a href="#solucoes" class="hover:text-amber transition">Consultoria Estratégica</a></li>
+          <li><a href="#solucoes" class="hover:text-amber transition">Treinamentos In Company</a></li>
+          <li><a href="#solucoes" class="hover:text-amber transition">Treinamento de Vendas</a></li>
+          <li><a href="#solucoes" class="hover:text-amber transition">Sistemas Web e IA</a></li>
         </ul>
       </div>
       <div>
         <p class="text-cream font-600 mb-3">Contato</p>
         <ul class="space-y-2">
-          <li><a href="mailto:alfredo@agenciagraodemostarda.com.br" class="hover:text-mint transition">alfredo@agenciagraodemostarda.com.br</a></li>
+          <li><a href="mailto:alfredo@agenciagraodemostarda.com.br" class="hover:text-amber transition">alfredo@agenciagraodemostarda.com.br</a></li>
           <li>Barra da Tijuca, Rio de Janeiro — RJ</li>
         </ul>
       </div>
@@ -327,7 +373,7 @@
 
   <!-- WhatsApp flutuante (atualizar com o número real) -->
   <a href="#contato" aria-label="Falar com a Grão de Mostarda"
-     class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-mint text-ink grid place-items-center text-2xl shadow-xl shadow-mint/30 hover:scale-105 transition">
+     class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-amber text-ink grid place-items-center text-2xl shadow-xl shadow-amber/30 hover:scale-105 transition">
     💬
   </a>
 
@@ -352,8 +398,6 @@
     });
     setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('in')), 1200);
 
-    // Formulário -> abre e-mail pré-preenchido (funciona sem servidor).
-    // Depois dá pra trocar por um formulário conectado a CRM/WhatsApp.
     function enviarLead(e) {
       e.preventDefault();
       const nome = document.getElementById('f-nome').value;
