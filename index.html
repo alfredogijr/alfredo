@@ -271,8 +271,8 @@
         <a href="#depoimentos" class="hover:text-amber transition">Depoimentos</a>
         <a href="#contato" class="hover:text-amber transition">Contato</a>
       </div>
-      <a href="#contato" class="text-sm font-600 px-4 py-2 rounded-full bg-amber text-ink hover:bg-amberLight transition shadow-lg shadow-amber/20">
-        Falar com especialista
+      <a href="#contato" class="text-sm font-600 px-4 py-2 rounded-full bg-amber text-ink hover:bg-amberLight transition shadow-lg shadow-amber/20 whitespace-nowrap shrink-0">
+        <span class="sm:hidden">Falar</span><span class="hidden sm:inline">Falar com especialista</span>
       </a>
     </nav>
   </header>
@@ -289,7 +289,7 @@
         <span class="relative z-10 text-cream/90 text-sm font-500 tracking-wide">✨ Marketing digital potencializado por IA</span>
       </div>
 
-      <h1 class="font-display font-800 leading-[1.02] tracking-tight text-5xl md:text-7xl lg:text-8xl max-w-4xl reveal" data-hero>
+      <h1 class="font-display font-800 leading-[1.07] md:leading-[1.02] tracking-tight text-[2.75rem] sm:text-6xl md:text-7xl lg:text-8xl max-w-4xl reveal" data-hero>
         <span class="block headline-anim">Menos dependência.</span>
         <span class="block text-cream">Mais controle.</span>
       </h1>
@@ -300,18 +300,18 @@
         <span class="text-cream">autonomia, clareza e resultados reais</span>.
       </p>
 
-      <div class="mt-10 flex items-center gap-5 flex-wrap reveal" data-hero>
+      <div class="mt-10 flex flex-col sm:flex-row sm:items-center gap-4 reveal" data-hero>
         <!-- botão gooey (estilo 21st.dev) -->
-        <div class="gooey-group group relative flex items-center">
+        <div class="gooey-group group relative flex items-center w-full sm:w-auto">
           <a href="#contato" aria-label="Falar com a gente"
-             class="absolute right-0 grid place-items-center h-12 w-12 rounded-full bg-amber text-ink z-0 -translate-x-14 group-hover:-translate-x-24 transition-all duration-300">
+             class="hidden sm:grid absolute right-0 place-items-center h-12 w-12 rounded-full bg-amber text-ink z-0 -translate-x-14 group-hover:-translate-x-24 transition-all duration-300">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
           </a>
-          <a href="#contato" class="relative z-10 inline-flex items-center h-12 px-8 rounded-full bg-amber text-ink font-700 text-sm hover:bg-amberLight transition">
+          <a href="#contato" class="relative z-10 inline-flex items-center justify-center h-12 px-8 w-full sm:w-auto rounded-full bg-amber text-ink font-700 text-sm hover:bg-amberLight transition">
             Falar com a gente
           </a>
         </div>
-        <a href="#solucoes" class="inline-flex items-center h-12 px-8 rounded-full border-2 border-white/20 text-cream font-600 text-sm hover:border-amber/50 hover:text-amber transition backdrop-blur-sm">
+        <a href="#solucoes" class="inline-flex items-center justify-center h-12 px-8 w-full sm:w-auto rounded-full border-2 border-white/20 text-cream font-600 text-sm hover:border-amber/50 hover:text-amber transition backdrop-blur-sm">
           Conheça as soluções
         </a>
       </div>
@@ -354,7 +354,7 @@
   </section>
 
   <!-- ====================== PROBLEMA / BRIDGE ====================== -->
-  <section class="relative z-10 py-24">
+  <section class="relative z-10 py-16 md:py-24">
     <div class="max-w-4xl mx-auto px-5 text-center reveal">
       <h2 class="font-display font-700 text-3xl md:text-4xl tracking-tight leading-tight">
         Cansado de depender de agência pra cada <span class="text-gradient">post, campanha ou decisão</span>?
@@ -368,7 +368,7 @@
   </section>
 
   <!-- ====================== PILARES DA MARCA ====================== -->
-  <section id="pilares" class="relative z-10 py-24">
+  <section id="pilares" class="relative z-10 py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-14 reveal">
         <p class="text-amber font-600 text-sm mb-3">O que fazemos por quem confia</p>
@@ -401,7 +401,7 @@
   </section>
 
   <!-- ====================== SOLUÇÕES ====================== -->
-  <section id="solucoes" class="relative z-10 py-24">
+  <section id="solucoes" class="relative z-10 py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
         <p class="text-amber font-600 text-sm mb-3">Nossas soluções</p>
@@ -430,7 +430,7 @@
   </section>
 
   <!-- ====================== RESULTADOS ====================== -->
-  <section id="resultados" class="relative z-10 py-24">
+  <section id="resultados" class="relative z-10 py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
         <p class="text-amber font-600 text-sm mb-3">Resultados que falam por si</p>
@@ -459,7 +459,7 @@
   </section>
 
   <!-- ====================== DEPOIMENTOS ====================== -->
-  <section id="depoimentos" class="relative z-10 py-24">
+  <section id="depoimentos" class="relative z-10 py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-5">
       <div class="max-w-2xl mb-16 reveal">
         <p class="text-amber font-600 text-sm mb-3">Quem já cresceu com a gente</p>
@@ -498,7 +498,7 @@
   </section>
 
   <!-- ====================== FAQ ====================== -->
-  <section id="faq" class="relative z-10 py-24">
+  <section id="faq" class="relative z-10 py-16 md:py-24">
     <div class="max-w-3xl mx-auto px-5">
       <div class="mb-12 reveal">
         <p class="text-amber font-600 text-sm mb-3">Perguntas frequentes</p>
@@ -545,7 +545,7 @@
   </section>
 
   <!-- ====================== CTA / CONTATO ====================== -->
-  <section id="contato" class="relative z-10 py-28">
+  <section id="contato" class="relative z-10 py-20 md:py-28">
     <div class="max-w-3xl mx-auto px-5 text-center reveal">
       <h2 class="font-display font-800 text-4xl md:text-6xl tracking-tight">
         Não encontrou a solução que <span class="text-gradient">procurava</span>?
