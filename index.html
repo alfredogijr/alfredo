@@ -27,6 +27,7 @@
             amber:'#F5A702', gold:'#D4B81E', amberLight:'#FFCA3C',
             green:'#6FA86E', cream:'#FBF7EF', mustardLight:'#FFF4DA',
           },
+          fontWeight: { 500:'500', 600:'600', 700:'700', 800:'800', 900:'900' },
         },
       },
     };
@@ -88,6 +89,48 @@
     .sway { animation: sway 7s ease-in-out infinite; transform-origin: 50% 90%; }
     @keyframes sway { 0%,100%{ transform: rotate(-7deg); } 50%{ transform: rotate(7deg); } }
 
+    /* ===== HERO estilo shader (21st.dev) recriado em CSS ===== */
+    .hero-mesh { position:absolute; inset:0; overflow:hidden; z-index:0; }
+    .hero-mesh::before, .hero-mesh::after { content:''; position:absolute; inset:-25%; filter:blur(70px); }
+    .hero-mesh::before{
+      background:
+        radial-gradient(32% 36% at 22% 28%, #1f5a8a 0%, transparent 60%),
+        radial-gradient(28% 30% at 78% 22%, #F5A702 0%, transparent 55%),
+        radial-gradient(42% 42% at 62% 78%, #0E2A4E 0%, transparent 62%),
+        radial-gradient(30% 30% at 18% 82%, #6FA86E 0%, transparent 55%);
+      animation: mesh1 16s ease-in-out infinite alternate;
+    }
+    .hero-mesh::after{
+      background:
+        radial-gradient(30% 30% at 70% 58%, #D4B81E 0%, transparent 55%),
+        radial-gradient(34% 34% at 32% 52%, #14406a 0%, transparent 60%);
+      opacity:.55; mix-blend-mode:screen;
+      animation: mesh2 22s ease-in-out infinite alternate;
+    }
+    @keyframes mesh1{ to{ transform:translate(4%,-3%) scale(1.15) rotate(7deg);} }
+    @keyframes mesh2{ to{ transform:translate(-5%,4%) scale(1.2) rotate(-9deg);} }
+
+    .glass-pill{ position:relative; backdrop-filter:blur(8px); }
+    .glass-pill .hairline{ position:absolute; top:0; left:6px; right:6px; height:1px;
+      background:linear-gradient(90deg,transparent,rgba(245,167,2,.55),transparent); border-radius:9999px; }
+
+    .headline-anim{
+      background:linear-gradient(120deg,#FBF7EF 0%,#F5A702 32%,#D4B81E 58%,#FBF7EF 100%);
+      background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: shine 8s linear infinite;
+    }
+    @keyframes shine{ to{ background-position:200% center; } }
+
+    /* selo pulsante (estilo PulsingBorder) */
+    .pulse-ring{ position:absolute; width:78px; height:78px; border-radius:50%;
+      background:conic-gradient(from 0deg,#F5A702,#D4B81E,#6FA86E,#1f5a8a,#F5A702);
+      -webkit-mask:radial-gradient(closest-side, transparent 58%, #000 60%);
+              mask:radial-gradient(closest-side, transparent 58%, #000 60%);
+      animation: spin 7s linear infinite, ringpulse 2.6s ease-in-out infinite; }
+    @keyframes ringpulse{ 0%,100%{ opacity:.85; transform:scale(1);} 50%{ opacity:1; transform:scale(1.08);} }
+
+    .gooey-group{ filter:url(#gooey-filter); }
+
     .nav-blur { backdrop-filter: blur(12px); background: rgba(8,26,46,.7); }
     ::selection { background: rgba(245,167,2,.3); }
   </style>
@@ -96,6 +139,17 @@
 <body class="font-body">
   <div class="aurora"></div>
   <div class="spotlight" id="spotlight"></div>
+
+  <!-- filtro gooey para o botão estilo 21st.dev -->
+  <svg class="absolute w-0 h-0" aria-hidden="true">
+    <defs>
+      <filter id="gooey-filter" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="gooey" />
+        <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
 
   <!-- ====================== NAV ====================== -->
   <header class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-white/5">
@@ -124,17 +178,21 @@
     </nav>
   </header>
 
-  <!-- ====================== HERO ====================== -->
-  <section id="topo" class="relative z-10 min-h-screen flex items-center pt-28 pb-20">
-    <div class="max-w-6xl mx-auto px-5 w-full">
-      <div class="inline-flex items-center gap-2 text-xs font-600 px-3 py-1.5 rounded-full border border-amber/30 bg-amber/10 text-amber mb-8 reveal" data-hero>
-        <span class="w-1.5 h-1.5 rounded-full bg-amber animate-pulse"></span>
-        Marketing digital potencializado por IA
+  <!-- ====================== HERO (estilo shader 21st.dev, adaptado à marca) ====================== -->
+  <section id="topo" class="relative z-10 min-h-screen flex items-end pt-28 pb-20 overflow-hidden">
+    <!-- fundo mesh animado (recriado em CSS) -->
+    <div class="hero-mesh"></div>
+    <div class="absolute inset-0 z-[1] bg-gradient-to-t from-ink via-ink/55 to-ink/10"></div>
+
+    <div class="max-w-6xl mx-auto px-5 w-full relative z-10">
+      <div class="glass-pill inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 reveal" data-hero>
+        <span class="hairline"></span>
+        <span class="relative z-10 text-cream/90 text-sm font-500 tracking-wide">✨ Marketing digital potencializado por IA</span>
       </div>
 
-      <h1 class="font-display font-800 leading-[1.05] tracking-tight text-5xl md:text-7xl max-w-4xl reveal" data-hero>
-        Menos <span class="text-gradient">dependência</span>.<br/>
-        Mais <span class="text-gradient">controle</span>.
+      <h1 class="font-display font-800 leading-[1.02] tracking-tight text-5xl md:text-7xl lg:text-8xl max-w-4xl reveal" data-hero>
+        <span class="block headline-anim">Menos dependência.</span>
+        <span class="block text-cream">Mais controle.</span>
       </h1>
 
       <p class="mt-7 text-lg md:text-xl text-cream/70 max-w-2xl reveal" data-hero>
@@ -143,46 +201,46 @@
         <span class="text-cream">autonomia, clareza e resultados reais</span>.
       </p>
 
-      <div class="mt-10 flex flex-col sm:flex-row gap-4 reveal" data-hero>
-        <a href="#contato" class="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-amber text-ink font-700 text-base hover:bg-amberLight transition shadow-xl shadow-amber/25">
-          Falar com um especialista
-          <span class="group-hover:translate-x-1 transition">→</span>
-        </a>
-        <a href="#solucoes" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border border-white/15 text-cream/90 font-600 hover:border-amber/40 hover:text-amber transition">
+      <div class="mt-10 flex items-center gap-5 flex-wrap reveal" data-hero>
+        <!-- botão gooey (estilo 21st.dev) -->
+        <div class="gooey-group group relative flex items-center">
+          <a href="#contato" aria-label="Falar com a gente"
+             class="absolute right-0 grid place-items-center h-12 w-12 rounded-full bg-amber text-ink z-0 -translate-x-14 group-hover:-translate-x-24 transition-all duration-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="#contato" class="relative z-10 inline-flex items-center h-12 px-8 rounded-full bg-amber text-ink font-700 text-sm hover:bg-amberLight transition">
+            Falar com a gente
+          </a>
+        </div>
+        <a href="#solucoes" class="inline-flex items-center h-12 px-8 rounded-full border-2 border-white/20 text-cream font-600 text-sm hover:border-amber/50 hover:text-amber transition backdrop-blur-sm">
           Conheça as soluções
         </a>
       </div>
 
-      <div class="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-cream/50 reveal" data-hero>
+      <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-cream/50 reveal" data-hero>
         <span>✦ Time interno autônomo</span>
         <span>✦ CRM sob medida, sem custo de licença</span>
         <span>✦ Processos com IA</span>
       </div>
     </div>
 
-    <!-- SELO QUE GIRA + broto que balança -->
-    <div class="absolute right-8 lg:right-16 top-1/4 hidden md:block" aria-hidden="true">
-      <div class="relative w-44 h-44 lg:w-52 lg:h-52 grid place-items-center">
-        <div class="absolute -inset-6 rounded-full bg-amber/15 blur-2xl"></div>
-        <!-- texto circular girando -->
-        <svg viewBox="0 0 200 200" class="spin-slow w-full h-full">
-          <defs>
-            <path id="selo" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
-          </defs>
-          <text fill="#FBF7EF" font-family="Raleway, sans-serif" font-size="13" font-weight="600" letter-spacing="4">
+    <!-- selo pulsante + texto girando + broto (bottom-right) -->
+    <div class="absolute bottom-8 right-8 z-20 hidden sm:block" aria-hidden="true">
+      <div class="relative w-28 h-28 grid place-items-center">
+        <div class="pulse-ring"></div>
+        <svg viewBox="0 0 100 100" class="spin-slow absolute inset-0 w-full h-full">
+          <defs><path id="selo" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0" /></defs>
+          <text fill="#FBF7EF" font-family="Raleway, sans-serif" font-size="7.2" font-weight="600" letter-spacing="2.5">
             <textPath href="#selo" startOffset="0">GRÃO DE MOSTARDA • MARKETING + IA • </textPath>
           </text>
         </svg>
-        <!-- broto central que balança -->
-        <span class="absolute inset-0 grid place-items-center">
-          <span class="sway grid place-items-center w-16 h-16 rounded-2xl bg-amber shadow-xl shadow-amber/30">
-            <svg viewBox="0 0 64 64" class="w-10 h-10 text-ink" fill="none">
-              <path d="M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z" fill="currentColor"/>
-              <path d="M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z" fill="currentColor"/>
-              <path d="M31 34C31 43 33 47 32 53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-              <path d="M22 54H42" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-            </svg>
-          </span>
+        <span class="sway relative z-10 grid place-items-center w-10 h-10 rounded-xl bg-amber shadow-lg shadow-amber/30">
+          <svg viewBox="0 0 64 64" class="w-6 h-6 text-ink" fill="none">
+            <path d="M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z" fill="currentColor"/>
+            <path d="M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z" fill="currentColor"/>
+            <path d="M31 34C31 43 33 47 32 53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M22 54H42" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          </svg>
         </span>
       </div>
     </div>
