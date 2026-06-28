@@ -7,6 +7,35 @@
   <title>Grão de Mostarda — Marketing digital potencializado por IA</title>
   <meta name="description" content="Transformamos propósito em crescimento. Estruturamos seu time interno de marketing e transferimos o conhecimento para você ter autonomia, clareza e resultados reais — sem ser refém de agências." />
 
+  <!-- ATENÇÃO: troque o domínio abaixo pelo domínio final do site (canonical/OG/sitemap) -->
+  <link rel="canonical" href="https://www.agenciagraodemostarda.com.br/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="Grão de Mostarda" />
+  <meta name="keywords" content="marketing digital, inteligência artificial, consultoria de marketing, CRM sob medida, automação de marketing, tráfego pago, time interno de marketing, Rio de Janeiro, Barra da Tijuca" />
+
+  <!-- Geo / busca local -->
+  <meta name="geo.region" content="BR-RJ" />
+  <meta name="geo.placename" content="Barra da Tijuca, Rio de Janeiro" />
+  <meta name="geo.position" content="-23.0045;-43.3650" />
+  <meta name="ICBM" content="-23.0045, -43.3650" />
+
+  <!-- Open Graph (compartilhamento em redes/WhatsApp) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Grão de Mostarda" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:url" content="https://www.agenciagraodemostarda.com.br/" />
+  <meta property="og:title" content="Grão de Mostarda — Marketing digital potencializado por IA" />
+  <meta property="og:description" content="Menos dependência, mais controle. Estruturamos seu time interno de marketing e transferimos o conhecimento — sem ser refém de agências." />
+  <meta property="og:image" content="https://www.agenciagraodemostarda.com.br/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Grão de Mostarda — Marketing digital potencializado por IA" />
+  <meta name="twitter:description" content="Menos dependência, mais controle. Seu time interno de marketing, com autonomia e resultado." />
+  <meta name="twitter:image" content="https://www.agenciagraodemostarda.com.br/assets/og-image.png" />
+
   <!-- Favicon: broto da marca -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5A702'/%3E%3Cpath d='M31 35C36 19 46 13 55 11C53 22 45 33 31 35Z' fill='white'/%3E%3Cpath d='M30 37C22 27 13 27 7 29C11 38 22 42 30 37Z' fill='white'/%3E%3Cpath d='M31 34C31 43 33 47 32 53' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M22 54H42' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
 
@@ -133,7 +162,77 @@
 
     .nav-blur { backdrop-filter: blur(12px); background: rgba(8,26,46,.7); }
     ::selection { background: rgba(245,167,2,.3); }
+
+    /* âncoras não ficam atrás da nav fixa */
+    section[id] { scroll-margin-top: 5rem; }
+    /* acordeão FAQ */
+    details summary::-webkit-details-marker { display: none; }
+    details[open] summary .faq-plus { transform: rotate(45deg); }
+    /* respeita quem prefere menos movimento */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee, .spin-slow, .pulse-ring, .sway, .float, .aurora { animation: none !important; }
+      .hero-mesh::before, .hero-mesh::after { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
   </style>
+
+  <!-- ====== Dados estruturados (SEO + GEO) ====== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["ProfessionalService", "Organization"],
+        "@id": "https://www.agenciagraodemostarda.com.br/#org",
+        "name": "Grão de Mostarda",
+        "alternateName": "Agência Grão de Mostarda",
+        "description": "Agência de marketing digital potencializada por IA. Estrutura o time interno de marketing das empresas e transfere conhecimento para que elas cresçam com autonomia, sem depender de agências.",
+        "url": "https://www.agenciagraodemostarda.com.br/",
+        "email": "alfredo@agenciagraodemostarda.com.br",
+        "logo": "https://www.agenciagraodemostarda.com.br/assets/logo-broto.svg",
+        "image": "https://www.agenciagraodemostarda.com.br/assets/og-image.png",
+        "slogan": "Transformamos propósito em crescimento.",
+        "founder": { "@type": "Person", "name": "Alfredo Girolami", "jobTitle": "Estrategista & Fundador" },
+        "areaServed": { "@type": "Country", "name": "Brasil" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Barra da Tijuca",
+          "addressRegion": "RJ",
+          "addressCountry": "BR"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": -23.0045, "longitude": -43.3650 },
+        "knowsAbout": ["Marketing digital", "Inteligência artificial aplicada a negócios", "CRM sob medida", "Automação de processos", "Tráfego pago", "Treinamento de marketing"],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Soluções",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria Imersiva", "description": "Diagnóstico de gargalos e plano estratégico conectando marketing, tecnologia e resultados." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Desenvolvimento de Sistemas com IA", "description": "CRMs, automações e sistemas web sob medida com inteligência artificial." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Treinamento e Mentoria Interna", "description": "Capacitação prática do time para executar o marketing com autonomia." } }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.agenciagraodemostarda.com.br/#website",
+        "url": "https://www.agenciagraodemostarda.com.br/",
+        "name": "Grão de Mostarda",
+        "inLanguage": "pt-BR",
+        "publisher": { "@id": "https://www.agenciagraodemostarda.com.br/#org" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "O que a Grão de Mostarda faz?", "acceptedAnswer": { "@type": "Answer", "text": "Somos uma agência de marketing digital potencializada por IA. Estruturamos o time interno de marketing das empresas e transferimos conhecimento para que elas cresçam com autonomia, em vez de depender de agências." } },
+          { "@type": "Question", "name": "Vocês substituem a minha agência?", "acceptedAnswer": { "@type": "Answer", "text": "Nosso modelo é o oposto de prender você num contrato eterno: montamos a estrutura, treinamos o seu time e deixamos o conhecimento dentro da sua empresa. Quando terminamos, você não precisa mais de nós." } },
+          { "@type": "Question", "name": "Quais segmentos vocês atendem?", "acceptedAnswer": { "@type": "Answer", "text": "Temos profundidade em educação, turismo esportivo, eventos, esportes, saúde, construção civil, serviços e varejo." } },
+          { "@type": "Question", "name": "Vocês atendem empresas fora do Rio de Janeiro?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. Ficamos na Barra da Tijuca (RJ), mas atendemos empresas em todo o Brasil, presencial e remotamente." } },
+          { "@type": "Question", "name": "Como funciona o primeiro passo?", "acceptedAnswer": { "@type": "Answer", "text": "Começa por uma conversa de diagnóstico para entender seus gargalos e desenhar o plano ideal. É só falar com a gente pelo formulário ou pelo e-mail alfredo@agenciagraodemostarda.com.br." } }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body class="font-body">
@@ -179,7 +278,7 @@
   </header>
 
   <!-- ====================== HERO (estilo shader 21st.dev, adaptado à marca) ====================== -->
-  <section id="topo" class="relative z-10 min-h-screen flex items-end pt-28 pb-20 overflow-hidden">
+  <section id="topo" class="relative z-10 min-h-screen flex items-center sm:items-end pt-28 pb-20 overflow-hidden">
     <!-- fundo mesh animado (recriado em CSS) -->
     <div class="hero-mesh"></div>
     <div class="absolute inset-0 z-[1] bg-gradient-to-t from-ink via-ink/55 to-ink/10"></div>
@@ -394,6 +493,53 @@
             <a href="#contato" class="inline-flex items-center gap-2 text-amber font-600 hover:gap-3 transition-all">Vamos conversar →</a>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== FAQ ====================== -->
+  <section id="faq" class="relative z-10 py-24">
+    <div class="max-w-3xl mx-auto px-5">
+      <div class="mb-12 reveal">
+        <p class="text-amber font-600 text-sm mb-3">Perguntas frequentes</p>
+        <h2 class="font-display font-700 text-4xl md:text-5xl tracking-tight">Ainda com dúvidas?</h2>
+      </div>
+      <div class="space-y-3">
+        <details class="group glow-border bg-navy/40 p-5 reveal">
+          <summary class="flex justify-between items-center gap-4 cursor-pointer list-none font-display font-600 text-lg">
+            O que a Grão de Mostarda faz?
+            <span class="faq-plus text-amber text-2xl leading-none transition-transform shrink-0">+</span>
+          </summary>
+          <p class="mt-3 text-cream/60">Somos uma agência de marketing digital potencializada por IA. Estruturamos o time interno de marketing das empresas e transferimos conhecimento para que elas cresçam com autonomia, em vez de depender de agências.</p>
+        </details>
+        <details class="group glow-border bg-navy/40 p-5 reveal">
+          <summary class="flex justify-between items-center gap-4 cursor-pointer list-none font-display font-600 text-lg">
+            Vocês substituem a minha agência?
+            <span class="faq-plus text-amber text-2xl leading-none transition-transform shrink-0">+</span>
+          </summary>
+          <p class="mt-3 text-cream/60">Nosso modelo é o oposto de prender você num contrato eterno: montamos a estrutura, treinamos o seu time e deixamos o conhecimento dentro da sua empresa. Quando terminamos, você não precisa mais de nós.</p>
+        </details>
+        <details class="group glow-border bg-navy/40 p-5 reveal">
+          <summary class="flex justify-between items-center gap-4 cursor-pointer list-none font-display font-600 text-lg">
+            Quais segmentos vocês atendem?
+            <span class="faq-plus text-amber text-2xl leading-none transition-transform shrink-0">+</span>
+          </summary>
+          <p class="mt-3 text-cream/60">Temos profundidade em educação, turismo esportivo, eventos, esportes, saúde, construção civil, serviços e varejo.</p>
+        </details>
+        <details class="group glow-border bg-navy/40 p-5 reveal">
+          <summary class="flex justify-between items-center gap-4 cursor-pointer list-none font-display font-600 text-lg">
+            Vocês atendem empresas fora do Rio de Janeiro?
+            <span class="faq-plus text-amber text-2xl leading-none transition-transform shrink-0">+</span>
+          </summary>
+          <p class="mt-3 text-cream/60">Sim. Ficamos na Barra da Tijuca (RJ), mas atendemos empresas em todo o Brasil, presencial e remotamente.</p>
+        </details>
+        <details class="group glow-border bg-navy/40 p-5 reveal">
+          <summary class="flex justify-between items-center gap-4 cursor-pointer list-none font-display font-600 text-lg">
+            Como funciona o primeiro passo?
+            <span class="faq-plus text-amber text-2xl leading-none transition-transform shrink-0">+</span>
+          </summary>
+          <p class="mt-3 text-cream/60">Começa por uma conversa de diagnóstico para entender seus gargalos e desenhar o plano ideal. É só falar com a gente pelo formulário aqui embaixo ou pelo e-mail alfredo@agenciagraodemostarda.com.br.</p>
+        </details>
       </div>
     </div>
   </section>
