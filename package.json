@@ -1,0 +1,8 @@
+{
+  "name": "grao-mostarda-site",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@base44/sdk": "^0.8.35"
+  }
+}
