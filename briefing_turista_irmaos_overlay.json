@@ -19,33 +19,42 @@
   "segments": [
     {
       "start": 0.3, "end": 5.5,
-      "anim": "fade",
-      "main": ["EM 2025,", "ELES VIERAM", "PELA PRIMEIRA VEZ."],
-      "sub": [],
-      "position": "top",
-      "accent": false,
-      "drop_shadow": true
-    },
-    {
-      "start": 10.0, "end": 14.5,
-      "anim": "typewriter",
-      "main": ["ATLÉTICO DE MADRID.", "MADRID, ESPANHA."],
-      "sub": [],
-      "position": "top",
-      "accent": false,
-      "drop_shadow": true
-    },
-    {
-      "start": 15.2, "end": 18.8,
       "anim": "slide_up",
-      "main": ["COM ACOMPANHAMENTO VIP", "DO TURISTA FC."],
+      "main": ["NOSSOS CLIENTES", "NA COPA DO MUNDO."],
       "sub": [],
       "position": "top",
       "accent": true,
       "drop_shadow": true
     },
     {
-      "start": 19.3, "end": 23.5,
+      "start": 6.2, "end": 9.8,
+      "anim": "fade",
+      "main": ["MAS ISSO", "COMEÇOU MUITO ANTES."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 10.2, "end": 13.8,
+      "anim": "typewriter",
+      "main": ["ATLÉTICO DE MADRID.", "MADRID, 2025."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 14.5, "end": 19.5,
+      "anim": "fade",
+      "main": ["PRIMEIRA VEZ", "COM O TURISTA FC."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 24.3, "end": 28.5,
       "anim": "scale_fade",
       "main": ["EM 2026,", "VOLTARAM."],
       "sub": [],
@@ -54,7 +63,7 @@
       "drop_shadow": true
     },
     {
-      "start": 23.8, "end": 28.5,
+      "start": 28.8, "end": 33.5,
       "anim": "slide_up",
       "main": ["DESTA VEZ,", "PARA A COPA DO MUNDO."],
       "sub": [],
@@ -63,25 +72,16 @@
       "drop_shadow": true
     },
     {
-      "start": 31.2, "end": 35.8,
+      "start": 34.0, "end": 40.5,
       "anim": "word_reveal",
-      "main": ["QUANDO A EXPERIÊNCIA É BOA,"],
+      "main": ["QUANDO A EXPERIÊNCIA É BOA,", "O CLIENTE VOLTA."],
       "sub": [],
       "position": "top",
       "accent": false,
       "drop_shadow": true
     },
     {
-      "start": 36.0, "end": 39.8,
-      "anim": "slide_up",
-      "main": ["O CLIENTE VOLTA."],
-      "sub": [],
-      "position": "top",
-      "accent": true,
-      "drop_shadow": true
-    },
-    {
-      "start": 40.3, "end": 45.7,
+      "start": 41.2, "end": 45.7,
       "anim": "fade",
       "main": ["TURISTA FC."],
       "sub": ["Turismo esportivo de verdade."],
@@ -99,7 +99,7 @@
       "y_frac": 0.40
     }
   ],
-  "logos_start": 40.3,
+  "logos_start": 41.2,
   "logos_end": 45.7,
   "logos_fade_dur": 0.8
 }

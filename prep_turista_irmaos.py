@@ -1,10 +1,11 @@
 """
-Turista FC — Os Irmãos: Atlético Madrid 2025 → Copa 2026
-Gera turista_irmaos_base.mp4 (~44s, sem áudio original)
+Turista FC — Os Irmãos: estrutura de flashback
+Gera turista_irmaos_base.mp4 (~46s, sem áudio original)
 
-Capítulo 1 — Madrid 2025 (0-18s):  WA00201 + 3 fotos
-Capítulo 2 — Copa 2026  (18-38s):  WA00222 + WA00162
-CTA preta                (38-44s)
+Capítulo 1 — HOOK: Copa 2026 agora     (0-6s):   V2
+Capítulo 2 — FLASHBACK: Madrid 2025   (6-24s):   V1 + 3 fotos
+Capítulo 3 — VOLTA: Copa 2026         (24-40s):  V2 + V3
+CTA preta                              (40-46s)
 """
 from pathlib import Path
 from moviepy import VideoFileClip, ImageClip, ColorClip, concatenate_videoclips
@@ -49,21 +50,26 @@ v2 = VideoFileClip(str(V2p))
 v3 = VideoFileClip(str(V3p))
 
 clips = [
-    # — Capítulo 1: Madrid 2025 —
-    to_916(v1.subclipped(0,   4)),     # 0-4s    hook abertura
-    to_916(v1.subclipped(5,   9)),     # 4-8s    segundo momento
-    photo(P1p, 2.5),                   # 8-10.5s foto 1
-    photo(P2p, 2.5),                   # 10.5-13s foto 2
-    photo(P3p, 2.0),                   # 13-15s   foto 3
-    to_916(v1.subclipped(16,  20)),    # 15-19s   reação/clímax Madrid
-    # — Capítulo 2: Copa 2026 —
-    to_916(v2.subclipped(0,   4)),     # 19-23s   Copa abertura
-    to_916(v3.subclipped(0,   4)),     # 23-27s   Copa cena 2
-    to_916(v2.subclipped(8,   12)),    # 27-31s   Copa energia
-    to_916(v3.subclipped(10,  14)),    # 31-35s   Copa cena 4
-    to_916(v2.subclipped(44,  49)),    # 35-40s   Copa clímax (fim do clip)
+    # — Cap. 1: HOOK — Copa 2026 agora —
+    to_916(v2.subclipped(0,   3)),     # 0-3s    Copa abertura (hook)
+    to_916(v3.subclipped(0,   3)),     # 3-6s    Copa segunda cena
+
+    # — Cap. 2: FLASHBACK — Madrid 2025 —
+    to_916(v1.subclipped(0,   4)),     # 6-10s   Madrid abertura
+    to_916(v1.subclipped(5,   9)),     # 10-14s  Madrid ação
+    photo(P1p, 2.0),                   # 14-16s  foto Madrid 1
+    photo(P2p, 2.0),                   # 16-18s  foto Madrid 2
+    photo(P3p, 2.0),                   # 18-20s  foto Madrid 3
+    to_916(v1.subclipped(18,  22)),    # 20-24s  Madrid clímax
+
+    # — Cap. 3: VOLTA — Copa 2026 —
+    to_916(v2.subclipped(6,   10)),    # 24-28s  Copa energia
+    to_916(v3.subclipped(8,   12)),    # 28-32s  Copa cena 2
+    to_916(v2.subclipped(14,  18)),    # 32-36s  Copa ação
+    to_916(v2.subclipped(44,  49)),    # 36-41s  Copa clímax final
+
     # — CTA —
-    ColorClip(size=(W, H), color=(0, 0, 0), duration=6).with_fps(FPS),  # 40-46s
+    ColorClip(size=(W, H), color=(0, 0, 0), duration=5).with_fps(FPS),  # 41-46s
 ]
 
 base = concatenate_videoclips(clips).without_audio()
