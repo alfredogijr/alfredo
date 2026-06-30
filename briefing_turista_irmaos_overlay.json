@@ -1,0 +1,105 @@
+{
+  "inputs": ["/home/user/alfredo/turista_irmaos_base.mp4"],
+  "duration": 46.0,
+
+  "brand_color": [20, 90, 210],
+  "progress_bar": false,
+  "ken_burns": 0,
+  "vignette": 0.72,
+  "contrast": 1.18,
+  "color_grade": "cinematic",
+  "letterbox": 0,
+
+  "audio_fade": 0,
+  "audio_volume": 0,
+
+  "font_size_main": 56,
+  "font_size_sub": 26,
+
+  "segments": [
+    {
+      "start": 0.3, "end": 5.5,
+      "anim": "fade",
+      "main": ["EM 2025,", "ELES VIERAM", "PELA PRIMEIRA VEZ."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 10.0, "end": 14.5,
+      "anim": "typewriter",
+      "main": ["ATLÉTICO DE MADRID.", "MADRID, ESPANHA."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 15.2, "end": 18.8,
+      "anim": "slide_up",
+      "main": ["COM ACOMPANHAMENTO VIP", "DO TURISTA FC."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 19.3, "end": 23.5,
+      "anim": "scale_fade",
+      "main": ["EM 2026,", "VOLTARAM."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 23.8, "end": 28.5,
+      "anim": "slide_up",
+      "main": ["DESTA VEZ,", "PARA A COPA DO MUNDO."],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 31.2, "end": 35.8,
+      "anim": "word_reveal",
+      "main": ["QUANDO A EXPERIÊNCIA É BOA,"],
+      "sub": [],
+      "position": "top",
+      "accent": false,
+      "drop_shadow": true
+    },
+    {
+      "start": 36.0, "end": 39.8,
+      "anim": "slide_up",
+      "main": ["O CLIENTE VOLTA."],
+      "sub": [],
+      "position": "top",
+      "accent": true,
+      "drop_shadow": true
+    },
+    {
+      "start": 40.3, "end": 45.7,
+      "anim": "fade",
+      "main": ["TURISTA FC."],
+      "sub": ["Turismo esportivo de verdade."],
+      "position": "center",
+      "accent": false,
+      "drop_shadow": true
+    }
+  ],
+
+  "logos": [
+    {
+      "path": "/root/.claude/uploads/a2d92e31-73f6-4945-a382-29957624cebe/1c0d3b7b-whitelogo2_transparente_20260601_232004_0000.png",
+      "width_pct": 0.55,
+      "x_frac": 0.50,
+      "y_frac": 0.40
+    }
+  ],
+  "logos_start": 40.3,
+  "logos_end": 45.7,
+  "logos_fade_dur": 0.8
+}
