@@ -35,7 +35,7 @@ HOME  — triagem (Colégio · Escola Técnica · EAD) + prova social + unidades
 │
 ├── ESCOLA TÉCNICA ......................... tom: carreira, empregabilidade
 │   ├── Todos os cursos — filtro Saúde · Indústria · Tecnologia · Negócios
-│   ├── /curso/[slug] — UMA página dinâmica para os ~17 cursos
+│   ├── /curso/[slug] — UMA página dinâmica para os 13 cursos
 │   └── Especializações / Cursos Livres
 │
 ├── EAD — Polo Unicesumar (graduação e pós)
@@ -69,19 +69,27 @@ Jovem ou adulto decidindo mudar de vida. Tom direto, sem rodeio institucional.
 
 - Assinaturas que a marca já usa e funcionam: *"Quer mudar de vida?"*, *"a forma mais rápida de entrar no
   mercado"*, `#vem pro ct`.
-- **Toda página de curso responde acima da dobra:** duração (12 ou 18 meses) · turno · unidade · o que o
-  profissional faz · onde trabalha.
+- **Toda página de curso responde acima da dobra:** duração · modalidade · unidade · o que o profissional faz ·
+  onde trabalha.
 - **Bloco anti-objeção obrigatório**, tirado direto do funil real:
   | Objeção no funil | Resposta na página |
   |---|---|
   | `"Distante"` | Mapa, duas unidades, trem/BRT, tempo de deslocamento |
-  | `"achou longo 18 meses"` | **Mostrar as duas opções de turno lado a lado** — 12 meses no noturno, 18 aos sábados |
+  | `"achou longo 18 meses"` | **"A partir de 12 meses"** em destaque, com convite a consultar a turma |
   | `"3º ANO"` / `"2º ANO"` | Ponte para o Médio Técnico — hoje esse lead é perdido |
-  | `"HR DE MANHÃ"` / `"curso EAD"` | Turnos e modalidades visíveis |
+  | `"HR DE MANHÃ"` / `"curso EAD"` | Convite a consultar turnos disponíveis |
 
-> **A duração varia por turno, não por curso.** O site atual informa, para Enfermagem, 12 meses no noturno e 18
-> aos sábados. A objeção "18 meses é longo" já tem resposta — só não está sendo comunicada. Cada página de curso
-> deve apresentar as duas opções como escolha do aluno, não como letra miúda.
+> ### ⚠️ Regra de duração — definida pelo cliente
+> **Não afirmar** que todos os cursos têm turma noturna e aos sábados. A disponibilidade varia por curso,
+> unidade, período de matrícula e formação de turma.
+>
+> - **Card:** `Duração: a partir de 12 meses*` + nota *"A duração pode variar conforme o curso, o turno e a
+>   organização da turma."*
+> - **Página de curso:** ficha com Modalidade (presencial), Duração (a partir de 12 meses) e *"Turmas e
+>   horários: consulte nossa equipe."*
+> - **Especializações:** categoria separada, com pré-requisito visível e duração sempre "consulte a equipe".
+>
+> Isso preserva a vantagem competitiva do "12 meses" sem prometer turma que pode não existir.
 - **Prova:** depoimentos em vídeo (Drive), laboratórios, empresas empregadoras.
 
 ### Home
@@ -97,7 +105,7 @@ Três blocos, sem splash: **quem você é** → **prova** (formados, cursos, uni
 
 ### O que usar
 
-1. **Portfólio 3x maior que o do vizinho** — ~17 cursos contra ~5 do CE Triângulo.
+1. **Portfólio quase 3x maior que o do vizinho** — 13 cursos técnicos mais 2 especializações, contra ~5 do CE Triângulo.
 2. **Bloco de Saúde exclusivo na região** — e Enfermagem é o curso mais procurado do funil. Ativo mais forte e
    mais subaproveitado.
 3. **Duas unidades** — Zona Norte e Zona Oeste; os concorrentes locais têm endereço único.
@@ -114,22 +122,23 @@ Do manual de identidade de 2025:
 | Item | Definição |
 |---|---|
 | Marca | All-type, caixa baixa, `ctrio` **sem hífen**, dobras laranja nas letras c e t |
-| Azul (Profundo) | `#1B3A6B` *(a confirmar no manual)* |
-| Laranja (Suco) | `#F5820A` *(a confirmar no manual)* |
-| Apoio | Branco · Preto · Claridade |
-| Tipografia | **Montserrat** pelo manual — app `ctrio` usa Barlow *(a decidir)* |
-| Padrão criativo | Dobras das letras + espaço vazio entre peças |
+| Arquivo da marca | `ctrio_marca_final-01.png` — já hospedado em `media.base44.com`, usado no componente `Logo` |
+| Azul (Profundo) | `#1B3A6B` → `--ct-profundo: 217 60% 26%` *(a conferir no manual)* |
+| Laranja (Suco) | `#F5820A` → `--ct-suco: 31 92% 50%` *(a conferir no manual)* |
+| Apoio | Branco · Preto · Claridade `#F4F6FA` |
+| Tipografia | **Montserrat** — decisão: seguir o manual de 2025, não o Barlow do app `ctrio` |
+| Padrão criativo | Dobras das letras + espaço vazio entre peças; faixa `.ct-faixa-marca` no topo |
 | Fotografia | Dois bancos: Colégio (uniforme, sala, famílias) · Técnica (jaleco, EPI, laboratório) |
 
-**Componentes a herdar do app `ctrio`:** `RevealWrap`, `CursoCard`, `CursoCardSVGs`, filtro por área,
-`WhatsAppIcon`, `Header` / `MobileNav` / `Footer`.
+Os tokens vivem em `src/index.css` como variáveis CSS, com classes utilitárias próprias
+(`.ct-titulo`, `.ct-btn--laranja`, `.ct-card`, `.ct-eyebrow`, `.ct-container`, `.ct-secao`).
 
 ---
 
 ## Modelo de dados
 
 - **`CursoTecnico`** — herdar o schema existente e adicionar `area` (saude/industria/tecnologia/negocios),
-  `unidades` (array), `turnos`, `destaque` (bool). **Popular com os ~17 cursos** — hoje a entidade está vazia e
+  `unidades` (array), `turnos`, `destaque` (bool). **Popular com os 13 cursos** — hoje a entidade está vazia e
   a lista vive hardcoded no componente.
 - **`Lead`** — herdar (`tipo_interesse`, `unidade_preferencia`, `origem`) e adicionar
   `utm_source` / `utm_medium` / `utm_campaign`. Sem isso não se mede de onde vem a matrícula.
@@ -142,15 +151,19 @@ Uma única página `/curso/[slug]` movida a dados, aposentando as quatro página
 
 ## Ordem de execução
 
-**Fase 1 — Fundação**
-1. Extrair hex oficiais e logo de `ctrio_marca_final.ai` / `.pdf`
-2. Criar o app Base44 novo com design system e Layout (Header, Footer, WhatsApp flutuante)
-3. Criar as entidades e **popular `CursoTecnico`**
+> **App Base44:** `6a6f78ea6e53ff34f8239311`
+> Editor: https://app.base44.com/apps/6a6f78ea6e53ff34f8239311/editor/preview
+
+**Fase 1 — Fundação** ✅ *feita*
+1. ✅ Logo oficial aplicada (`Logo.jsx`, a partir do arquivo já hospedado no Base44)
+2. ✅ Design system em `src/index.css` — azul Profundo, laranja Suco, Montserrat
+3. ✅ Conteúdo em `src/lib/ctRioData.js` — 13 cursos, 2 especializações, unidades e WhatsApp corretos
 
 **Fase 2 — Espinha dorsal** *(o que gera matrícula)*
-4. Home com a triagem dos dois mundos
-5. `CursosTecnicos` (listagem + filtro) e `/curso/[slug]` dinâmica
-6. `EnsinoMedioTecnico` — a página mais importante do site
+4. ✅ Home com a triagem dos dois mundos (`Hero`, `Colegio`, `Cursos`, `Especializacoes`, `Diferenciais`,
+   `Unidades`, `CtaFinal`, `Footer`, `WhatsAppFlutuante`)
+5. ⬜ `/curso/[slug]` — página dinâmica por curso
+6. ⬜ `EnsinoMedioTecnico` — página própria do carro-chefe
 
 **Fase 3 — Completar**
 7. Fundamental, Médio, EJA, EAD, Especializações

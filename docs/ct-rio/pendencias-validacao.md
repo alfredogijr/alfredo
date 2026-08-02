@@ -25,32 +25,34 @@ ir ao ar publicado sem confirmação.
 - **Contexto competitivo:** CE Triângulo é de 1994 e ETERJ de 1968 — tradição não é terreno vencedor para o
   CT-Rio, então este número é informativo, não argumento.
 
-### 3. Lista fechada de cursos técnicos
-- **Divergência:** 15 cursos no doc de marca e no site · 10 no app `ctrio` · códigos nas planilhas sugerem ~17
-- **Assumido:** ~17 cursos, listados no diagnóstico §2
-- **A confirmar:**
-  - A lista de 17 está correta e completa?
-  - **Preparatório para Carreira Militar** — é curso ativo? Entra no site? É técnico ou livre?
-  - **Análises Clínicas** e **Automação Industrial** aparecem só no app `ctrio` — existem mesmo?
-  - **Logística** e **Instrumentação Cirúrgica** aparecem só no doc de marca — seguem ativos?
+### 3. Lista fechada de cursos ✅ RESOLVIDO
+- **Confirmado pelo cliente — 13 cursos técnicos:**
+  Administração · Edificações · Eletricista Predial e Residencial · Eletrônica · Eletrotécnica · Enfermagem ·
+  Formação de Professores · Informática · Logística · Mecânica Industrial · Mecatrônica · Radiologia ·
+  Segurança do Trabalho
+- **E 2 especializações técnicas**, em categoria separada, para quem já tem formação técnica compatível:
+  Enfermagem do Trabalho · Instrumentação Cirúrgica
+- **Descartado:** **Automação Industrial** não existe como curso próprio — é conteúdo de Mecatrônica.
+  **Análises Clínicas** (que constava só no app `ctrio`) também saiu.
+- **Ainda em aberto:** o **Preparatório para Carreira Militar**, que aparece nas peças de 2025 — é curso ativo?
+  Entra no site? Se sim, em que categoria?
 
-### 4. Duração e turno de cada curso ⚠️ *cliente vai enviar*
-- **O que falta:** tabela definitiva de duração × turno × unidade, curso a curso
-- **Por que importa:** esta é a **objeção nº 2** do funil. As planilhas registram `"achou longo 18 meses"` e
-  `"QUER DURAÇÃO 12 MESES"` repetidamente. A duração precisa estar acima da dobra em toda página de curso.
-
-> **Descoberta que muda o copy:** a duração **varia por turno**, não por curso. O site atual informa, para
-> Enfermagem: **12 meses no noturno** ou **18 meses aos sábados**. Ou seja, a objeção "18 meses é muito longo"
-> tem resposta pronta — existe caminho de 12 meses — e hoje ninguém comunica isso. O site precisa mostrar as
-> duas opções lado a lado em cada curso.
->
-> **A confirmar:** essa regra 12/18 vale para todos os cursos ou só para Enfermagem?
-
-- **Conflito de dados:** o app `ctrio` no Base44 registra durações bem maiores (Enfermagem 20 meses, Radiologia
-  24, Mecânica 20, Edificações 20), enquanto as peças de social de 2025 anunciam "Enfermagem — 12 meses",
-  "Informática — 12 meses" e "Formação Técnica em 12 a 18 meses". **Não usar as durações do app `ctrio`** sem
-  confirmação.
-- **Também necessário:** turno por curso — há leads pedindo `"HR DE MANHÃ"`.
+### 4. Duração e turno ✅ POLÍTICA DEFINIDA — dados ainda pendentes
+- **Regra de comunicação definida pelo cliente e já aplicada no site:**
+  > **Não afirmar** que todos os cursos têm turma noturna e aos sábados. A disponibilidade varia por curso,
+  > unidade, período de matrícula e formação de turma.
+- **Texto aprovado, em uso nos cards:** *"Duração: a partir de 12 meses\*"* + nota *"A duração pode variar
+  conforme o curso, o turno e a organização da turma."*
+- **Texto aprovado, em uso nas páginas de curso:** ficha com Modalidade (presencial), Duração (a partir de 12
+  meses) e "Turmas e horários: consulte nossa equipe".
+- **Contexto:** o site atual informa 12 meses (noturno) e 18 meses (sábados), mas não dá para confirmar quais
+  cursos têm turma de sábado hoje — daí a regra acima.
+- **Ainda em aberto:**
+  - **Carga horária total em horas** de cada curso (o site atual não informa)
+  - **Quais cursos têm turma aos sábados** de fato
+  - Turno por curso — há leads pedindo `"HR DE MANHÃ"`
+- **Conflito registrado:** o app `ctrio` no Base44 traz durações bem maiores (Enfermagem 20 meses, Radiologia
+  24, Mecânica 20). **Não usar** — foram descartadas.
 
 ### 5. Oferta da unidade Bangu
 - **O que se sabe:** Bangu é só cursos técnicos, concentrada em Enfermagem, Administração e Segurança do Trabalho
@@ -59,10 +61,12 @@ ir ao ar publicado sem confirmação.
 
 ### 6. WhatsApp oficial de cada unidade ✅ RESOLVIDO
 - **Confirmado pelo cliente:**
-  - **Bento Ribeiro:** `5521990063785`
-  - **Bangu:** `5521968076091`
-- **Nota:** confirma que o `"552196807-6091"` da LP antiga era o número de Bangu apenas malformado (hífen no
-  lugar errado), e que o `5521964414114` que constava para Bento Ribeiro estava **errado**.
+  - **Bento Ribeiro:** `5521990063785` — (21) 99006-3785
+  - **Bangu:** `5521968076091` — (21) 96807-6091
+- **Houve conflito no caminho:** o relatório de cursos trazia (21) 96441-4114 para Bento Ribeiro — mesmo número
+  da LP antiga do Base44. O cliente confirmou que o correto é **99006-3785**, que também é o publicado no site
+  atual. O `964414114` está **incorreto** e não deve ser reutilizado de nenhuma peça antiga.
+- **Também confirmado:** o `"552196807-6091"` da LP antiga era o número de Bangu apenas malformado.
 - **Ainda em aberto:** há número separado para Colégio e para Escola Técnica, ou o mesmo atende os dois?
 - **Também:** telefones fixos publicados hoje — `(21) 2179-6439` e `(21) 2179-9206` — seguem válidos?
 

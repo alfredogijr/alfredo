@@ -42,27 +42,40 @@ que o cliente aponta como o maior nível de diferenciação, e é onde o site pr
 
 ## 2. O portfólio técnico
 
-Nenhuma fonte bate com as outras. Consolidando o doc de marca (15 cursos), os slugs do site atual, o app `ctrio`
-no Base44 (10 cursos) e os códigos de curso que aparecem nas planilhas de matrícula, o portfólio real é de
-**~17 cursos**:
+*Validado com o cliente em agosto de 2026.* As fontes internas divergiam bastante — o doc de marca listava 15
+cursos, o app `ctrio` listava 10, e os códigos das planilhas sugeriam outros. A lista fechada é:
 
-**Saúde**
-Enfermagem · Enfermagem do Trabalho · Radiologia · Análises Clínicas · Instrumentação Cirúrgica
+### 13 cursos técnicos
 
-**Indústria e Construção**
-Eletrotécnica · Eletrônica · Mecânica Industrial · Mecatrônica · Automação Industrial · Edificações ·
-Eletricista Predial e Residencial · Segurança do Trabalho
+**Saúde** — Enfermagem · Radiologia
 
-**Tecnologia**
-Informática
+**Indústria e Construção** — Eletrotécnica · Eletrônica · Mecânica Industrial · Mecatrônica · Edificações ·
+Segurança do Trabalho · Eletricista Predial e Residencial
 
-**Negócios e Educação**
-Administração · Logística · Formação de Professores
+**Tecnologia** — Informática
 
-Mais um **Preparatório para Carreira Militar**, que aparece nas peças de 2025 e não consta em lista nenhuma.
+**Negócios e Educação** — Administração · Logística · Formação de Professores
 
-> As durações variam: há cursos de **12 meses** e cursos de **18 meses** (alguns chegam a 20–24 nas peças do
-> Base44). A tabela definitiva virá do cliente. Esta diferença é argumento comercial, não letra miúda — ver §4.
+### 2 especializações técnicas — categoria separada
+
+Enfermagem do Trabalho · Instrumentação Cirúrgica
+
+São formações para quem **já possui formação técnica compatível**, especialmente em Enfermagem. Precisam
+aparecer separadas dos cursos técnicos para não confundir o candidato.
+
+**Descartado:** *Automação Industrial* não existe como curso próprio — é conteúdo de Mecatrônica. *Análises
+Clínicas*, que constava só no app `ctrio`, também saiu. Segue em aberto o *Preparatório para Carreira Militar*,
+que aparece nas peças de 2025.
+
+### Regra de comunicação sobre duração
+
+O site atual informa 12 meses (noturno) e 18 meses (sábados), mas **não é possível confirmar quais cursos têm
+turma de sábado hoje**. Por isso o site novo não afirma que todos os cursos têm as duas opções. O padrão é:
+
+> **Duração: a partir de 12 meses\*** — *a duração pode variar conforme o curso, o turno e a organização da
+> turma. Consulte nossa equipe para confirmar as turmas disponíveis e a previsão de início das aulas.*
+
+Isso mantém a vantagem competitiva do "12 meses" (ver §4) sem prometer turma que pode não existir.
 
 ---
 
@@ -152,7 +165,7 @@ Ambos podem continuar como prova de solidez. Nenhum dos dois pode ser a manchete
 
 ### Onde o CT-Rio ganha de verdade
 
-1. **Portfólio 3x maior que o do vizinho** — ~17 cursos contra ~5 do Triângulo.
+1. **Portfólio quase 3x maior que o do vizinho** — 13 cursos técnicos mais 2 especializações, contra ~5 do Triângulo.
 2. **Bloco de Saúde exclusivo na região** — Enfermagem, Radiologia, Análises Clínicas, Instrumentação Cirúrgica,
    Enfermagem do Trabalho. O Triângulo só tem Enfermagem; a ETERJ não tem saúde. **E Enfermagem é justamente o
    curso mais procurado do funil.** Este é o ativo competitivo mais forte e o mais subaproveitado.
@@ -247,7 +260,7 @@ define **laranja**. Ver pendências.
 |---|---|---|---|
 | Alunos formados | 10.000 (apresentação 2025, peças) | +8mil (app `ctrio`) | **"+ de 10 mil formados"** |
 | Ano de fundação | 2011 (apresentação de identidade) | 2014 (diretórios externos) | **2011** |
-| Nº de cursos | 15 (doc de marca e site) | 10 (app `ctrio`) | **~17**, consolidado |
+| Nº de cursos | 15 (doc de marca e site) | 10 (app `ctrio`) | **13 + 2 especializações** — validado |
 | Cor de apoio | Vermelho (doc de marca antigo) | Laranja "Suco" (manual 2025) | **Laranja** |
 | Azul | `#143666` (LP antiga) | `#1B3A6B` (app `ctrio`) | **`#1B3A6B`** |
 | Laranja | `#ff8500` (LP antiga) | `#F5820A` (app `ctrio`) | **`#F5820A`** |
