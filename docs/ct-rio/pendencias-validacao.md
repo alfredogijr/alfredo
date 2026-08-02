@@ -35,25 +35,36 @@ ir ao ar publicado sem confirmação.
   - **Logística** e **Instrumentação Cirúrgica** aparecem só no doc de marca — seguem ativos?
 
 ### 4. Duração e turno de cada curso ⚠️ *cliente vai enviar*
-- **O que falta:** tabela definitiva — quais cursos são de **12 meses**, quais são de **18**, e se há de 20/24
+- **O que falta:** tabela definitiva de duração × turno × unidade, curso a curso
 - **Por que importa:** esta é a **objeção nº 2** do funil. As planilhas registram `"achou longo 18 meses"` e
   `"QUER DURAÇÃO 12 MESES"` repetidamente. A duração precisa estar acima da dobra em toda página de curso.
-- **Também necessário:** turno (noturno / sábados / manhã) por curso — há leads pedindo `"HR DE MANHÃ"`.
+
+> **Descoberta que muda o copy:** a duração **varia por turno**, não por curso. O site atual informa, para
+> Enfermagem: **12 meses no noturno** ou **18 meses aos sábados**. Ou seja, a objeção "18 meses é muito longo"
+> tem resposta pronta — existe caminho de 12 meses — e hoje ninguém comunica isso. O site precisa mostrar as
+> duas opções lado a lado em cada curso.
+>
+> **A confirmar:** essa regra 12/18 vale para todos os cursos ou só para Enfermagem?
+
+- **Conflito de dados:** o app `ctrio` no Base44 registra durações bem maiores (Enfermagem 20 meses, Radiologia
+  24, Mecânica 20, Edificações 20), enquanto as peças de social de 2025 anunciam "Enfermagem — 12 meses",
+  "Informática — 12 meses" e "Formação Técnica em 12 a 18 meses". **Não usar as durações do app `ctrio`** sem
+  confirmação.
+- **Também necessário:** turno por curso — há leads pedindo `"HR DE MANHÃ"`.
 
 ### 5. Oferta da unidade Bangu
 - **O que se sabe:** Bangu é só cursos técnicos, concentrada em Enfermagem, Administração e Segurança do Trabalho
 - **A confirmar:** a lista exata de cursos disponíveis em Bangu. O site precisa mostrar curso × unidade
   corretamente — mandar alguém para a unidade errada é perder a matrícula.
 
-### 6. WhatsApp oficial de cada unidade ⚠️ *crítico*
-- **Problema:** os números nos apps existentes estão quebrados
-  - App `ctrio`: `5521000000000` — **placeholder, todos os CTAs não funcionam**
-  - LP Médio+Profissão: Bangu como `"552196807-6091"` — **malformado, hífen no meio do número**
-  - Bento Ribeiro consta como `5521964414114` — confirmar
-- **A confirmar:** número oficial de WhatsApp de Bento Ribeiro e de Bangu, e se há número separado para
-  Colégio e para Escola Técnica.
-- **Também:** telefones fixos publicados hoje — `(21) 2179-6439`, `(21) 2179-9206`, `(21) 99006-3785` — seguem
-  válidos?
+### 6. WhatsApp oficial de cada unidade ✅ RESOLVIDO
+- **Confirmado pelo cliente:**
+  - **Bento Ribeiro:** `5521990063785`
+  - **Bangu:** `5521968076091`
+- **Nota:** confirma que o `"552196807-6091"` da LP antiga era o número de Bangu apenas malformado (hífen no
+  lugar errado), e que o `5521964414114` que constava para Bento Ribeiro estava **errado**.
+- **Ainda em aberto:** há número separado para Colégio e para Escola Técnica, ou o mesmo atende os dois?
+- **Também:** telefones fixos publicados hoje — `(21) 2179-6439` e `(21) 2179-9206` — seguem válidos?
 
 ---
 

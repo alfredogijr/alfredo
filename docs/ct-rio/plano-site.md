@@ -75,9 +75,13 @@ Jovem ou adulto decidindo mudar de vida. Tom direto, sem rodeio institucional.
   | Objeção no funil | Resposta na página |
   |---|---|
   | `"Distante"` | Mapa, duas unidades, trem/BRT, tempo de deslocamento |
-  | `"achou longo 18 meses"` | Destacar os cursos de 12 meses; enquadrar 18 como investimento com data de retorno |
+  | `"achou longo 18 meses"` | **Mostrar as duas opções de turno lado a lado** — 12 meses no noturno, 18 aos sábados |
   | `"3º ANO"` / `"2º ANO"` | Ponte para o Médio Técnico — hoje esse lead é perdido |
   | `"HR DE MANHÃ"` / `"curso EAD"` | Turnos e modalidades visíveis |
+
+> **A duração varia por turno, não por curso.** O site atual informa, para Enfermagem, 12 meses no noturno e 18
+> aos sábados. A objeção "18 meses é longo" já tem resposta — só não está sendo comunicada. Cada página de curso
+> deve apresentar as duas opções como escolha do aluno, não como letra miúda.
 - **Prova:** depoimentos em vídeo (Drive), laboratórios, empresas empregadoras.
 
 ### Home
