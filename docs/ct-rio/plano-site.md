@@ -165,6 +165,33 @@ Uma única página `/curso/[slug]` movida a dados, aposentando as quatro página
 5. ⬜ `/curso/[slug]` — página dinâmica por curso
 6. ⬜ `EnsinoMedioTecnico` — página própria do carro-chefe
 
+**Fase 3 — Humanização e captação** *(em andamento)*
+- ✅ **Hero split** dos dois mundos + `FaixaCampanha` (Matrículas 2027), ligável por `campanha.ativa`
+- ✅ **Sistema de imagens** — `img()`, `SEM_IMAGEM` (cai em gradiente da marca, sem parecer quebrado) e
+  `imagensProvisorias()` para o inventário de troca pós-produção
+- ✅ **Captura de interesse** — `leadTracking.js` + `FormularioInteresse.jsx`, sem telefone
+- ✅ **Todos os 9 CTAs de WhatsApp rastreados** com `cta_origem`
+- ⬜ Imagens provisórias · páginas internas · SEO e redirects
+
+### Captura de lead — como ficou
+
+Sem telefone, o lead do site não casaria com a conversa do WhatsApp e a UTM se perderia. Resolvido assim:
+
+| Peça | O que faz |
+|---|---|
+| `ref_codigo` | Código `CT-XXXXX` embutido na mensagem. **5 caracteres** (~17 mi) — com 4 seriam 614 mil, o que geraria dezenas de códigos repetidos por ano no volume real |
+| Alfabeto | Sem vogais e sem `0/O/1/I` — não forma palavra acidental nem confunde na leitura em voz alta |
+| UTM | Persistida em `sessionStorage`, não lida só na conversão — a pessoa cai numa página vinda do anúncio e converte em outra |
+| `cta_origem` | Diz qual botão gerou o lead (card de curso, faixa de campanha, botão flutuante, header…) |
+| `abrirWhatsApp()` | Todo CTA passa por aqui. O `href` do WhatsApp continua válido: se o registro falhar, o visitante chega no WhatsApp mesmo assim |
+
+**Dois problemas encontrados e corrigidos na validação:**
+
+1. O builder criou a entidade `Lead` com **nome, e-mail e telefone obrigatórios** — o oposto do combinado.
+2. O arquivo `base44/entities/Lead.jsonc` do sandbox **ainda tinha o schema antigo**, e é ele que vai para o
+   deploy — sobrescreveria a correção. Reescrito, com RLS permitindo criação anônima (senão o formulário não
+   funcionaria para visitante) e leitura restrita a admin.
+
 **Fase 3 — Completar**
 7. Fundamental, Médio, EJA, EAD, Especializações
 8. Unidades (mapa e rota), Nossa História, Proposta Pedagógica, Depoimentos, Contato
