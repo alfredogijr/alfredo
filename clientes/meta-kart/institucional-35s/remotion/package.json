@@ -1,0 +1,27 @@
+{
+  "name": "meta-kart-institucional-35s",
+  "version": "1.0.0",
+  "description": "Institucional de 35s do Meta Kart",
+  "scripts": {
+    "studio": "remotion studio",
+    "prova": "remotion render Institucional-16x9 out/PROVA-tempo-16x9.mp4",
+    "build": "remotion render"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/montserrat": "^5.3.0",
+    "@remotion/cli": "^4.0.510",
+    "@remotion/renderer": "^4.0.510",
+    "@remotion/transitions": "^4.0.510",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.510"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
+  }
+}

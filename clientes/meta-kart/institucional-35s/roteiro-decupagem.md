@@ -25,16 +25,16 @@ O bloco 5 acelera o corte de 1,3s para 0,7s — é o ponto de virada entre a par
 de pista e a parte de eventos. O fade out final começa em 0:34,4.
 
 A lista corte a corte, com arquivo de origem e timecode de entrada, está em
-`cortes.csv`.
+`remotion/src/decupagem.ts` — que é a fonte única de verdade da peça.
 
 ## Texto na tela
 
-- Branco puro, negrito, centralizado na parte inferior.
+- Montserrat 800, branco puro, centralizado na parte inferior.
 - Fundo preto semitransparente a 65% (estilo `caixa`, padrão). A variante
-  `sombra` está disponível em `gerar-legendas.py --estilo sombra`.
+  `sombra` sai pela prop `estiloLegenda`.
 - Entrada e saída com fade de 150ms, para não piscar em cima do corte.
-- Margem inferior: 84px no 16x9, 260px no 9x16 (o vertical sobe o texto para
-  escapar da interface do Instagram e do WhatsApp).
+- Margem inferior: 7,8% da altura no 16x9 e 14% no 9x16 (o vertical sobe o texto
+  para escapar da interface do Instagram e do WhatsApp).
 
 Dois pontos que ajustei e valem confirmação:
 
@@ -63,37 +63,31 @@ preciso escolher uma faixa com licença comercial. Referência de busca: eletrô
 instrumental, 120–128 BPM, build contínuo, sem queda de energia até os 0:31 e
 resolução no final. O script aplica fade out de 1s a partir de 0:34.
 
-Coloque a faixa em `fontes/trilha.m4a` e o `render.sh` a aplica sozinho.
+Coloque a faixa em `remotion/public/fontes/trilha.m4a` e passe o nome na prop
+`trilha` — o volume já cai em fade de 1s no final.
 
 ## Como renderizar
 
-```bash
-pip install imageio-ffmpeg          # se não houver ffmpeg com libass no sistema
-python3 gerar-legendas.py           # gera legendas-16x9.ass e legendas-9x16.ass
-./render.sh 16x9                    # versão horizontal
-./render.sh 9x16                    # versão vertical
-```
-
-O material bruto vai em `fontes/`, com os nomes listados em `mapa-de-material.md`.
-O `render.sh` corta, enquadra, aplica o zoom, junta, queima a legenda, entra com
-a trilha e fecha com fade out.
-
-Para revisar tempo e legibilidade sem o material bruto:
+A peça é um projeto Remotion. Instruções completas em
+[`remotion/README.md`](remotion/README.md).
 
 ```bash
-./render.sh 16x9 --prova
+cd remotion
+npm install
+npm run studio     # preview com timeline
+npx remotion render Institucional-16x9 out/PROVA-tempo-16x9.mp4   # prova de tempo
 ```
 
-Isso gera `PROVA-tempo-16x9.mp4`: 35s com placas cinza no lugar das imagens e as
-legendas reais queimadas, na marcação exata.
+Para a peça final, com o material bruto em `remotion/public/fontes/`:
+
+```bash
+npx remotion render Institucional-16x9 out/institucional-16x9.mp4 \
+  --props='{"modo":"real","estiloLegenda":"caixa","trilha":"trilha.m4a"}'
+```
 
 ## Fonte tipográfica
 
-As legendas saem em DejaVu Sans Bold, que é só o fallback disponível na máquina
-onde foram geradas. Para a peça final, troque pela fonte de marca do Meta Kart:
-
-```bash
-python3 gerar-legendas.py --fonte "Nome Da Fonte"
-```
-
-A fonte precisa estar instalada na máquina que renderiza.
+As legendas saem em Montserrat 800, empacotada no projeto via `@fontsource`, sem
+depender do que está instalado na máquina que renderiza. Para trocar pela fonte
+de marca do Meta Kart, ajuste o `fontFamily` em `remotion/src/Legenda.tsx` e
+adicione o `@font-face` correspondente.
