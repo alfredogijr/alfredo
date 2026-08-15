@@ -1,0 +1,53 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>grão de mostarda — wordmark</title>
+<style>
+  @font-face { font-family: CF; src: url(../assets/fonts/Comfortaa-var.ttf); }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: CF, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #stage { position: relative; display: flex; flex-direction: column;
+           align-items: center; justify-content: center; text-align: center; }
+  .line { white-space: nowrap; line-height: 1.06; font-variation-settings: 'wght' 460;
+          letter-spacing: -0.012em; }
+  svg.r { height: 1em; width: .62em; vertical-align: baseline; overflow: visible; }
+  #legenda { position: absolute; left: 0; right: 0; font-variation-settings: 'wght' 400;
+             letter-spacing: 0; opacity: .55; }
+</style>
+<div id="stage"></div>
+<script src="wordmark.js"></script>
+<script>
+  // Recebe a config via ?cfg=<json url-encoded> e monta a arte.
+  const cfg = JSON.parse(decodeURIComponent(location.search.slice(5)));
+  document.body.style.width = cfg.w + 'px';
+  document.body.style.height = cfg.h + 'px';
+  document.body.style.background = cfg.bg;
+  document.body.style.color = cfg.fg;
+
+  const stage = document.getElementById('stage');
+  stage.innerHTML = cfg.lines
+    .map(t => `<div class="line">${wordmark(t, cfg.r, cfg.stroke || 8)}</div>`)
+    .join('');
+
+  // Escala o bloco de texto até ocupar a largura útil pedida (cfg.fill).
+  const target = cfg.w * cfg.fill;
+  let size = 100;
+  stage.style.fontSize = size + 'px';
+  const widest = () => Math.max(...[...stage.querySelectorAll('.line')].map(el => el.getBoundingClientRect().width));
+  size = size * target / widest();
+  stage.style.fontSize = size + 'px';
+
+  if (cfg.legenda) {
+    const el = document.createElement('div');
+    el.id = 'legenda';
+    el.textContent = cfg.legenda;
+    el.style.fontSize = (cfg.w * 0.026) + 'px';
+    el.style.bottom = (-cfg.h * 0.5 + cfg.h * 0.075) + 'px';
+    stage.appendChild(el);
+  }
+  if (cfg.offsetY) stage.style.transform = `translateY(${cfg.offsetY * cfg.h}px)`;
+  document.title = 'pronto';
+</script>
