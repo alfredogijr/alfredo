@@ -7,16 +7,20 @@ em caixa baixa ocupando o centro.
 
 ## O que tem em `out/`
 
-| arquivo | formato | uso |
-|---|---|---|
-| `01-feed-wordmark.png` | 1080×1080 | feed — nome em uma linha, `r` desenhado (versão legível) |
-| `02-feed-espelhado.png` | 1080×1080 | feed — versão meme, com o `r` espelhado (lê "gzão de mostazda", que é a piada do "Instagzam") |
-| `03-feed-duas-linhas.png` | 1080×1080 | feed — nome em duas linhas, presença bem maior |
-| `04-feed-mostarda.png` | 1080×1080 | feed — mesma arte no amarelo mostarda |
-| `05-feed-slide2.png` | 1080×1080 | segundo slide do carrossel ("instagram novo, grão de mostarda de sempre.") |
-| `06-story.png` | 1080×1920 | story |
+Cada arte de feed sai em dois formatos: **`out/4x5/`** (1080×1350, o retrato
+do Instagram — é o que ocupa mais tela e o que eu usaria) e **`out/1x1/`**
+(1080×1080, quadrado).
 
-Sugestão de carrossel: `03` (ou `02`, se for de humor) + `05`.
+| arquivo | uso |
+|---|---|
+| `01-wordmark.png` | nome em uma linha, `r` desenhado (versão legível) |
+| `02-espelhado.png` | versão meme, com o `r` espelhado (lê "gzão de mostazda", que é a piada do "Instagzam") |
+| `03-duas-linhas.png` | nome em duas linhas, presença bem maior |
+| `04-mostarda.png` | mesma arte no amarelo mostarda |
+| `05-slide2.png` | segundo slide do carrossel ("instagram novo, grão de mostarda de sempre.") |
+| `story.png` | 1080×1920, para stories |
+
+Sugestão de carrossel: `4x5/03` (ou `4x5/02`, se for de humor) + `4x5/05`.
 
 ## Legendas sugeridas
 
@@ -55,8 +59,9 @@ npm run build        # gera tudo em out/
 ```
 
 Onde mexer:
-- textos, cores, tamanhos e formatos: array `artes` em `src/render.mjs`
+- textos, cores e tamanhos: array `feed` em `src/render.mjs`
   (`fill` = quanto da largura o texto ocupa, de 0 a 1);
+- formatos gerados: array `FORMATOS` em `src/render.mjs`;
 - amarelo da marca: constante `MOSTARDA` em `src/render.mjs` — está em
   `#E3A81C` como aproximação, é só trocar pelo hex oficial da agência;
 - pra assinar com o @ da agência, adicione `legenda: '@seuarroba'` na arte
