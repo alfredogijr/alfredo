@@ -37,6 +37,12 @@ Hashtags: #instagram #novoinstagram #branding #design #identidadevisual
 - O `r` de cada palavra é **desenhado à mão em SVG** (`src/wordmark.js`),
   porque é justamente o `r` esquisito que dá a cara da trend. São dois
   desenhos: `arco` (legível) e `espelhado` (o meme).
+- O desenho do `r` sai das **métricas reais da Comfortaa** (altura-x,
+  espessura de traço, largura de avanço e espaço lateral), medidas por
+  `src/metrics.mjs`. Assim ele tem exatamente o mesmo tamanho e o mesmo peso
+  das letras vizinhas — nada de `r` maior ou mais gordo que o resto. Se
+  mudar o peso do texto em `src/page.html`, rode `node src/metrics.mjs` de
+  novo e atualize as constantes `M` em `src/wordmark.js`.
 - A fonte real do Instagram é proprietária e não foi usada nem imitada
   glifo a glifo: isso aqui é uma homenagem/paródia feita com tipografia
   livre, que é o caminho seguro pra uma agência publicar.
