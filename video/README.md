@@ -11,6 +11,28 @@
 
 Welcome to your Remotion project!
 
+## Projetos de cliente
+
+| Composição | Cliente | Formato | Arquivos |
+|---|---|---|---|
+| `MetaKartB2B` | Meta Kart — institucional B2B | 16:9, 60s | `src/MetaKart/` |
+
+**Meta Kart:** roteiro e decupagem em
+[`clientes/meta-kart/roteiro-video-institucional-b2b.md`](../clientes/meta-kart/roteiro-video-institucional-b2b.md).
+
+Para montar: copie os takes para `public/`, preencha `src` e
+`trimBeforeInSeconds` em `src/MetaKart/shots.ts`, ajuste marca e trilha em
+`src/MetaKart/theme.ts` e exporte com:
+
+```console
+npx remotion render MetaKartB2B out/meta-kart-b2b.mp4
+```
+
+Enquanto os takes não estiverem definidos, cada slot aparece como cartela de
+storyboard — o filme já roda do começo ao fim para aprovação de estrutura.
+
+Para descobrir a duração de um arquivo bruto: `npx remotion ffprobe public/ARQUIVO.mp4`
+
 ## Commands
 
 **Install Dependencies**

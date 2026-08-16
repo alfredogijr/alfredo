@@ -2,12 +2,31 @@ import "./index.css";
 import { Composition } from "remotion";
 import { HelloWorld, myCompSchema } from "./HelloWorld";
 import { Logo, myCompSchema2 } from "./HelloWorld/Logo";
+import { MetaKart, metaKartSchema } from "./MetaKart/MetaKart";
+import { totalDurationInSeconds } from "./MetaKart/shots";
+
+const FPS = 30;
 
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* Cliente: Meta Kart — institucional B2B, 16:9, 60s.
+          Decupagem e textos em src/MetaKart/shots.ts */}
+      <Composition
+        id="MetaKartB2B"
+        component={MetaKart}
+        durationInFrames={Math.round(totalDurationInSeconds * FPS)}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        schema={metaKartSchema}
+        defaultProps={{
+          contato: "Agende uma visita · (00) 00000-0000 · metakart.com.br",
+        }}
+      />
+
       <Composition
         // You can take the "id" to render a video:
         // npx remotion render HelloWorld
