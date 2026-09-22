@@ -75,3 +75,16 @@ A transição padrão é `fade`. O ffmpeg aceita outras no mesmo lugar:
 O zoom lento (efeito Ken Burns) está em `zoompan=z='min(zoom+0.0007,1.12)'`.
 Aumentar o `0.0007` deixa o movimento mais agressivo, o `1.12` é o limite de
 aproximação.
+
+## Desempenho
+
+Referência de máquina modesta: 12 fotos em 30 segundos, nos dois formatos,
+levam cerca de 1 minuto de render. O gargalo é o zoom, não a quantidade de
+fotos.
+
+## Armadilha do zoompan (já resolvida aqui)
+
+O filtro `zoompan` gera `d` frames para **cada** frame que entra. Se a foto
+entrar com `-loop 1 -t 3`, são 90 frames de entrada virando 90 clipes de 90
+frames, e o vídeo sai com minutos em vez de segundos. Por isso o script
+passa a foto como frame único e controla a duração pelo `-frames:v`.

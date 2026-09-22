@@ -84,12 +84,14 @@ render() {
   for i in $(seq 0 $((N-1))); do
     printf '%s\n' "${CENAS[$i]//|/$'\n'}" > "$TMP/txt$i.txt"
     FC="[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H}"
-    FC="${FC},scale=$((W*2)):$((H*2)),setsar=1"
+    FC="${FC},scale=$((W*3/2)):$((H*3/2)),setsar=1"
     FC="${FC},zoompan=z='min(zoom+0.0007,1.12)':d=${FRAMES}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=${W}x${H}:fps=${FPS}"
-    FC="${FC},drawtext=fontfile='${FONTE}':textfile='${TMP}/txt${i}.txt':fontcolor=white:fontsize=${TAM_TEXTO}:line_spacing=$((TAM_TEXTO/4)):x=(w-text_w)/2:y=h-${MARGEM}-text_h:box=1:boxcolor=black@0.42:boxborderw=$((TAM_TEXTO/2)):shadowcolor=black@0.55:shadowx=2:shadowy=3"
+    FC="${FC},drawtext=fontfile='${FONTE}':textfile='${TMP}/txt${i}.txt':fontcolor=white:fontsize=${TAM_TEXTO}:line_spacing=$((TAM_TEXTO/4)):text_align=C+M:x=(w-text_w)/2:y=h-${MARGEM}-text_h:box=1:boxcolor=black@0.42:boxborderw=$((TAM_TEXTO/2)):shadowcolor=black@0.55:shadowx=2:shadowy=3"
     FC="${FC},format=yuv420p"
-    ffmpeg -nostdin -loglevel error -y -loop 1 -t "$DUR" -i "${FOTOS[$i]}" \
-      -filter_complex "$FC" -r "$FPS" -c:v libx264 -preset veryfast -crf 20 -an "$TMP/clip$i$SUFIXO.mp4"
+    # sem -loop: o zoompan gera os ${FRAMES} frames do clipe a partir de uma foto so
+    ffmpeg -nostdin -loglevel error -y -i "${FOTOS[$i]}" \
+      -filter_complex "$FC" -frames:v "$FRAMES" -r "$FPS" \
+      -c:v libx264 -preset veryfast -crf 20 -an "$TMP/clip$i$SUFIXO.mp4"
   done
 
   # encadeia os clipes com xfade
