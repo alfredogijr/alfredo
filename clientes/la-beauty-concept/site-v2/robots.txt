@@ -1,0 +1,39 @@
+# LA Beauty Concept: buscadores e assistentes de IA são bem-vindos
+User-agent: *
+Allow: /
+
+# Assistentes de IA, liberados de forma explícita
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://la-beauty-concept-d19c2256.base44.app/sitemap.xml
