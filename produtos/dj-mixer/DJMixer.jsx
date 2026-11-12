@@ -646,6 +646,14 @@ class Engine {
     this.decks.A.xfade.gain.setTargetAtTime(Math.cos(t), now, 0.008);
     this.decks.B.xfade.gain.setTargetAtTime(Math.sin(t), now, 0.008);
   }
+  // Troca de grave: passa a linha de baixo de um deck para o outro de uma vez.
+  swapBass() {
+    const { A, B } = this.decks;
+    let a = A.kill.low, b = B.kill.low;
+    if (a === b) { a = this.crossfader > 0; b = !a; } else { a = !a; b = !b; }
+    A.setKill("low", a);
+    B.setKill("low", b);
+  }
   setMaster(v) {
     this.masterValue = clamp(v, 0, 1);
     this.master.gain.setTargetAtTime(this.masterValue * this.masterValue, this.ctx.currentTime, 0.01);
@@ -686,6 +694,107 @@ class Engine {
       rec.stop();
     });
   }
+}
+
+/* ----------------------------- Atalhos ---------------------------------- */
+
+const DECK_ACTIONS = [
+  ["play", "Tocar / pausar"],
+  ["cue", "CUE"],
+  ["sync", "SYNC"],
+  ["killLow", "Kill grave"],
+  ["killMid", "Kill médio"],
+  ["killHigh", "Kill agudo"],
+  ["cue1", "Hot cue 1"],
+  ["cue2", "Hot cue 2"],
+  ["cue3", "Hot cue 3"],
+  ["cue4", "Hot cue 4"],
+  ["loop4", "Loop de 4 batidas"],
+  ["bendDown", "Atrasar (segurar)"],
+  ["bendUp", "Adiantar (segurar)"],
+];
+const MIX_ACTIONS = [
+  ["swap", "Troca de grave"],
+  ["xfLeft", "Crossfader para A"],
+  ["xfRight", "Crossfader para B"],
+  ["xfCenter", "Crossfader no centro"],
+];
+const KEY_GROUPS = [
+  ["Deck A", DECK_ACTIONS.map(([k, l]) => ["A." + k, l])],
+  ["Deck B", DECK_ACTIONS.map(([k, l]) => ["B." + k, l])],
+  ["Mixer", MIX_ACTIONS.map(([k, l]) => ["mix." + k, l])],
+];
+const DEFAULT_KEYS = {
+  "A.play": "KeyQ", "A.cue": "KeyW", "A.sync": "KeyE",
+  "A.killLow": "KeyA", "A.killMid": "KeyS", "A.killHigh": "KeyD",
+  "A.cue1": "Digit1", "A.cue2": "Digit2", "A.cue3": "Digit3", "A.cue4": "Digit4",
+  "A.loop4": "KeyR", "A.bendDown": "KeyZ", "A.bendUp": "KeyX",
+  "B.play": "KeyP", "B.cue": "KeyO", "B.sync": "KeyI",
+  "B.killLow": "KeyJ", "B.killMid": "KeyK", "B.killHigh": "KeyL",
+  "B.cue1": "Digit7", "B.cue2": "Digit8", "B.cue3": "Digit9", "B.cue4": "Digit0",
+  "B.loop4": "KeyU", "B.bendDown": "KeyN", "B.bendUp": "KeyM",
+  "mix.swap": "Space", "mix.xfLeft": "ArrowLeft", "mix.xfRight": "ArrowRight", "mix.xfCenter": "ArrowDown",
+};
+const KEY_NAMES = {
+  Space: "Espaço", ArrowLeft: "←", ArrowRight: "→", ArrowUp: "↑", ArrowDown: "↓", Enter: "Enter", Tab: "Tab",
+  Comma: ",", Period: ".", Semicolon: ";", Slash: "/", Minus: "-", Equal: "=", Backquote: "`", Quote: "'",
+  BracketLeft: "[", BracketRight: "]", Backslash: "\\", ShiftLeft: "Shift E", ShiftRight: "Shift D",
+};
+function keyLabel(code) {
+  if (!code) return "";
+  if (KEY_NAMES[code]) return KEY_NAMES[code];
+  return code.replace(/^Key|^Digit/, "").replace(/^Numpad/, "Num ");
+}
+function loadStored(name, fallback) {
+  try {
+    const v = JSON.parse(window.localStorage.getItem(name));
+    return v == null ? fallback : v;
+  } catch (e) {
+    return fallback;
+  }
+}
+function store(name, value) {
+  try {
+    window.localStorage.setItem(name, JSON.stringify(value));
+  } catch (e) {
+    /* sem armazenamento: os atalhos valem só nesta sessão */
+  }
+}
+
+const BANDS = { killLow: "low", killMid: "mid", killHigh: "high" };
+
+// Executa uma ação de atalho. `up` indica que a tecla foi solta.
+function runAction(engine, id, up, opt) {
+  const [scope, name] = id.split(".");
+  if (scope === "mix") {
+    if (up) return;
+    if (name === "swap") return engine.swapBass();
+    const v = name === "xfCenter" ? 0 : clamp(engine.crossfader + (name === "xfLeft" ? -0.1 : 0.1), -1, 1);
+    engine.setCrossfader(v);
+    engine.onCrossfader && engine.onCrossfader(v);
+    return;
+  }
+  const d = engine.decks[scope];
+  if (name === "cue") return up ? d.cueUp() : d.cueDown();
+  if (name === "bendDown" || name === "bendUp") return d.setBend(up ? 0 : name === "bendUp" ? 0.04 : -0.04);
+  if (BANDS[name]) {
+    const band = BANDS[name];
+    if (opt.killHold) d.setKill(band, !up);
+    else if (!up) d.setKill(band, !d.kill[band]);
+    return;
+  }
+  if (up) return;
+  if (name === "play") return d.toggle();
+  if (name === "sync") return d.syncTo(engine.other(scope));
+  if (name === "loop4") return d.toggleLoop(4);
+  if (name.startsWith("cue")) return d.hotCue(Number(name.slice(3)) - 1, opt.shift);
+}
+
+const KeysContext = React.createContext(DEFAULT_KEYS);
+function KeyHint({ action }) {
+  const keys = React.useContext(KeysContext);
+  const label = keyLabel(keys[action]);
+  return label ? <kbd className="djx-kbd">{label}</kbd> : null;
 }
 
 /* ----------------------------- Controles -------------------------------- */
@@ -942,7 +1051,7 @@ function drawOverview(cv, deck, col, cache) {
 
 /* ----------------------------- Deck ------------------------------------- */
 
-function DeckPanel({ engine, deck, onPickFile, keys }) {
+function DeckPanel({ engine, deck, onPickFile }) {
   useDeck(deck);
   const other = engine.other(deck.id);
   useDeck(other);
@@ -1089,26 +1198,27 @@ function DeckPanel({ engine, deck, onPickFile, keys }) {
               onPointerDown={() => deck.cueDown()}
               onPointerUp={() => deck.cueUp()}
               onPointerLeave={() => deck.cueUp()}
-              title={`Atalho: ${keys.cue}`}
             >
               CUE
+              <KeyHint action={`${deck.id}.cue`} />
             </button>
             <button
               className={`djx-btn djx-big djx-play ${deck.playing ? "djx-on" : ""}`}
               disabled={!loaded}
               onClick={() => deck.toggle()}
               aria-pressed={deck.playing}
-              title={`Atalho: ${keys.play}`}
             >
               {deck.playing ? "❚❚" : "▶"}
+              <KeyHint action={`${deck.id}.play`} />
             </button>
             <button
               className={`djx-btn djx-big djx-sync ${deck.synced ? "djx-on" : ""}`}
               disabled={!loaded || !deck.bpm || !other.bpm}
               onClick={() => deck.syncTo(other)}
-              title={`Iguala o BPM ao deck ${other.id}. Atalho: ${keys.sync}`}
+              title={`Iguala o BPM ao deck ${other.id}`}
             >
               SYNC
+              <KeyHint action={`${deck.id}.sync`} />
             </button>
           </div>
 
@@ -1127,6 +1237,7 @@ function DeckPanel({ engine, deck, onPickFile, keys }) {
                   }}
                 >
                   {i + 1}
+                  <KeyHint action={`${deck.id}.cue${i + 1}`} />
                 </button>
               ))}
               <button
@@ -1152,6 +1263,7 @@ function DeckPanel({ engine, deck, onPickFile, keys }) {
                   title={`Loop de ${b === 0.5 ? "meia" : b} batida${b > 1 ? "s" : ""}`}
                 >
                   {b === 0.5 ? "½" : b}
+                  {b === 4 && <KeyHint action={`${deck.id}.loop4`} />}
                 </button>
               ))}
             </div>
@@ -1198,15 +1310,15 @@ function DeckPanel({ engine, deck, onPickFile, keys }) {
 function Channel({ deck }) {
   useDeck(deck);
   const bands = [
-    ["high", "Agudo"],
-    ["mid", "Médio"],
-    ["low", "Grave"],
+    ["high", "Agudo", "killHigh"],
+    ["mid", "Médio", "killMid"],
+    ["low", "Grave", "killLow"],
   ];
   return (
     <div className={`djx-channel djx-deck-${deck.id}`}>
       <span className="djx-badge djx-small">{deck.id}</span>
       <Knob label="Ganho" value={deck.trim} min={-12} max={12} reset={0} bipolar onChange={(v) => deck.setTrim(v)} />
-      {bands.map(([band, name]) => (
+      {bands.map(([band, name, action]) => (
         <div className="djx-band" key={band}>
           <Knob label={name} value={deck.eq[band]} min={0} max={1} reset={0.5} onChange={(v) => deck.setEq(band, v)} />
           <button
@@ -1216,6 +1328,7 @@ function Channel({ deck }) {
             onClick={() => deck.setKill(band, !deck.kill[band])}
           >
             KILL
+            <KeyHint action={`${deck.id}.${action}`} />
           </button>
         </div>
       ))}
@@ -1292,6 +1405,14 @@ function MixerPanel({ engine }) {
         </div>
         <Channel deck={engine.decks.B} />
       </div>
+      <button
+        className="djx-btn djx-swap"
+        onClick={() => engine.swapBass()}
+        title="Mata o grave de um deck e devolve o do outro no mesmo instante"
+      >
+        Troca de grave
+        <KeyHint action="mix.swap" />
+      </button>
       <div className="djx-xfade">
         <span className="djx-badge djx-small djx-deck-A">A</span>
         <Slider
@@ -1313,11 +1434,6 @@ function MixerPanel({ engine }) {
 
 /* ----------------------------- Página ----------------------------------- */
 
-const KEYMAP = {
-  A: { play: "Q", cue: "W", sync: "E", cues: ["1", "2", "3", "4"], kills: { low: "A", mid: "S", high: "D" } },
-  B: { play: "P", cue: "O", sync: "I", cues: ["7", "8", "9", "0"], kills: { low: "J", mid: "K", high: "L" } },
-};
-
 export default function DJMixer() {
   const [engine] = useState(() => (typeof window === "undefined" ? null : new Engine()));
   const [library, setLibrary] = useState([]);
@@ -1326,46 +1442,72 @@ export default function DJMixer() {
   const libraryRef = useRef(library);
   libraryRef.current = library;
 
+  const [keys, setKeys] = useState(() => ({ ...DEFAULT_KEYS, ...loadStored("cabine.keys", {}) }));
+  const [killHold, setKillHold] = useState(() => loadStored("cabine.killHold", false));
+  const [capture, setCapture] = useState(null);
+  const live = useRef({});
+  live.current = { keys, killHold, capture };
+
+  const bind = (action, code) => {
+    setKeys((prev) => {
+      const next = { ...prev };
+      if (code) for (const k in next) if (next[k] === code) next[k] = null;
+      next[action] = code;
+      store("cabine.keys", next);
+      return next;
+    });
+  };
+
   useEffect(() => {
     if (!engine) return;
     const wake = () => engine.resume();
     window.addEventListener("pointerdown", wake);
-    const held = new Set();
+    const held = new Map();
     const onKey = (e) => {
-      const tag = (e.target.tagName || "").toLowerCase();
-      if (tag === "input" || tag === "textarea" || e.metaKey || e.ctrlKey || e.altKey) return;
-      const k = e.key.toUpperCase();
       const up = e.type === "keyup";
-      if (up) held.delete(k);
-      else if (held.has(k)) return;
-      else held.add(k);
-      engine.resume();
-      if (!up && (k === "ARROWLEFT" || k === "ARROWRIGHT")) {
-        held.delete(k);
-        const v = clamp(engine.crossfader + (k === "ARROWLEFT" ? -0.1 : 0.1), -1, 1);
-        engine.setCrossfader(v);
-        engine.onCrossfader && engine.onCrossfader(v);
+      const { keys, killHold, capture } = live.current;
+      if (capture) {
+        if (up) return;
         e.preventDefault();
+        if (e.code === "Escape") setCapture(null);
+        else if (e.code === "Backspace" || e.code === "Delete") { bind(capture, null); setCapture(null); }
+        else if (!/^(Shift|Control|Alt|Meta)/.test(e.code)) { bind(capture, e.code); setCapture(null); }
         return;
       }
-      for (const id of ["A", "B"]) {
-        const m = KEYMAP[id];
-        const d = engine.decks[id];
-        if (k === m.cue) return up ? d.cueUp() : d.cueDown();
-        if (up) continue;
-        if (k === m.play) return d.toggle();
-        if (k === m.sync) return d.syncTo(engine.other(id));
-        const ci = m.cues.indexOf(k);
-        if (ci >= 0) return d.hotCue(ci, e.shiftKey);
-        for (const band of ["low", "mid", "high"]) if (k === m.kills[band]) return d.setKill(band, !d.kill[band]);
+      const tag = (e.target.tagName || "").toLowerCase();
+      const typing = tag === "textarea" || (tag === "input" && !/checkbox|radio|file|button/.test(e.target.type));
+      if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (up) {
+        // Solta a ação que a tecla disparou, mesmo que o atalho tenha mudado no meio.
+        const id = held.get(e.code);
+        if (!id) return;
+        held.delete(e.code);
+        e.preventDefault();
+        runAction(engine, id, true, { killHold, shift: e.shiftKey });
+        return;
       }
+      const id = Object.keys(keys).find((k) => keys[k] === e.code);
+      if (!id) return;
+      e.preventDefault();
+      const repeatable = id.startsWith("mix.xf");
+      if (held.has(e.code) && !repeatable) return;
+      held.set(e.code, id);
+      engine.resume();
+      runAction(engine, id, false, { killHold, shift: e.shiftKey });
+    };
+    const releaseAll = () => {
+      const { killHold } = live.current;
+      held.forEach((id) => runAction(engine, id, true, { killHold, shift: false }));
+      held.clear();
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("keyup", onKey);
+    window.addEventListener("blur", releaseAll);
     return () => {
       window.removeEventListener("pointerdown", wake);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("keyup", onKey);
+      window.removeEventListener("blur", releaseAll);
     };
   }, [engine]);
 
@@ -1397,6 +1539,7 @@ export default function DJMixer() {
   };
 
   return (
+    <KeysContext.Provider value={keys}>
     <div className="djx-app">
       <style>{CSS}</style>
       <header className="djx-top">
@@ -1414,17 +1557,65 @@ export default function DJMixer() {
       </header>
 
       {help && (
-        <div className="djx-help">
-          <p><b>Deck A:</b> Q toca e pausa, W cue, E sync, 1 a 4 hot cues, A S D kill de grave, médio e agudo.</p>
-          <p><b>Deck B:</b> P toca e pausa, O cue, I sync, 7 a 0 hot cues, J K L kill de grave, médio e agudo.</p>
-          <p><b>Geral:</b> setas esquerda e direita movem o crossfader. Dois cliques em qualquer botão giratório ou fader voltam ao centro. Shift com hot cue apaga o ponto.</p>
-        </div>
+        <section className="djx-help" aria-label="Atalhos de teclado">
+          <div className="djx-help-head">
+            <p>
+              Clique em um atalho e aperte a tecla nova. Esc cancela, Backspace deixa a função sem tecla. Dois cliques em qualquer
+              botão giratório ou fader voltam ao centro. Shift com hot cue apaga o ponto.
+            </p>
+            <div className="djx-help-opts">
+              <label className="djx-check">
+                <input
+                  id="djx-killhold"
+                  type="checkbox"
+                  checked={killHold}
+                  onChange={(e) => {
+                    setKillHold(e.target.checked);
+                    store("cabine.killHold", e.target.checked);
+                  }}
+                />
+                Kill só enquanto seguro a tecla
+              </label>
+              <button
+                className="djx-btn djx-ghost"
+                onClick={() => {
+                  setKeys({ ...DEFAULT_KEYS });
+                  store("cabine.keys", DEFAULT_KEYS);
+                  setCapture(null);
+                }}
+              >
+                Restaurar padrão
+              </button>
+            </div>
+          </div>
+          <div className="djx-keys">
+            {KEY_GROUPS.map(([group, actions]) => (
+              <div key={group} className={`djx-keygroup ${group === "Deck A" ? "djx-deck-A" : group === "Deck B" ? "djx-deck-B" : ""}`}>
+                <h3>{group}</h3>
+                {actions.map(([id, label]) => (
+                  <div className="djx-keyrow" key={id}>
+                    <span>{label}</span>
+                    <button
+                      className={`djx-btn djx-keybtn ${capture === id ? "djx-on" : ""}`}
+                      onClick={(e) => {
+                        e.currentTarget.blur();
+                        setCapture(capture === id ? null : id);
+                      }}
+                    >
+                      {capture === id ? "aperte…" : keyLabel(keys[id]) || "sem tecla"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       <main className="djx-grid">
-        <DeckPanel engine={engine} deck={engine.decks.A} onPickFile={pickFile("A")} keys={KEYMAP.A} />
+        <DeckPanel engine={engine} deck={engine.decks.A} onPickFile={pickFile("A")} />
         <MixerPanel engine={engine} />
-        <DeckPanel engine={engine} deck={engine.decks.B} onPickFile={pickFile("B")} keys={KEYMAP.B} />
+        <DeckPanel engine={engine} deck={engine.decks.B} onPickFile={pickFile("B")} />
       </main>
 
       <section
@@ -1473,6 +1664,7 @@ export default function DJMixer() {
         )}
       </section>
     </div>
+    </KeysContext.Provider>
   );
 }
 
@@ -1499,8 +1691,21 @@ const CSS = `
 .djx-top h1{font-family:var(--display); font-size:20px; font-weight:700; letter-spacing:-.01em; margin:0; display:flex; align-items:baseline; gap:10px}
 .djx-top h1 span{font-family:var(--mono); font-size:11px; font-weight:400; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
 .djx-top-actions{display:flex; gap:8px; flex-wrap:wrap}
-.djx-help{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:10px 14px; margin-bottom:12px; color:var(--muted); max-width:78ch}
-.djx-help p{margin:4px 0} .djx-help b{color:var(--ink); font-weight:600}
+.djx-help{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:12px 14px; margin-bottom:12px; -webkit-user-select:none; user-select:none}
+.djx-help-head{display:flex; gap:16px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; margin-bottom:10px}
+.djx-help-head p{margin:0; color:var(--muted); max-width:62ch; flex:1 1 280px}
+.djx-help-opts{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+.djx-check{display:flex; gap:7px; align-items:center; cursor:pointer}
+.djx-check input{width:16px; height:16px; accent-color:var(--a)}
+.djx-keys{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px 28px}
+.djx-keygroup h3{font-family:var(--display); font-size:13px; font-weight:600; margin:0 0 4px; color:var(--deck,var(--ink))}
+.djx-keyrow{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:3px 0; border-top:1px solid var(--line)}
+.djx-keybtn{min-width:76px; padding:3px 8px; font-family:var(--mono); font-size:12px}
+.djx-keybtn.djx-on{background:var(--cue); border-color:var(--cue); color:#0b0d11}
+.djx-kbd{font-family:var(--mono); font-size:9.5px; font-weight:400; letter-spacing:0; line-height:1; padding:2px 4px; margin-left:6px; border:1px solid currentColor; border-radius:3px; opacity:.6; vertical-align:middle}
+.djx-pad .djx-kbd{border:0; padding:0; margin-left:4px}
+.djx-kill .djx-kbd{border:0; padding:0; margin-left:3px}
+.djx-swap{font-size:12.5px; width:100%}
 .djx-grid{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:12px; align-items:stretch}
 .djx-label{font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); white-space:nowrap}
 .djx-num{font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:500}

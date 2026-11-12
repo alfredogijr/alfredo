@@ -14,7 +14,23 @@ O app inteiro está em `DJMixer.jsx`, um componente React sem dependências alé
 - Medidores de nível por canal e no master, limitador na saída
 - Gravação do set (botão REC) com download do arquivo
 - Biblioteca de arquivos locais com BPM e duração
-- Atalhos de teclado (botão "Atalhos" dentro do app)
+- Atalhos de teclado configuráveis: o botão "Atalhos" abre o painel onde cada função pode ganhar outra tecla (fica salvo no navegador)
+- Kill por tecla em dois modos: alternar a cada toque ou só enquanto a tecla está apertada
+- Troca de grave em uma tecla (Espaço): mata o grave de um deck e devolve o do outro no mesmo instante
+
+## Atalhos padrão
+
+| Função | Deck A | Deck B |
+|---|---|---|
+| Tocar / pausar | Q | P |
+| CUE | W | O |
+| SYNC | E | I |
+| Kill grave / médio / agudo | A / S / D | J / K / L |
+| Hot cues 1 a 4 | 1 2 3 4 | 7 8 9 0 |
+| Loop de 4 batidas | R | U |
+| Atrasar / adiantar (segurar) | Z / X | N / M |
+
+Mixer: Espaço faz a troca de grave, setas esquerda e direita movem o crossfader, seta para baixo centraliza.
 
 ## Como publicar no Base44
 
