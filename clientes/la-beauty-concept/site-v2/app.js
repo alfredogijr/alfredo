@@ -24,7 +24,7 @@
     if (a) track(a.dataset.origem || 'outro', a.dataset.tom ? { tom: a.dataset.tom } : null);
   });
 
-  // The colour lab: two choices build the result and the WhatsApp message
+  // Choose your colour: the tone builds the result and a WhatsApp message that asks for a photo of the hair today
   var form = document.querySelector('.lab__steps');
   var result = document.querySelector('.lab__result');
   if (form && result) {
@@ -35,7 +35,6 @@
     var cta = result.querySelector('.lab__cta');
 
     function update() {
-      var atual = (form.querySelector('input[name="atual"]:checked') || {}).value || '';
       var key = (form.querySelector('input[name="tom"]:checked') || {}).value || 'mel';
       var t = TONS[key];
       foto.style.setProperty('--tone', 'var(--tone-' + key + ')');
@@ -51,7 +50,7 @@
       }
       servico.textContent = t.servico;
       preco.hidden = !t.preco;
-      var msg = 'Olá! Fiz o diagnóstico no site. Meu cabelo hoje é ' + atual + ' e quero chegar no tom ' + t.nome + '. Caminho indicado: ' + t.servico.toLowerCase() + '.';
+      var msg = 'Olá! Escolhi o tom ' + t.nome + ' no site. Vou mandar uma foto do meu cabelo como está hoje para vocês avaliarem.';
       cta.href = WA + encodeURIComponent(msg);
       cta.dataset.tom = key;
     }

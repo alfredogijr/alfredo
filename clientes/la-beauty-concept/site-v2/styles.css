@@ -74,13 +74,16 @@ html.js .mecha { animation: abre-leque 620ms var(--ease-out) both; animation-del
 .lab__form { display: grid; gap: var(--space-lg); align-content: start; }
 .lab__steps { display: grid; gap: var(--space-xl); margin-top: var(--space-lg); }
 .seg { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0; padding: 0; border: 0; }
-.seg legend { width: 100%; margin-bottom: var(--space-sm); padding: 0; font-size: var(--text-sm); font-weight: 600; color: var(--color-muted); }
+.seg legend:not(.visually-hidden) { width: 100%; margin-bottom: var(--space-sm); padding: 0; font-size: var(--text-sm); font-weight: 600; color: var(--color-muted); }
 .seg input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .seg label { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 48px; padding: 0 var(--space-md); border: var(--rule-hair) solid var(--color-rule-2); font-weight: 600; cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
 .seg label:hover { border-color: var(--color-ink); }
 .seg input:checked + label { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
 .seg input:focus-visible + label { outline: 2px solid var(--color-focus); outline-offset: 3px; }
-.seg--tons label .chip { width: 18px; height: 18px; }
+.seg--tons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs); }
+.seg--tons label { min-height: 72px; gap: var(--space-sm); padding: 0 var(--space-md); }
+.seg--tons label .chip { width: 28px; height: 28px; }
+.seg--tons input:checked + label .chip { outline-color: var(--color-paper); }
 
 .lab__result { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
 .lab__foto { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-bottom: 6px solid var(--tone); }
@@ -207,6 +210,7 @@ html.js .mecha { animation: abre-leque 620ms var(--ease-out) both; animation-del
   .hero__side { margin-top: var(--space-lg); }
 
   .lab__grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-2xl); }
+  .seg--tons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .servicos__head { grid-column: 1 / -1; }
   .preview { display: none; }
   .tile--lead, .tile--a, .tile--b { grid-column: 1 / -1; grid-row: auto; min-height: 0; margin-bottom: var(--space-xl); }
