@@ -51,7 +51,7 @@ export const STORES: Store[] = [
     labelSide: "left",
   },
   {
-    name: "Park Shopping Campo Grande",
+    name: "ParkShopping Campo Grande",
     address: "Estrada do Monteiro, 1200",
     district: "Campo Grande",
     lon: -43.548,

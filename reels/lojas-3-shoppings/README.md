@@ -1,7 +1,7 @@
 # Reel: nossas lojas em 3 shoppings
 
 Reel 9:16 da Meta Kart (1080x1920, ~19 s) feito em Remotion: mapa real do Rio, caminho animado
-Shopping Metropolitano Barra → NorteShopping → Park Shopping Campo Grande, uma parada
+Shopping Metropolitano Barra → NorteShopping → ParkShopping Campo Grande, uma parada
 por loja com endereço e fechamento com os três pontos no mapa.
 
 - Marca, cores, textos, endereços e coordenadas: `src/config.ts`
