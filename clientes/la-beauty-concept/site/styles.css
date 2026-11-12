@@ -166,3 +166,21 @@ a:not(.btn):hover { text-decoration-color: var(--color-ink); text-decoration-thi
   .swatch { flex-basis: 62%; }
   .rows li { grid-template-columns: minmax(0, 1fr); gap: var(--space-2xs); }
 }
+
+/* questions before booking: what search and AI assistants read, set as a ruled list */
+.faq { padding-block: var(--section-gap-s) var(--section-gap); }
+.faq__head { grid-column: 1 / span 4; align-self: start; }
+.faq__list { grid-column: 6 / span 7; border-top: var(--rule-hair) solid var(--color-ink); }
+.faq__item { border-bottom: var(--rule-hair) solid var(--color-rule); }
+.faq__item summary { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-lg); min-height: 72px; padding-block: var(--space-lg); cursor: pointer; list-style: none; }
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; flex-shrink: 0; font-family: var(--font-body); font-size: var(--text-title); line-height: 1; color: var(--color-muted); transition: transform var(--dur-short) var(--ease-out); }
+.faq__item[open] summary::after { transform: rotate(45deg); }
+.faq__item summary:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+.faq__item summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.faq__item h3 { font-size: var(--text-title); }
+.faq__item p { padding-bottom: var(--space-lg); max-width: 60ch; color: var(--color-ink-2); }
+@media (max-width: 60rem) {
+  .faq__head, .faq__list { grid-column: 1 / -1; }
+  .faq__list { margin-top: var(--space-xl); }
+}
