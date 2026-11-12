@@ -1,15 +1,13 @@
 import { Star, Download } from "lucide-react";
 import { PROFESSIONALS } from "@/lib/la";
 
-// Weighted score (Bayesian average): each professional starts with WEIGHT "virtual" ratings at the salon's mean,
-// so a single 5-star review does not outrank forty reviews averaging 4.8.
+// Weighted score: everyone starts with WEIGHT imaginary ratings of PRIOR stars, so the score only climbs
+// with volume. A single 5-star review (4.17) does not outrank forty reviews averaging 4.8 (4.71).
 const WEIGHT = 5;
+const PRIOR = 4;
 const fmt = (v) => (v === null || v === undefined ? "—" : v.toFixed(2).replace(".", ","));
 
 export function buildRanking(responses, prevResponses) {
-  const all = responses.filter((r) => r.professional_rating);
-  const salonMean = all.length ? all.reduce((s, r) => s + r.professional_rating, 0) / all.length : 0;
-
   const stat = (list, name) => {
     const mine = list.filter((r) => r.professional_name === name && r.professional_rating);
     const sum = mine.reduce((s, r) => s + r.professional_rating, 0);
@@ -19,7 +17,7 @@ export function buildRanking(responses, prevResponses) {
   return PROFESSIONALS.map((name) => {
     const now = stat(responses, name);
     const before = prevResponses ? stat(prevResponses, name) : null;
-    const weighted = now.count ? (WEIGHT * salonMean + now.sum) / (WEIGHT + now.count) : null;
+    const weighted = now.count ? (WEIGHT * PRIOR + now.sum) / (WEIGHT + now.count) : null;
     return {
       name,
       count: now.count,
@@ -59,7 +57,7 @@ export default function AdminRanking({ responses, prevResponses, periodLabel, on
         <div>
           <h2 className="text-2xl text-foreground">Ranking da equipe, {periodLabel.toLowerCase()}</h2>
           <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
-            Ordenado pela nota ponderada, que puxa para a média do salão quem tem poucas avaliações. Assim, uma única nota 5 não passa na frente de quem tem muitas avaliações altas.
+            Ordenado pela nota ponderada: cada profissional começa com 5 avaliações imaginárias de nota 4, e a nota sobe conforme as avaliações reais chegam. Assim, uma única nota 5 não passa na frente de quem tem muitas avaliações altas.
           </p>
         </div>
         <button onClick={() => exportCSV(rows, periodLabel)} className="inline-flex items-center gap-2 h-10 px-4 rounded-md border border-border text-sm hover:bg-secondary">
