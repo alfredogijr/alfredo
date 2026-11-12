@@ -8,6 +8,8 @@ import AdminStatsCards from "../components/AdminStatsCards";
 import AdminRanking from "../components/AdminRanking";
 import AdminResponseRow from "../components/AdminResponseRow";
 import AdminExportMenu from "../components/AdminExportMenu";
+import AdminPeriod from "../components/AdminPeriod";
+import { availableMonths, monthKey, periodRange, previousRange, inRange, describePeriod } from "@/lib/period";
 import { LOGO_LIGHT, PROFESSIONALS } from "@/lib/la";
 
 const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -32,6 +34,7 @@ export default function Admin() {
   const [search, setSearch] = useState("");
   const [birthMonth, setBirthMonth] = useState("all");
   const [pro, setPro] = useState("all");
+  const [period, setPeriod] = useState({ type: "month", value: monthKey(Date.now()) });
   const [loading, setLoading] = useState(true);
 
   const isAdmin = isAuthenticated && user?.role === "admin";
@@ -75,11 +78,18 @@ export default function Admin() {
     setCoupons((cs) => cs.map((c) => (c.id === coupon.id ? { ...c, ...updated, redeemed: !coupon.redeemed } : c)));
   }
 
+  const range = periodRange(period);
+  const prevRange = previousRange(range, period);
+  const periodResponses = responses.filter((r) => inRange(r, range));
+  const prevResponses = prevRange ? responses.filter((r) => inRange(r, prevRange)) : null;
+  const periodCoupons = coupons.filter((c) => inRange(c, range));
+  const periodLabel = describePeriod(period);
+
   const couponMap = {};
   coupons.forEach((c) => { couponMap[c.survey_id] = c; });
 
   const q = search.trim().toLowerCase();
-  const filtered = responses.filter((r) => {
+  const filtered = periodResponses.filter((r) => {
     const c = couponMap[r.id];
     const matchesSearch = !q
       || r.customer_name?.toLowerCase().includes(q)
@@ -112,8 +122,12 @@ export default function Admin() {
           <button onClick={() => logout()} className="text-sm text-muted-foreground underline underline-offset-4">Sair</button>
         </header>
 
-        <AdminStatsCards responses={responses} coupons={coupons} />
-        <AdminRanking responses={responses} onPick={setPro} active={pro} />
+        <div className="mb-6">
+          <AdminPeriod period={period} setPeriod={setPeriod} months={availableMonths(responses)} />
+        </div>
+
+        <AdminStatsCards responses={periodResponses} coupons={periodCoupons} prevResponses={prevResponses} />
+        <AdminRanking responses={periodResponses} prevResponses={prevResponses} periodLabel={periodLabel} onPick={setPro} active={pro} />
 
         <div className="flex flex-col md:flex-row gap-3 mt-10 mb-4">
           <div className="relative flex-1">
@@ -125,7 +139,7 @@ export default function Admin() {
               <div className="flex items-center gap-2"><User className="w-4 h-4 text-accent" /><SelectValue placeholder="Profissional" /></div>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Todos os profissionais</SelectItem>
+              <SelectItem value="all">Toda a equipe</SelectItem>
               {PROFESSIONALS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
             </SelectContent>
           </Select>
@@ -141,7 +155,8 @@ export default function Admin() {
           <AdminExportMenu responses={filtered} couponMap={couponMap} />
         </div>
 
-        <p className="text-xs text-muted-foreground mb-3">{filtered.length} resultado{filtered.length !== 1 ? "s" : ""}</p>
+        <h2 className="text-2xl text-foreground mt-2 mb-1">Avaliações</h2>
+        <p className="text-xs text-muted-foreground mb-3">{filtered.length} resultado{filtered.length !== 1 ? "s" : ""} em {periodLabel.toLowerCase()}{pro !== "all" ? `, de ${pro}` : ""}</p>
         <div className="space-y-3">
           {filtered.map((r) => (
             <AdminResponseRow key={r.id} response={r} coupon={couponMap[r.id]} onToggleRedeemed={toggleRedeemed} />
