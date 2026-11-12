@@ -4,7 +4,7 @@ Fonte: https://sea-lion-ph845d.my.canva.site/ (link da bio do Instagram), lido e
 
 ## Dados de contato
 
-- WhatsApp de agendamento: (21) 97158-5367, https://wa.me/5521971585367
+- WhatsApp de agendamento: (21) 97158-5367, https://wa.me/5521971585367 (confirmado pelo Alfredo)
 - Endereço: Estrada do Tindiba, 332, Loja D, Pechincha / Jacarepaguá, Rio de Janeiro
 - Instagram: @la.beautyconcept
 - Linha própria/parceira: @lualprofessional
