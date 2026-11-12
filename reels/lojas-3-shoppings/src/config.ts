@@ -1,9 +1,9 @@
 // Tudo que muda de cliente para cliente fica aqui: marca, cores, textos e lojas.
 
 export const BRAND = {
-  name: "SUA MARCA", // trocar pelo nome (ou usar LOGO abaixo)
-  logo: "", // ex.: "logo.png" dentro de public/ — se vazio, mostra o nome em texto
-  handle: "@seuperfil",
+  name: "Meta Kart",
+  logo: "logo.png", // dentro de public/ — se vazio, mostra o nome em texto
+  handle: "", // ex.: "@metakart" — vazio não aparece
   colors: {
     sea: "#121a24", // fundo (mar)
     land: "#1d2733", // municípios vizinhos

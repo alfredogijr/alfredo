@@ -17,7 +17,7 @@
   },
   "scripts": {
     "studio": "remotion studio",
-    "render": "remotion render LojasShoppings out/reel-lojas-3-shoppings.mp4 --codec=h264 --crf=18",
+    "render": "remotion render LojasShoppings out/reel-metakart-3-shoppings.mp4 --codec=h264 --crf=18",
     "check": "tsc --noEmit"
   }
 }

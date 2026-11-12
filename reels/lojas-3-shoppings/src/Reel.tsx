@@ -16,20 +16,20 @@ const C = BRAND.colors;
 
 // Linha do tempo (frames)
 const T = {
-  fly1: [58, 104],
-  pins: [98, 282, 478],
+  fly1: [36, 70],
+  pins: [66, 196, 336],
   cards: [
-    [104, 186],
-    [286, 362],
-    [482, 556],
+    [70, 144],
+    [200, 270],
+    [340, 396],
   ],
   legs: [
-    [186, 286],
-    [362, 482],
+    [130, 200],
+    [256, 340],
   ],
-  out: [556, 604],
-  final: [596, 704],
-  end: [704, 796],
+  out: [394, 428],
+  final: [422, 500],
+  end: [500, 570],
 } as const;
 export const TOTAL = T.end[1];
 
@@ -359,7 +359,7 @@ const StoreCard: React.FC<{ f: number; i: number }> = ({ f, i }) => {
       </div>
       <div style={{ ...fadeUp(f, a + 4, 18), marginTop: 22, color: C.text, fontWeight: 500, fontSize: 64, lineHeight: 1.08, letterSpacing: -0.5 }}>{st.name}</div>
       <div style={{ marginTop: 28, height: 2, backgroundColor: C.accent, width: interpolate(f, [a + 10, a + 30], [0, 120], { ...clamp, easing: ease }) }} />
-      <div style={{ ...fadeUp(f, a + 14, 18), marginTop: 26, color: C.light, fontWeight: 300, fontSize: 38, lineHeight: 1.3 }}>{st.address}</div>
+      <div style={{ ...fadeUp(f, a + 10, 16), marginTop: 26, color: C.light, fontWeight: 300, fontSize: 38, lineHeight: 1.3 }}>{st.address}</div>
     </div>
   );
 };
@@ -394,22 +394,26 @@ const Final: React.FC<{ f: number }> = ({ f }) => {
 
 const EndCard: React.FC<{ f: number }> = ({ f }) => {
   const [a] = T.end;
-  const bg = interpolate(f, [a, a + 14], [0, 1], { ...clamp, easing: ease });
+  const bg = interpolate(f, [a, a + 12], [0, 1], { ...clamp, easing: ease });
   return (
-    <AbsoluteFill style={{ backgroundColor: C.sea, alignItems: "center", justifyContent: "center", opacity: bg }}>
-      <div style={{ ...fadeUp(f, a + 6, 22, 20), marginTop: -140 }}>
+    <AbsoluteFill style={{ backgroundColor: "#ffffff", alignItems: "center", justifyContent: "center", opacity: bg }}>
+      <div style={{ ...fadeUp(f, a + 4, 20, 20), marginTop: -120 }}>
         {BRAND.logo ? (
-          <Img src={staticFile(BRAND.logo)} style={{ width: 560, display: "block" }} />
+          <Img src={staticFile(BRAND.logo)} style={{ width: 900, display: "block" }} />
         ) : (
-          <div style={{ color: C.text, fontWeight: 600, fontSize: 92, letterSpacing: 14, textAlign: "center" }}>{BRAND.name}</div>
+          <div style={{ color: C.sea, fontWeight: 600, fontSize: 92, letterSpacing: 14, textAlign: "center" }}>{BRAND.name}</div>
         )}
       </div>
-      <div style={{ ...fadeUp(f, a + 22, 20), marginTop: 44, textAlign: "center" }}>
-        <div style={{ color: C.light, fontWeight: 300, fontStyle: "italic", fontSize: 50, lineHeight: 1.25 }}>
-          <Rich text={TEXTS.endTagline} />
+      <div style={{ ...fadeUp(f, a + 18, 18), marginTop: 40, textAlign: "center" }}>
+        <div style={{ color: "#2b2b33", fontWeight: 300, fontStyle: "italic", fontSize: 50, lineHeight: 1.25 }}>
+          <Rich text={TEXTS.endTagline} italicColor="#2b2b33" />
         </div>
-        <div style={{ width: 60, height: 2, backgroundColor: C.accent, margin: "34px auto" }} />
-        <Eyebrow text={BRAND.handle} color={C.light} style={{ fontSize: 28, letterSpacing: 8, textTransform: "none" }} />
+        {BRAND.handle && (
+          <>
+            <div style={{ width: 60, height: 2, backgroundColor: C.accent, margin: "34px auto" }} />
+            <Eyebrow text={BRAND.handle} color="#2b2b33" style={{ fontSize: 28, letterSpacing: 8, textTransform: "none" }} />
+          </>
+        )}
       </div>
     </AbsoluteFill>
   );
